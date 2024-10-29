@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="0dp"
+    android:paddingTop="0dp"
+    android:paddingRight="0dp"
+    android:paddingBottom="0dp"
+    tools:context=".ui.login.Login"
+    android:background="@color/white">
+    <!-- edit text missing: login + password -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background2"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="307dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="215dp"
+            android:layout_height="110dp"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"/>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp">
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="60dp"
+                android:textSize="17sp"
+                android:fontFamily="@font/interregular"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/black"
+                android:background="@drawable/textbox"
+                android:hint="Username"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/user_icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                app:tint="@color/dark_gray" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="60dp"
+                android:textSize="17sp"
+                android:fontFamily="@font/interregular"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/black"
+                android:background="@drawable/textbox"
+                android:hint="Password"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/padlock_icon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="20dp"
+                app:tint="@color/dark_gray" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <View
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="28dp"
+                android:background="@android:color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="12dp"
+                android:gravity="center"
+                android:text="Or"
+                android:textSize="17sp"
+                android:fontFamily="@font/interbold" />
+            <View
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="28dp"
+                android:background="@android:color/black" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/btnLoginGoogle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_button"
+                style="@style/buttonText"
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:textColor="@color/gray"
+                android:text="Use Google Account"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:elevation="2dp"
+                android:importantForAccessibility="no"
+                app:srcCompat="@drawable/google"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="48dp"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp">
+            <Button
+                android:id="@+id/btnLoginFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_button"
+                style="@style/buttonText"
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:paddingStart="20dp"
+                android:textColor="@color/gray"
+                android:text="Use Facebook Account"/>
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:elevation="2dp"
+                android:importantForAccessibility="no"
+                app:srcCompat="@drawable/facebook"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="44dp"/>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btnForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:text="Forgot password?"
+            android:textSize="17sp"
+            android:textColor="@color/dark_gray"
+            android:fontFamily="@font/inter"
+            android:textAllCaps="false"
+            android:background="@null"
+            android:layout_marginLeft="102dp"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="350dp"
+            android:layout_height="55dp"
+            android:background="@drawable/cyan_button"
+            android:fontFamily="@font/interbold"
+            android:textAllCaps="false"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:paddingStart="20dp"
+            android:text="LOGIN"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginVertical="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account?"
+                android:textSize="17sp"
+                android:textColor="@color/dark_gray"
+                android:fontFamily="@font/interregular"
+                android:textAllCaps="false"
+                android:background="@null"/>
+            <Button
+                android:id="@+id/btnSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:textSize="17sp"
+                android:textColor="@color/cyan"
+                android:fontFamily="@font/interbold"
+                android:textAllCaps="false"
+                android:background="@null"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

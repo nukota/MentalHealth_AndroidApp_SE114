@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/login">
+
+    <fragment
+        android:id="@+id/Home"
+        android:name="com.example.uplift.ui.fragments.home.Home"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/Habits"
+        android:name="com.example.uplift.ui.fragments.habit.Habit"
+        android:label="Habits"
+        tools:layout="@layout/fragment_habit" />
+    <fragment
+        android:id="@+id/sendEmail"
+        android:name="com.example.uplift.ui.fragments.sendEmail.sendEmail"
+        android:label="fragment_send_email"
+        tools:layout="@layout/fragment_send_email" />
+    <fragment
+        android:id="@+id/resetPassword"
+        android:name="com.example.uplift.ui.fragments.resetPassword.resetPassword"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" />
+    <fragment
+        android:id="@+id/login"
+        android:name="com.example.uplift.ui.fragments.login.Login"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+</navigation>
