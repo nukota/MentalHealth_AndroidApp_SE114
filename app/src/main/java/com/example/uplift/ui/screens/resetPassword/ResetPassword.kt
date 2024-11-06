@@ -74,9 +74,3 @@ fun ResetPasswordScreen(navHostController: NavHostController, authViewModel: Aut
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    ResetPasswordScreen(rememberNavController(), AuthViewModel())
-}

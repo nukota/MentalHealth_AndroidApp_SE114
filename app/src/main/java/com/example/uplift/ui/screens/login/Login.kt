@@ -98,7 +98,9 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 text = "Forgot password?",
                 modifier = Modifier
                     .padding(start = 210.dp, top = 10.dp, bottom = 10.dp),
-                onClick = {}
+                onClick = {
+                    navHostController.navigate(Routes.SENDEMAIL)
+                }
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
@@ -128,7 +130,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                     color = Cyan,
                     modifier = Modifier.padding(start = 4.dp),
                     onClick = {
-                        authViewModel.signup(email.value, password.value)
+                        navHostController.navigate(Routes.SIGNUP)
                     }
                 )
             }

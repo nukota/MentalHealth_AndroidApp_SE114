@@ -22,16 +22,22 @@ import com.example.uplift.ui.screens.sendEmail.SendEmailScreen
 import com.example.uplift.ui.screens.signup.SignUpScreen
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.viewmodels.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
         val authViewModel : AuthViewModel by viewModels()
         setContent {
             MainActivityContent(authViewModel)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Sign out the user when the activity is stopped
+        FirebaseAuth.getInstance().signOut()
     }
 }
 @Composable
@@ -55,9 +61,9 @@ fun MainActivityContent(authViewModel: AuthViewModel) {
                 SignUpScreen(navController, authViewModel)
             }
         }
-        NavigationBar(modifier = Modifier
-            .align(Alignment.BottomCenter)
-        )
+//        NavigationBar(modifier = Modifier
+//            .align(Alignment.BottomCenter)
+//        )
 
     }
 }

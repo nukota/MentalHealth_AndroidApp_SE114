@@ -11,6 +11,7 @@ class AuthViewModel() : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()
     val authState = _authState
 
+
     init {
         checkAuthStatus()
     }
@@ -39,25 +40,45 @@ class AuthViewModel() : ViewModel() {
             }
     }
 
-    fun signup(email: String, password: String) {
-        if (email.isEmpty() || password.isEmpty()) {
+    fun signUp(email: String, password1: String, password2: String, callback: (Boolean) -> Unit) {
+        if (email.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
             _authState.value = AuthState.Error("Please fill in all fields")
+            callback(false)
             return
         }
         _authState.value = AuthState.Loading
-        auth.createUserWithEmailAndPassword(email, password)
+        if (password1 != password2) {
+            _authState.value = AuthState.Error("Passwords do not match")
+            callback(false)
+            return
+        }
+        auth.createUserWithEmailAndPassword(email, password1)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
+                    signOut()
+                    callback(true)
                 } else {
                     _authState.value = AuthState.Error(task.exception?.message ?: "An unknown error occurred")
+                    callback(false)
                 }
             }
     }
 
-    fun signout() {
+    fun signOut() {
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
+    }
+
+    fun sendPasswordResetEmail(email: String, callback: (Boolean) -> Unit) {
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    callback(true)
+                } else {
+                    callback(false)
+                }
+            }
     }
 }
 

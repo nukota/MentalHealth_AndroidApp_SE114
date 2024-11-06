@@ -1,5 +1,6 @@
 package com.example.uplift.ui.screens.sendEmail
 
+import android.widget.Toast
 import com.example.uplift.ui.theme.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -34,6 +36,7 @@ import com.example.uplift.ui.viewmodels.AuthViewModel
 fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
 
     var verifyingEmail = remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -66,14 +69,18 @@ fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthVie
             Spacer(modifier = Modifier.height(30.dp))
             CustomTextBox(verifyingEmail,"Enter Your Email", painterResource(id = R.drawable.email_icon))
             Spacer(modifier = Modifier.height(28.dp))
-            CustomButton("Reset Password", null, onClick = { })
+            CustomButton("Send mail", null, onClick = {
+                Toast.makeText(context, "You entered email: " + verifyingEmail.value, Toast.LENGTH_SHORT).show()
+                authViewModel.sendPasswordResetEmail(verifyingEmail.value) { success ->
+                    if (success) {
+                        Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT).show()
+                        navHostController.navigate(Routes.LOGIN)
+                    } else {
+                        Toast.makeText(context, "Failed to send password reset email.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
             Spacer(modifier = Modifier.height(220.dp))
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    SendEmailScreen(rememberNavController(), AuthViewModel())
 }
