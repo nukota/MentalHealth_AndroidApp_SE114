@@ -10,6 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,7 +55,8 @@ fun TextboxShape(
 }
 
 @Composable
-fun CustomTextBox(hint: String, leadingIcon: Painter) {
+fun CustomTextBox(text : MutableState<String>, hint: String, leadingIcon: Painter) {
+
     Box() {
         TextboxShape() // Use the Textbox composable as the background
         Row(
@@ -65,9 +71,9 @@ fun CustomTextBox(hint: String, leadingIcon: Painter) {
                 modifier = Modifier.size(22.dp)
             )
             TextField(
-                value = "",
+                value = text.value,
                 placeholder = { Text(text = hint, color = Gray, fontSize = 17.sp,) },
-                onValueChange = {},
+                onValueChange = { text.value = it },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
@@ -78,15 +84,10 @@ fun CustomTextBox(hint: String, leadingIcon: Painter) {
                     disabledIndicatorColor = Color.Transparent,
                     errorIndicatorColor = Color.Transparent
                 ),
+                singleLine = true,
                 textStyle = TextStyle(fontSize = 17.sp, color = Black, fontFamily = FontFamily(Font(R.font.interregular))),
                 modifier = Modifier.padding(start = 4.dp)
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CustomTextBoxPreview() {
-    CustomTextBox("Username", painterResource(id = R.drawable.user_icon))
 }

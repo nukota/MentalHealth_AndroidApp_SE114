@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.*
 import com.example.uplift.R
 
 @Composable
-fun CustomButton(text: String, icon: Painter, onClick: () -> Unit,) {
+fun CustomButton(text: String, icon: Painter?, onClick: () -> Unit,) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.wrapContentSize()
@@ -35,26 +35,38 @@ fun CustomButton(text: String, icon: Painter, onClick: () -> Unit,) {
                 .width(350.dp)
                 .height(55.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp)
-            ) {
-                Image(
-                    painter = icon,
-                    contentDescription = null,
+            if (icon != null) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
-                        .size(24.dp)
-                        .padding(start = 0.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+                        .fillMaxWidth()
+                        .padding(start = 24.dp)
+                ) {
+                    if (icon != null) {
+                        Image(
+                            painter = icon,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(start = 0.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = text,
+                        color = Color.Gray,
+                        style = TextStyle(fontSize = 17.sp, fontFamily = FontFamily(Font(R.font.interbold))),
+                        modifier = Modifier.padding(start = 24.dp)
+                    )
+                }
+            } else {
                 Text(
                     text = text,
-                    color = Color.Gray,
-                    style = TextStyle(fontSize = 17.sp, fontFamily = FontFamily(Font(R.font.interbold))),
-                    modifier = Modifier.padding(start = 24.dp)
+                    color = Color.LightGray,
+                    style = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.interbold))),
+                    modifier = Modifier.padding(start = 0.dp)
                 )
             }
         }

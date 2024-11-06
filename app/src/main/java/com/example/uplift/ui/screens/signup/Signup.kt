@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.resetPassword
+package com.example.uplift.ui.screens.signup
 
 import com.example.uplift.ui.theme.*
 import androidx.compose.foundation.Image
@@ -31,8 +31,9 @@ import com.example.uplift.ui.composables.*
 import com.example.uplift.ui.viewmodels.AuthViewModel
 
 @Composable
-fun ResetPasswordScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
+fun SignUpScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
 
+    var email = remember { mutableStateOf("") }
     var password1 = remember { mutableStateOf("") }
     var password2 = remember { mutableStateOf("") }
 
@@ -62,15 +63,17 @@ fun ResetPasswordScreen(navHostController: NavHostController, authViewModel: Aut
                     .size(width = 215.dp, height = 110.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Spacer(modifier = Modifier.height(100.dp))
-            Text("Reset Password", style = TextStyle(fontSize = 24.sp, color = DarkGray, fontFamily = FontFamily(Font(R.font.interregular))))
+            Spacer(modifier = Modifier.height(80.dp))
+            Text("Sign Up", style = TextStyle(fontSize = 32.sp, color = DarkGray, fontFamily = FontFamily(Font(R.font.interregular))))
             Spacer(modifier = Modifier.height(30.dp))
-            CustomTextBox(password1, "Enter New Password", painterResource(id = R.drawable.padlock_icon))
+            CustomTextBox(email, "Username", painterResource(id = R.drawable.user_icon))
             Spacer(modifier = Modifier.height(12.dp))
-            CustomTextBox(password2, "Confirm New Password", painterResource(id = R.drawable.padlock_icon))
+            CustomTextBox(password1, "Enter Password", painterResource(id = R.drawable.padlock_icon))
+            Spacer(modifier = Modifier.height(12.dp))
+            CustomTextBox(password2, "Confirm Password", painterResource(id = R.drawable.padlock_icon))
             Spacer(modifier = Modifier.height(28.dp))
-            CustomButton("Reset Password", null, onClick = { })
-            Spacer(modifier = Modifier.height(150.dp))
+            CustomButton("Confirm", null, onClick = { })
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
@@ -78,5 +81,5 @@ fun ResetPasswordScreen(navHostController: NavHostController, authViewModel: Aut
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    ResetPasswordScreen(rememberNavController(), AuthViewModel())
+    SignUpScreen(rememberNavController(), AuthViewModel())
 }
