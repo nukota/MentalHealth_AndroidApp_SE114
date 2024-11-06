@@ -17,11 +17,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
+import com.example.uplift.ui.viewmodels.AuthViewModel
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.background1),
@@ -58,5 +61,5 @@ fun HomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(rememberNavController(), AuthViewModel())
 }

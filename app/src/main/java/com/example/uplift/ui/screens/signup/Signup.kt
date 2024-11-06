@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.sendEmail
+package com.example.uplift.ui.screens.signup
 
 import android.widget.Toast
 import com.example.uplift.ui.theme.*
@@ -33,9 +33,11 @@ import com.example.uplift.ui.composables.*
 import com.example.uplift.ui.viewmodels.AuthViewModel
 
 @Composable
-fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
+fun SignUpScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
 
-    var verifyingEmail = remember { mutableStateOf("") }
+    var email = remember { mutableStateOf("") }
+    var password1 = remember { mutableStateOf("") }
+    var password2 = remember { mutableStateOf("") }
     val context = LocalContext.current
 
     Box(
@@ -64,23 +66,25 @@ fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthVie
                     .size(width = 215.dp, height = 110.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Spacer(modifier = Modifier.height(100.dp))
-            Text("You will receive a password reset link in your email.\nClick the link to reset your password.", style = TextStyle(fontSize = 14.sp, color = Gray, fontFamily = FontFamily(Font(R.font.interregular))))
+            Spacer(modifier = Modifier.height(80.dp))
+            Text("Sign Up", style = TextStyle(fontSize = 32.sp, color = DarkGray, fontFamily = FontFamily(Font(R.font.interregular))))
             Spacer(modifier = Modifier.height(30.dp))
-            CustomTextBox(verifyingEmail,"Enter Your Email", painterResource(id = R.drawable.email_icon))
+            CustomTextBox(email, "Username", painterResource(id = R.drawable.user_icon))
+            Spacer(modifier = Modifier.height(12.dp))
+            CustomTextBox(password1, "Enter Password", painterResource(id = R.drawable.padlock_icon))
+            Spacer(modifier = Modifier.height(12.dp))
+            CustomTextBox(password2, "Confirm Password", painterResource(id = R.drawable.padlock_icon))
             Spacer(modifier = Modifier.height(28.dp))
-            CustomButton("Send mail", null, onClick = {
-                Toast.makeText(context, "You entered email: " + verifyingEmail.value, Toast.LENGTH_SHORT).show()
-                authViewModel.sendPasswordResetEmail(verifyingEmail.value) { success ->
+            CustomButton("Confirm", null, onClick = {
+                authViewModel.signUp(email.value, password1.value, password2.value) { success ->
                     if (success) {
-                        Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT).show()
                         navHostController.navigate(Routes.LOGIN)
                     } else {
-                        Toast.makeText(context, "Failed to send password reset email.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Sign-up failed. Please try again.", Toast.LENGTH_SHORT).show()
                     }
                 }
             })
-            Spacer(modifier = Modifier.height(220.dp))
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
