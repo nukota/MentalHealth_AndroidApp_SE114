@@ -3,6 +3,7 @@ package com.example.uplift.logic.repository
 import androidx.lifecycle.LiveData
 import com.example.uplift.data.models.User
 import com.example.uplift.logic.dao.UserDao
+import com.example.uplift.data.database.UserDatabase
 
 class UserRepository(private val userDao: UserDao) {
     val getAllUsers: LiveData<List<User>> = userDao.getAllUsers()
@@ -21,5 +22,10 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun deleteAllUsers() {
         userDao.deleteAllUsers()
+    }
+
+    suspend fun verifyUser(username: String, password: String): Boolean {
+        val user = userDao.getUserByUsername(username)
+        return user?.password == password
     }
 }
