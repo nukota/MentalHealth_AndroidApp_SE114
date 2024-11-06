@@ -1,5 +1,6 @@
 package com.example.uplift.ui.screens.signup
 
+import android.widget.Toast
 import com.example.uplift.ui.theme.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -36,6 +38,7 @@ fun SignUpScreen(navHostController: NavHostController, authViewModel: AuthViewMo
     var email = remember { mutableStateOf("") }
     var password1 = remember { mutableStateOf("") }
     var password2 = remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -72,14 +75,16 @@ fun SignUpScreen(navHostController: NavHostController, authViewModel: AuthViewMo
             Spacer(modifier = Modifier.height(12.dp))
             CustomTextBox(password2, "Confirm Password", painterResource(id = R.drawable.padlock_icon))
             Spacer(modifier = Modifier.height(28.dp))
-            CustomButton("Confirm", null, onClick = { })
+            CustomButton("Confirm", null, onClick = {
+                authViewModel.signUp(email.value, password1.value, password2.value) { success ->
+                    if (success) {
+                        navHostController.navigate(Routes.LOGIN)
+                    } else {
+                        Toast.makeText(context, "Sign-up failed. Please try again.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
             Spacer(modifier = Modifier.height(100.dp))
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    SignUpScreen(rememberNavController(), AuthViewModel())
 }

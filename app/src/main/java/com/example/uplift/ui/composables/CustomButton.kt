@@ -26,7 +26,7 @@ fun CustomButton(text: String, icon: Painter?, onClick: () -> Unit,) {
         modifier = Modifier.wrapContentSize()
     ) {
         Button(
-            onClick = {  },
+            onClick = onClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Black,
                 contentColor = White
