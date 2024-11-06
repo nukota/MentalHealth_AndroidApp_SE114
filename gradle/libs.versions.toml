@@ -26,6 +26,8 @@ roomRuntime = "2.6.1"
 viewpager2 = "1.1.0"
 annotation = "1.9.0"
 navigationCompose = "2.8.3"
+firebaseAuthKtx = "23.1.0"
+runtimeLivedata = "1.7.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,6 +62,8 @@ materialdatetimepicker = { module = "com.wdullaer:materialdatetimepicker", versi
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

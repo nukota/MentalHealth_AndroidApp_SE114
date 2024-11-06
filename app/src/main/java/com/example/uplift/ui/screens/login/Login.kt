@@ -1,31 +1,49 @@
 package com.example.uplift.ui.screens.login
 
+import android.widget.Toast
 import com.example.uplift.ui.theme.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.uplift.R
 import com.example.uplift.ui.composables.*
+import com.example.uplift.ui.viewmodels.AuthViewModel
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import com.example.uplift.ui.viewmodels.AuthState
+import com.example.uplift.ui.theme.Routes
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewModel) {
+
+    var email = remember { mutableStateOf("") }
+    var password = remember { mutableStateOf("") }
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.Authenticated -> navHostController.navigate(Routes.HOME)
+            is AuthState.Error -> Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+            else -> Unit
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -54,9 +72,9 @@ fun LoginScreen() {
             )
 
             Spacer(modifier = Modifier.height(50.dp))
-            CustomTextBox("Username", painterResource(id = R.drawable.user_icon))
+            CustomTextBox(email, hint = "Email", leadingIcon = painterResource(id = R.drawable.user_icon))
             Spacer(modifier = Modifier.height(12.dp))
-            CustomTextBox("Password", painterResource(id = R.drawable.padlock_icon))
+            CustomTextBox(password, hint = "Password", leadingIcon = painterResource(id = R.drawable.padlock_icon))
             Spacer(modifier = Modifier.height(28.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -79,14 +97,17 @@ fun LoginScreen() {
             TextButton(
                 text = "Forgot password?",
                 modifier = Modifier
-                    .padding(start = 210.dp, top = 10.dp, bottom = 10.dp)
+                    .padding(start = 210.dp, top = 10.dp, bottom = 10.dp),
+                onClick = {}
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    authViewModel.login(email.value, password.value)
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Cyan),
                 modifier = Modifier
-                    .size(width = 350.dp, height = 55.dp)
+                    .size(width = 350.dp, height = 55.dp),
             ) {
                 Text(
                     text = "LOGIN",
@@ -105,20 +126,14 @@ fun LoginScreen() {
                 TextButton(
                     text = "Sign Up",
                     color = Cyan,
-                    modifier = Modifier.padding(start = 4.dp)
+                    modifier = Modifier.padding(start = 4.dp),
+                    onClick = {
+                        authViewModel.signup(email.value, password.value)
+                    }
                 )
             }
         }
     }
-}
-
-@Composable
-fun TextButton(text: String, color: Color = DarkGray, modifier: Modifier = Modifier) {
-    Text(
-        text = text,
-        style = TextStyle(fontSize = 17.sp, color = color, fontFamily = FontFamily(Font(R.font.interregular))),
-        modifier = modifier
-    )
 }
 
 @Composable
@@ -129,10 +144,4 @@ fun DividerLine() {
             .height(1.dp)
             .background(Black)
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
 }
