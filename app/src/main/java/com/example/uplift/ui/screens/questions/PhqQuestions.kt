@@ -28,17 +28,19 @@ import com.example.uplift.R
 import com.example.uplift.data.models.Phqanswers
 import com.example.uplift.data.models.Phqquestions
 import androidx.compose.ui.res.painterResource
+import com.example.uplift.ui.composables.AnswerOption
+import com.example.uplift.ui.composables.NextPreviousBox
 import java.lang.Integer.parseInt
 
 
 @Composable
-fun QuestionScreen(
+fun PhqQuestionScreen(
     questions: List<Phqquestions>,
     answers:  List<Phqanswers>,
     onAnswerSelected: (Phqanswers) -> Unit,
     currentQuestionIndex: Int,
 
-    ) {
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +80,7 @@ fun QuestionScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end=28.dp, top=28.dp)
-            ){
+         ){
                 Image(
                     painter = painterResource(id = R.drawable.menu),
                     contentDescription = null,
@@ -97,7 +99,7 @@ fun QuestionScreen(
                 .width(286.dp)
         ) {
             if (currentQuestionIndex >= 1) {
-                ButtonBox(text = "Previous", onClick = { /* Handle Previous */ })
+                NextPreviousBox(text = "Previous", onClick = { /* Handle Previous */ })
             }
 
             Text(
@@ -114,7 +116,7 @@ fun QuestionScreen(
                     .height(24.dp)
                     .wrapContentHeight(align = Alignment.CenterVertically)
             )
-            ButtonBox(text = "Next", onClick = { /* Handle Next */ })
+            NextPreviousBox(text = "Next", onClick = { /* Handle Next */ })
         }
 
         //questions
@@ -213,82 +215,10 @@ fun QuestionScreen(
     }
 }
 
-@Composable
-fun ButtonBox(text: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .width(96.dp)
-            .height(29.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(10.dp))
-            .clickable { onClick() }
-            .background(Color.White)
-    ) {
-        Text(
-            text = text,
-            color = Color(0xff505050),
-            textAlign = TextAlign.Center,
-            fontSize = 17.sp,
-            style = TextStyle(
-                fontFamily = FontFamily(Font(R.font.inter)),
-                fontSize = 17.sp
-            ),
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentHeight(align = Alignment.CenterVertically)
-        )
-    }
-}
-@Composable
-fun AnswerOption(
-    text: String,
-    iconResId: Int,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xffd7f9fa))
-            .clickable { onClick() }
-            .height(40.dp)
-            .width(284.dp)
-            .padding(end = 16.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Icon(
-                painter = painterResource(id = iconResId),
-                contentDescription = text,
-                tint = Color(0xfff55d5f),
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .size(20.dp)
-            )
-
-            Text(
-                text = text,
-                color = Color.Black,
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                    fontSize = 18.sp
-                ),
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .fillMaxSize()
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-            )
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
-fun QuestionScreenPreview() {
+fun PhqQuestionScreenPreview() {
     val questions = listOf(
         Phqquestions(1, 2, "Little interest or pleasure in doing things?", 1),
         Phqquestions(2, 2, "Feeling down, depressed, or hopeless?", 2),
@@ -317,7 +247,7 @@ fun QuestionScreenPreview() {
 
     val currentQuestionIndex = 0
 
-    QuestionScreen(
+    PhqQuestionScreen(
         questions = questions,
         answers = answers,
         onAnswerSelected = onAnswerSelected,
