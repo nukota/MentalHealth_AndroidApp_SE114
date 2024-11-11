@@ -66,7 +66,6 @@ fun AnswerOption(
                     fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                     fontSize = 18.sp
                 ),
-                fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .fillMaxSize()
