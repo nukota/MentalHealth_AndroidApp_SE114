@@ -192,10 +192,11 @@ fun Mhiquestions(
         }
         Row(
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, top = 20.dp)
+                .fillMaxHeight()
+                .padding(start = 20.dp, bottom = 28.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.back),
@@ -207,7 +208,7 @@ fun Mhiquestions(
             Text(
                 text = "Back",
                 color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.inter)),
+                fontFamily = FontFamily(Font(R.font.intermedium)),
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)

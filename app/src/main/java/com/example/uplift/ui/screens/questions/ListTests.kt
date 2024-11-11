@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.questions
+package com.example.uplift.ui.screens.Questions
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -40,12 +40,13 @@ import androidx.compose.ui.zIndex
 import com.example.uplift.R
 import com.example.uplift.data.models.Gadquestions
 import com.example.uplift.data.models.Tests
+import com.example.uplift.ui.composables.QuestionBox
 import com.example.uplift.ui.theme.White
 
 @Composable
 fun ListTests (
     tests: List<Tests>,
-    ) {
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -157,96 +158,6 @@ fun ListTests (
                             }
                         )
                     }
-                }
-            }
-        }
-    }
-}
-@Composable
-fun QuestionBox(
-    testPurpose: String,
-    testName: String,
-    testTime: String,
-    questionCount:Int,
-    iconResId: Int,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .requiredWidth(width = 327.dp)
-            .requiredHeight(height = 118.dp)
-            .background(color = Color.White)
-            .border(
-                border = BorderStroke(1.dp, Color.Black),
-                shape = RoundedCornerShape(20.dp)
-            )
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Image(
-                painter = painterResource(id = iconResId),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 10.dp, top = 20.dp)
-                    .width(50.dp)
-                    .height(53.dp)
-            )
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .padding(top = 20.dp)
-        ) {
-            Text(
-                text = testPurpose,
-                color = Color(0xFF38AEB4),
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                    fontSize = 14.sp
-                ),
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-            )
-            Text(
-                text = testName,
-                color = Color(0xff101010),
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                    fontSize = 20.sp
-                ),
-                fontWeight = FontWeight.Medium,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-            )
-            Row() {
-                Column() {
-                    Text(
-                        text = "$questionCount questions - $testTime minutes",
-                        color = Color(0xff999999),
-                        style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                            fontSize = 13.sp
-                        ),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .padding(start = 12.dp)
-                            .wrapContentHeight(align = Alignment.CenterVertically)
-                    )
-                }
-                Column() {
-                    Image(
-                        painter = painterResource(id = R.drawable.playbutton),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 40.dp)
-                            .size(36.dp)
-                    )
-
                 }
             }
         }
