@@ -51,28 +51,30 @@ fun PhqQuestionScreen(
 
         ){
             Column(
-            ){
-                Row() {
-                    Text(
-                        text = "MHI Test",
-                        color = Color(0xff101010),
-                        style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
-                        modifier = Modifier
-                            .padding(start = 20.dp, top = 20.dp)
-                            .height(43.dp)
-                    )
-                }
-                Row() {
-                    Text(
-                        text = "Mental Health Inventory",
-                        color = Color(0xff999999),
-                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .height(29.dp)
-                            .padding(start = 20.dp)
-                    )
-                }
+            ) {
+
+                Text(
+                    text = "MHI Test",
+                    color = Color(0xff101010),
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        fontFamily = FontFamily(Font(R.font.lemonada))
+                    ),
+                    modifier = Modifier
+                        .padding(start = 20.dp, top = 20.dp)
+                        .height(43.dp)
+                )
+
+                Text(
+                    text = "Mental Health Inventory",
+                    color = Color(0xff999999),
+                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .height(29.dp)
+                        .padding(start = 20.dp)
+                )
+
             }
             Column(
                 horizontalAlignment = Alignment.End,
@@ -131,7 +133,6 @@ fun PhqQuestionScreen(
                 modifier = Modifier
                     .requiredWidth(width = 284.dp)
                     .requiredHeight(height = 132.dp)
-                    .clip(shape = RoundedCornerShape(20.dp))
                     .background(color = Color.White)
                     .border(
                         border = BorderStroke(2.dp, Color.Black),
@@ -140,7 +141,7 @@ fun PhqQuestionScreen(
             )
             {
                 Text(
-                    text = questions[currentQuestionIndex].question_text,
+                    text = questions[currentQuestionIndex].question_text.toString(),
                     color = Color(0xff505050),
                     textAlign = TextAlign.Center,
                     style = TextStyle(

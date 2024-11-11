@@ -52,7 +52,7 @@ fun Mhiquestions(
         ){
             Column(
             ){
-                Row() {
+
                     Text(
                         text = "MHI Test",
                         color = Color(0xff101010),
@@ -61,8 +61,7 @@ fun Mhiquestions(
                             .padding(start = 20.dp, top = 20.dp)
                             .height(43.dp)
                     )
-                }
-                Row() {
+
                     Text(
                         text = "Mental Health Inventory",
                         color = Color(0xff999999),
@@ -72,14 +71,14 @@ fun Mhiquestions(
                             .height(29.dp)
                             .padding(start = 20.dp)
                     )
-                }
+
             }
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(40.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end=28.dp, top=28.dp)
+                    .padding(end = 28.dp, top = 28.dp)
             ){
                 Image(
                     painter = painterResource(id = R.drawable.menu),
@@ -92,7 +91,7 @@ fun Mhiquestions(
 
 
         Row(
-            horizontalArrangement = Arrangement.Absolute.Right, // Căn giữa các phần tử trong Row theo chiều ngang
+            horizontalArrangement = Arrangement.Absolute.Right,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(start = 52.dp, top = 52.dp)
@@ -103,7 +102,7 @@ fun Mhiquestions(
             }
 
             Text(
-                text = "${currentQuestionIndex + 1}/${questions.size}", // Display current question number and total
+                text = "${currentQuestionIndex + 1}/${questions.size}",
                 color = Color(0xff101010),
                 textAlign = TextAlign.Center,
                 style = TextStyle(
@@ -131,7 +130,6 @@ fun Mhiquestions(
                 modifier = Modifier
                     .requiredWidth(width = 284.dp)
                     .requiredHeight(height = 132.dp)
-                    .clip(shape = RoundedCornerShape(20.dp))
                     .background(color = Color.White)
                     .border(
                         border = BorderStroke(2.dp, Color.Black),
@@ -140,7 +138,7 @@ fun Mhiquestions(
             )
             {
                 Text(
-                    text = questions[currentQuestionIndex].question_text,
+                    text = questions[currentQuestionIndex].question_text.toString(),
                     color = Color(0xff505050),
                     textAlign = TextAlign.Center,
                     style = TextStyle(
@@ -148,9 +146,9 @@ fun Mhiquestions(
                         fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
                     ),
                     modifier = Modifier
-                        .offset(x = 9.dp, y = 25.dp)
-                        .requiredWidth(width = 265.dp)
-                        .requiredHeight(height = 58.dp)
+                        .padding(horizontal = 9.dp, vertical = 25.dp)
+                        .width(265.dp)
+                        .height(58.dp)
                 )
             }
         }
