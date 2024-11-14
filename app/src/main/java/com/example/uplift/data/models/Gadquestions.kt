@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "gadquestions")
 data class Gadquestions (
     val question_id: Int,
-    val test_id: String,
-    val question_text: Int,
+    val test_id: Int,
+    val question_text: String,
     val question_order: Int
 ) : Parcelable

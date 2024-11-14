@@ -218,4 +218,34 @@ fun Mhiquestions(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewMhiquestions() {
+    val sampleQuestions = listOf(
+        Gadquestions(1, 1, "How are you?", 1),
+        Gadquestions(2, 1, "How do you feel?", 2),
+        Gadquestions(3, 1, "Not being able to stop or control worrying?", 3),
+        Gadquestions(4, 1, "Trouble relaxing?", 4)
+    )
+    val sampleAnswers = listOf(
+        Gadanswers(1, 1, "Good", 1, 1),
+        Gadanswers(2, 1, "Bad", 2, 2),
+        Gadanswers(3, 2, "Happy", 1, 1),
+        Gadanswers(4, 2, "Sad", 2, 2),
+        Gadanswers(5, 1, "Okay", 3, 3),
+        Gadanswers(6, 1, "Not great", 4, 4),
+        Gadanswers(7, 2, "Excited", 3, 3),
+        Gadanswers(8, 2, "Anxious", 4, 4),
+        Gadanswers(9, 3, "Fine", 1, 1),
+        Gadanswers(10, 3, "Terrible", 2, 2),
+        Gadanswers(11, 4, "Content", 1, 1),
+        Gadanswers(12, 4, "Stressed", 2, 2)
+    )
 
+    Mhiquestions(
+        questions = sampleQuestions,
+        answers = sampleAnswers,
+        onAnswerSelected = {},
+        currentQuestionIndex = 1
+    )
+}

@@ -216,4 +216,46 @@ fun Mhiquestions(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewMhiquestions() {
+    val sampleQuestions = listOf(
+        Mhiquestions(1, 1, "How are you?", 1),
+        Mhiquestions(2, 1, "How do you feel?", 2),
+        Mhiquestions(3, 1, "Not being able to stop or control worrying?", 3),
+        Mhiquestions(4, 1, "Trouble relaxing?", 4)
+    )
+    val sampleAnswers = listOf(
+        Mhianswers(1, 1, "Never", 1, 1),
+        Mhianswers(2, 1, "Rarely", 2, 2),
+        Mhianswers(3, 1, "Sometimes", 3, 3),
+        Mhianswers(4, 1, "Often", 4, 4),
+        Mhianswers(5, 1, "Always", 5, 5),
+
+        Mhianswers(6, 2, "Never", 1, 1),
+        Mhianswers(7, 2, "Rarely", 2, 2),
+        Mhianswers(8, 2, "Sometimes", 3, 3),
+        Mhianswers(9, 2, "Often", 4, 4),
+        Mhianswers(10, 2, "Always", 5, 5),
+
+        Mhianswers(11, 3, "Never", 1, 1),
+        Mhianswers(12, 3, "Rarely", 2, 2),
+        Mhianswers(13, 3, "Sometimes", 3, 3),
+        Mhianswers(14, 3, "Often", 4, 4),
+        Mhianswers(15, 3, "Always", 5, 5),
+
+        Mhianswers(16, 4, "Never", 1, 1),
+        Mhianswers(17, 4, "Rarely", 2, 2),
+        Mhianswers(18, 4, "Sometimes", 3, 3),
+        Mhianswers(19, 4, "Often", 4, 4),
+        Mhianswers(20, 4, "Always", 5, 5)
+    )
+
+    Mhiquestions(
+        questions = sampleQuestions,
+        answers = sampleAnswers,
+        onAnswerSelected = {},
+        currentQuestionIndex = 0
+    )
+}
 
