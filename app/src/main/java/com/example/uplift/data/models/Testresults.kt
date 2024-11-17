@@ -9,6 +9,8 @@ import kotlinx.android.parcel.Parcelize
 data class Testresults(
     val result_id: Int,
     val test_id: Int,
+    val score_min:Int,
+    val score_max:Int,
     val result_description: String,
     val result_recommendation: String
 ):Parcelable
