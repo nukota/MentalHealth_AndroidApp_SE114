@@ -40,7 +40,8 @@ fun PhqQuestionScreen(
     onAnswerSelected: (Phqanswers) -> Unit,
     currentQuestionIndex: Int,
 
-) {
+    ) {
+    var score by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,22 +51,18 @@ fun PhqQuestionScreen(
         Row(
         ){
             Column(
-            ) {
-
+            ){
                 Text(
-                    text = "MHI Test",
+                    text = "PHQ Test",
                     color = Color(0xff101010),
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.lemonada))
-                    ),
+                    style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
                     modifier = Modifier
                         .padding(start = 20.dp, top = 20.dp)
                         .height(43.dp)
                 )
 
                 Text(
-                    text = "Mental Health Inventory",
+                    text = "Patient Health Questionnaire",
                     color = Color(0xff999999),
                     fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                     fontSize = 20.sp,
@@ -73,7 +70,6 @@ fun PhqQuestionScreen(
                         .height(29.dp)
                         .padding(start = 20.dp)
                 )
-
             }
             Column(
                 horizontalAlignment = Alignment.End,
@@ -81,7 +77,7 @@ fun PhqQuestionScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end=28.dp, top=28.dp)
-         ){
+            ){
                 Image(
                     painter = painterResource(id = R.drawable.menu),
                     contentDescription = null,
@@ -140,7 +136,7 @@ fun PhqQuestionScreen(
             )
             {
                 Text(
-                    text = questions[currentQuestionIndex].question_text.toString(),
+                    text = questions[currentQuestionIndex].question_text,
                     color = Color(0xff505050),
                     textAlign = TextAlign.Center,
                     style = TextStyle(
@@ -182,6 +178,7 @@ fun PhqQuestionScreen(
                         text = answer.answer_text,
                         iconResId = iconResId,
                         onClick = {
+                            score+=answer.answer_value
                             onAnswerSelected(answer)
                         }
                     )
@@ -206,7 +203,7 @@ fun PhqQuestionScreen(
             Text(
                 text = "Back",
                 color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.intermedium)),
+                fontFamily = FontFamily(Font(R.font.inter)),
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)

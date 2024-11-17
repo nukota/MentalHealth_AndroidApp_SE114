@@ -34,13 +34,14 @@ import java.lang.Integer.parseInt
 
 
 @Composable
-fun Mhiquestions(
+fun MhiquestionsScreen(
     questions: List<Mhiquestions>,
     answers:  List<Mhianswers>,
     onAnswerSelected: (Mhianswers) -> Unit,
     currentQuestionIndex: Int,
 
     ) {
+    var score by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,30 +49,31 @@ fun Mhiquestions(
             .background(color = Color.White)
     ) {
         Row(
-
         ){
             Column(
-            ){
+            ) {
 
-                    Text(
-                        text = "MHI Test",
-                        color = Color(0xff101010),
-                        style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
-                        modifier = Modifier
-                            .padding(start = 20.dp, top = 20.dp)
-                            .height(43.dp)
-                    )
+                Text(
+                    text = "MHI Test",
+                    color = Color(0xff101010),
+                    style = TextStyle(
+                        fontSize = 22.sp,
+                        fontFamily = FontFamily(Font(R.font.lemonada))
+                    ),
+                    modifier = Modifier
+                        .padding(start = 20.dp, top = 20.dp)
+                        .height(43.dp)
+                )
 
-                    Text(
-                        text = "Mental Health Inventory",
-                        color = Color(0xff999999),
-                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .height(29.dp)
-                            .padding(start = 20.dp)
-                    )
-
+                Text(
+                    text = "Mental Health Inventory",
+                    color = Color(0xff999999),
+                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .height(29.dp)
+                        .padding(start = 20.dp)
+                )
             }
             Column(
                 horizontalAlignment = Alignment.End,
@@ -182,6 +184,7 @@ fun Mhiquestions(
                         text = answer.answer_text,
                         iconResId = iconResId,
                         onClick = {
+                            score+=answer.answer_value
                             onAnswerSelected(answer)
                         }
                     )
@@ -218,7 +221,7 @@ fun Mhiquestions(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewMhiquestions() {
+fun PreviewMhiquestionsScreen() {
     val sampleQuestions = listOf(
         Mhiquestions(1, 1, "How are you?", 1),
         Mhiquestions(2, 1, "How do you feel?", 2),
@@ -251,7 +254,7 @@ fun PreviewMhiquestions() {
         Mhianswers(20, 4, "Always", 5, 5)
     )
 
-    Mhiquestions(
+    MhiquestionsScreen(
         questions = sampleQuestions,
         answers = sampleAnswers,
         onAnswerSelected = {},
