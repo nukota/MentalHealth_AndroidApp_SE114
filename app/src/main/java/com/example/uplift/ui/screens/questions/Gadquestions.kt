@@ -34,13 +34,13 @@ import java.lang.Integer.parseInt
 
 
 @Composable
-fun Mhiquestions(
+fun GadquestionsScreen(
     questions: List<Gadquestions>,
     answers:  List<Gadanswers>,
     onAnswerSelected: (Gadanswers) -> Unit,
     currentQuestionIndex: Int,
-
     ) {
+    var score by remember { mutableStateOf(0) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,7 +54,7 @@ fun Mhiquestions(
             ){
 
                     Text(
-                        text = "MHI Test",
+                        text = "Gad Test",
                         color = Color(0xff101010),
                         style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
                         modifier = Modifier
@@ -63,7 +63,7 @@ fun Mhiquestions(
                     )
 
                     Text(
-                        text = "Mental Health Inventory",
+                        text = "Generalized Anxiety Disorder",
                         color = Color(0xff999999),
                         fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                         fontSize = 20.sp,
@@ -154,6 +154,7 @@ fun Mhiquestions(
         }
         val filteredAnswers =
             answers.filter { it.question_id == questions[currentQuestionIndex].question_id }
+
         //answer
         Row(
             horizontalArrangement = Arrangement.Center, // Căn giữa các phần tử trong Row theo chiều ngang
@@ -184,6 +185,7 @@ fun Mhiquestions(
                         text = answer.answer_text,
                         iconResId = iconResId,
                         onClick = {
+                            score+=answer.answer_value
                             onAnswerSelected(answer)
                         }
                     )
@@ -220,7 +222,7 @@ fun Mhiquestions(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewMhiquestions() {
+fun PreviewGadquestionsScreen() {
     val sampleQuestions = listOf(
         Gadquestions(1, 1, "How are you?", 1),
         Gadquestions(2, 1, "How do you feel?", 2),
@@ -242,7 +244,7 @@ fun PreviewMhiquestions() {
         Gadanswers(12, 4, "Stressed", 2, 2)
     )
 
-    Mhiquestions(
+    GadquestionsScreen(
         questions = sampleQuestions,
         answers = sampleAnswers,
         onAnswerSelected = {},
