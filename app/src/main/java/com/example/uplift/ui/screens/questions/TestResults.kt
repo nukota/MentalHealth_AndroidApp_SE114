@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import coil.compose.rememberAsyncImagePainter
 import com.example.uplift.R
 import com.example.uplift.data.models.Gadquestions
 import com.example.uplift.data.models.Testresults
@@ -49,6 +50,7 @@ import com.example.uplift.ui.theme.White
 @Composable
 fun TestResultsScreen (
     testresults: Testresults,
+    score:Int
 ) {
     Box(
         modifier = Modifier
@@ -122,7 +124,8 @@ fun TestResultsScreen (
                         .align(Alignment.Center)
                         .fillMaxHeight()
                         .padding(top = 5.dp)
-                ) { val testID: Int = testresults.test_id
+                ) {
+                    val testID: Int = testresults.test_id
 //                    val labeltext: String = when (testID) {
 //                        1 -> if (score > 80) "You have" else "You might be experiencing"
 //                        else -> "You might be experiencing"
@@ -157,39 +160,13 @@ fun TestResultsScreen (
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                val testID: Int = testresults.test_id
-                val IconSymbol: Int = when (testID) {
-                    1 -> when {
-//                        score <= 17 -> R.drawable.high_mental_health
-//                        score <= 23 -> R.drawable.moderate_mental_health
-                        else -> R.drawable.serious_mental_health
-                    }
-
-                    2 -> when {
-//                        score <= 4 -> R.drawable.no_depression
-//                        score <= 9 -> R.drawable.mild_depression
-//                        score <= 14 -> R.drawable.moderate_depression
-//                        score <= 19 -> R.drawable.moderate_servere_depression
-                        else -> R.drawable.serious_mental_health
-                    }
-
-                    3 -> when {
-//                        score <= 4 -> R.drawable.no_anxiety
-//                        score <= 9 -> R.drawable.mild_anxiety
-//                        score <= 14 -> R.drawable.moderate_anxiety
-                        else -> R.drawable.severe_anxiety
-                    }
-
-                    else -> R.drawable.high_mental_health
-                }
-
+                val iconSymbol: String = testresults.picture_url
                 Image(
-                    painter = painterResource(id = IconSymbol),
+                    painter = rememberAsyncImagePainter(iconSymbol),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 10.dp, top = 20.dp)
                 )
-
             }
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -218,7 +195,6 @@ fun TestResultsScreen (
                     .background(Color(0xff101010))
                     .height(50.dp)
                     .width(272.dp)
-                    .align(Alignment.CenterHorizontally)
             ) {
                 Text(
                     text = "Reach out to Specialists",
@@ -257,20 +233,19 @@ fun TestResultsScreen (
                 )
             }
         }
-
     }
 }
 
-@Preview(widthDp = 360, heightDp = 800)
-@Composable
-private fun TestResultsPreview() {
-    val score=14;
-    val testResult = Testresults(
-        result_id = 1,
-        test_id = 101,
-        0,0,
-        result_description = "Sample description.",
-        result_recommendation = "Sample recommendation.Sample description.Sample description.Sample description"
-    )
-    TestResultsScreen(testresults=testResult)
-}
+//@Preview(widthDp = 360, heightDp = 800)
+//@Composable
+//private fun TestResultsPreview() {
+//    val score=14;
+//    val testResult = Testresults(
+//        result_id = 1,
+//        test_id = 101,
+//        0,0,
+//        result_description = "Sample description.",
+//        result_recommendation = "Sample recommendation.Sample description.Sample description.Sample description"
+//    )
+//    TestResultsScreen(testresults=testResult)
+//}

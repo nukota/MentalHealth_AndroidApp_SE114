@@ -4,46 +4,60 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.uplift.data.database.GadDatabase
+import com.example.uplift.data.database.MhiDatabase
 import com.example.uplift.data.database.PhqDatabase
 import com.example.uplift.data.models.Gadquestions
+import com.example.uplift.data.models.Mhiquestions
 import com.example.uplift.data.models.Phqquestions
 import com.example.uplift.logic.repository.GadRepository
+import com.example.uplift.logic.repository.MhiRepository
 import com.example.uplift.logic.repository.PhqRepository
 import kotlinx.coroutines.launch
 
 class PhqViewModel(application: Application) : AndroidViewModel(application) {
     private val phqRepository: PhqRepository
-    private val allQuestions: LiveData<List<Phqquestions>>
+    private val _allQuestions  = MutableLiveData<List<Phqquestions>>()
+    val allQuestions: LiveData<List<Phqquestions>> get() = _allQuestions
 
     init {
         val phqQuestionsDao = PhqDatabase.getDatabase(application).phqQuestionsDao()
         phqRepository = PhqRepository(phqQuestionsDao)
-        allQuestions = phqRepository.getAllQuestions()
+        getAllQuestions()
     }
-
-    fun insertAll(listPhqQuestions: List<Phqquestions>) {
+    private fun getAllQuestions() {
         viewModelScope.launch {
-            phqRepository.insertAll(listPhqQuestions)
+            phqRepository.getAllQuestions().observeForever { gadquestions ->
+                _allQuestions.postValue(gadquestions)
+            }
         }
     }
-    fun addQuestions(phqQuestions: Phqquestions) {
+    fun insertQuestion(phqQuestions: Phqquestions) {
         viewModelScope.launch {
-            phqRepository.addQuestions(phqQuestions)
+            phqRepository.insertQuestion(phqQuestions)
+            getAllQuestions()
         }
     }
-    fun updateQuestions(phqQuestions: List<Phqquestions>) {
+    fun updateQuestions(phqQuestionsList: List<Phqquestions>) {
         viewModelScope.launch {
-            phqRepository.updateQuestions(phqQuestions)
-        }
-    }
-    fun deleteQuestions(phqQuestions: Phqquestions) {
-        viewModelScope.launch {
-            phqRepository.deleteQuestions(phqQuestions)
+            phqRepository.updateQuestions(phqQuestionsList)
+            getAllQuestions()
         }
     }
     fun deleteAllQuestions() {
         viewModelScope.launch {
             phqRepository.deleteAllQuestions()
+            _allQuestions.postValue(emptyList())
+        }
+    }
+    fun deleteQuestionById(questionId:Int) {
+        viewModelScope.launch {
+            phqRepository.deleteQuestionById(questionId)
+            getAllQuestions()
+        }
+    }
+    fun getQuestionById(questionId: Int){
+        viewModelScope.launch {
+            val test = phqRepository.getQuestionById(questionId)
         }
     }
 }

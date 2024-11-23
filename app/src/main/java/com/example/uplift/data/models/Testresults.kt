@@ -11,6 +11,7 @@ data class Testresults(
     val test_id: Int,
     val score_min:Int,
     val score_max:Int,
+    val picture_url:String,
     val result_description: String,
     val result_recommendation: String
 ):Parcelable
