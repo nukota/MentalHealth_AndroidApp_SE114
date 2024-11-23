@@ -10,37 +10,48 @@ import kotlinx.coroutines.launch
 
 class GadViewModel(application: Application) : AndroidViewModel(application) {
     private val gadRepository: GadRepository
-    private val allQuestions: LiveData<List<Gadquestions>>
+    private val _allQuestions  = MutableLiveData<List<Gadquestions>>()
+    val allQuestions: LiveData<List<Gadquestions>> get() = _allQuestions
 
     init {
         val gadQuestionsDao = GadDatabase.getDatabase(application).gadQuestionsDao()
         gadRepository = GadRepository(gadQuestionsDao)
-        allQuestions = gadRepository.getAllQuestions()
+        getAllQuestions()
     }
-
-    fun insertAll(listGadQuestions: List<Gadquestions>) {
+    private fun getAllQuestions() {
         viewModelScope.launch {
-            gadRepository.insertAll(listGadQuestions)
+            gadRepository.getAllQuestions().observeForever { gadquestions ->
+                _allQuestions.postValue(gadquestions)
+            }
         }
     }
-    fun addQuestions(gadQuestions: Gadquestions) {
+    fun insertQuestion(gadQuestions: Gadquestions) {
         viewModelScope.launch {
-            gadRepository.addQuestions(gadQuestions)
+            gadRepository.insertQuestion(gadQuestions)
+            getAllQuestions()
         }
     }
-    fun updateQuestions(gadQuestions: List<Gadquestions>) {
+    fun updateQuestions(gadQuestionsList: List<Gadquestions>) {
         viewModelScope.launch {
-            gadRepository.updateQuestions(gadQuestions)
-        }
-    }
-    fun deleteQuestions(gadQuestions: Gadquestions) {
-        viewModelScope.launch {
-            gadRepository.deleteQuestions(gadQuestions)
+            gadRepository.updateQuestions(gadQuestionsList)
+            getAllQuestions()
         }
     }
     fun deleteAllQuestions() {
         viewModelScope.launch {
             gadRepository.deleteAllQuestions()
+            _allQuestions.postValue(emptyList())
+        }
+    }
+    fun deleteQuestionById(questionId:Int) {
+        viewModelScope.launch {
+            gadRepository.deleteQuestionById(questionId)
+            getAllQuestions()
+        }
+    }
+    fun getQuestionById(questionId: Int){
+        viewModelScope.launch {
+            val test = gadRepository.getQuestionById(questionId)
         }
     }
 }

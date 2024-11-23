@@ -12,29 +12,48 @@ import kotlinx.coroutines.launch
 
 class ListTestsViewModel (application: Application) : AndroidViewModel(application) {
     private val testsRepository: TestsRepository
-    private val allTests: MutableLiveData<List<Tests>> = MutableLiveData()
+    private val _allTests = MutableLiveData<List<Tests>>()
+    val allTests: LiveData<List<Tests>> get() = _allTests
 
     init {
         val testsDao = TestsDatabase.getDatabase(application).testsDao()
         testsRepository = TestsRepository(testsDao)
-        loadAllTests()
+        getAllTests()
     }
-
-    fun getAllTests(): LiveData<List<Tests>> {
-        return allTests
-    }
-
-    private fun loadAllTests() {
+    private fun getAllTests() {
         viewModelScope.launch {
-            val tests = testsRepository.getAllTests()
-            allTests.postValue(tests)
+            testsRepository.getAllTests().observeForever { tests ->
+                _allTests.postValue(tests)
+            }
         }
     }
-
+    fun insertTest(test: Tests) {
+        viewModelScope.launch {
+            testsRepository.insertTest(test)
+            getAllTests()
+        }
+    }
+    fun updateTests(testList: List<Tests>) {
+        viewModelScope.launch {
+            testsRepository.updateTests(testList)
+            getAllTests()
+        }
+    }
     fun deleteAllTests() {
         viewModelScope.launch {
             testsRepository.deleteAllTests()
-            loadAllTests()
+            _allTests.postValue(emptyList())
+        }
+    }
+    fun deleteTestById(testId:Int) {
+        viewModelScope.launch {
+            testsRepository.deleteTestById(testId)
+            getAllTests()
+        }
+    }
+    fun getTestById(testId: Int){
+        viewModelScope.launch {
+            val test = testsRepository.getTestById(testId)
         }
     }
 }

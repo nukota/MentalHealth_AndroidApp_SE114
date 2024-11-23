@@ -54,8 +54,9 @@ android {
     }
 }
 dependencies {
-
-
+    implementation (libs.androidx.lifecycle.livedata.compose.v260)
+    implementation (libs.androidx.runtime.livedata.v150)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -69,6 +70,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.support.annotations)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

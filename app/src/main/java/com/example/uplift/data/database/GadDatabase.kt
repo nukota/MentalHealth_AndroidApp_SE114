@@ -21,7 +21,7 @@ abstract class GadDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     GadDatabase::class.java,
-                    "gad_questions_database"
+                    "gadquestions_database"
                 ).build()
                 INSTANCE = instance
                 instance

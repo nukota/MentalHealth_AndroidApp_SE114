@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -27,33 +28,35 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.uplift.R
-
+import coil.compose.rememberImagePainter
 @Composable
 fun QuestionBox(
     testPurpose: String,
     testName: String,
     testTime: String,
     questionCount:Int,
-    iconResId: Int,
+    iconResId: String,
     onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .requiredWidth(width = 327.dp)
             .requiredHeight(height = 118.dp)
-            .background(color = Color.White)
             .border(
                 border = BorderStroke(1.dp, Color.Black),
                 shape = RoundedCornerShape(20.dp)
             )
+            .clip(RoundedCornerShape(20.dp))
+            .background(color = Color.White)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
-                painter = painterResource(id = iconResId),
+                painter = rememberAsyncImagePainter(iconResId),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 10.dp, top = 20.dp)

@@ -21,7 +21,7 @@ abstract class MhiDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MhiDatabase::class.java,
-                    "mhi_questions_database"
+                    "mhiquestions_database"
                 ).build()
                 INSTANCE = instance
                 instance

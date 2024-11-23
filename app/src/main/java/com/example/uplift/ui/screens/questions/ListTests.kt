@@ -37,6 +37,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
 import com.example.uplift.data.models.Gadquestions
 import com.example.uplift.data.models.Tests
@@ -46,6 +48,7 @@ import com.example.uplift.ui.theme.White
 @Composable
 fun ListTests (
     tests: List<Tests>,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -138,21 +141,15 @@ fun ListTests (
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                     modifier = Modifier.fillMaxHeight()
                 ) {
-
                     tests.forEach { test ->
-                        val iconResId = when (test.test_id) {
-                            1 -> R.drawable.mhi
-                            2 -> R.drawable.phq
-                            3 -> R.drawable.gad
-                            else -> R.drawable.mhi
-                        }
+                        val iconUrl  = test.icon_url
 
                         QuestionBox(
                             testPurpose = test.test_purpose ?: "No purpose specified",
                             testName = test.test_name,
                             questionCount = test.question_count,
                             testTime = "${test.duration_minutes} min",
-                            iconResId = iconResId,
+                            iconResId = iconUrl ,
                             onClick = {
                                 // Hành động khi click vào từng câu hỏi
                             }
@@ -167,10 +164,11 @@ fun ListTests (
 @Preview(widthDp = 360, heightDp = 800)
 @Composable
 private fun TestPreview() {
+    val navController = rememberNavController()
     val sampleTests = listOf(
         Tests(1, "Mental Health Inventory", "For evaluating general mental health", 12, 10, "", 1),
         Tests(2, "Patient Health Questionnaire", "For screening depression", 9, 10, "", 1),
         Tests(3, "Generalized Anxiety Disorder", "For screening anxiety", 7, 10, "", 1)
     )
-    ListTests(tests = sampleTests)
+    ListTests(tests = sampleTests,navController=navController)
 }
