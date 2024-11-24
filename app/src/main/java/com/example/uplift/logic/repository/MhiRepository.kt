@@ -1,38 +1,21 @@
 package com.example.uplift.logic.repository
 
 import androidx.lifecycle.LiveData
+import com.example.uplift.data.database.MhiDatabase
+import com.example.uplift.data.models.Mhianswers
 import com.example.uplift.data.models.Mhiquestions
-import com.example.uplift.logic.dao.MhiquestionsDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
-class MhiRepository(private val mhiQuestionsDao: MhiquestionsDao) {
+class MhiRepository(private val database: MhiDatabase) {
+    private val mhiquestionsDao = database.mhiQuestionsDao()
+    private val mhianswersDao = database.mhiAnswersDao()
+
+    // Questions
     fun getAllQuestions(): LiveData<List<Mhiquestions>> {
-        return mhiQuestionsDao.getAllQuestions()
+        return mhiquestionsDao.getAllQuestions()
     }
-    suspend fun getQuestionById(questionId: Int): Mhiquestions? {
-        return withContext(Dispatchers.IO) {
-            mhiQuestionsDao.getQuestionById(questionId)
-        }
-    }
-    suspend fun insertQuestion(mhiQuestions: Mhiquestions) {
-        withContext(Dispatchers.IO) {
-            mhiQuestionsDao.insertQuestion(mhiQuestions)
-        }
-    }
-    suspend fun updateQuestions(gadQuestionsList: List<Mhiquestions>) {
-        withContext(Dispatchers.IO) {
-            mhiQuestionsDao.updateQuestions(gadQuestionsList)
-        }
-    }
-    suspend fun deleteAllQuestions() {
-        withContext(Dispatchers.IO) {
-            mhiQuestionsDao.deleteAllQuestions()
-        }
-    }
-    suspend fun deleteQuestionById(questionId: Int){
-        withContext(Dispatchers.IO) {
-            mhiQuestionsDao.deleteQuestionById(questionId)
-        }
+
+    // Answers
+    fun getAllAnswers(): LiveData<List<Mhianswers>> {
+        return mhianswersDao.getAllAnswers()
     }
 }

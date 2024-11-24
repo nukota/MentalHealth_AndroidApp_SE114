@@ -40,16 +40,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.uplift.R
 import com.example.uplift.data.models.Gadquestions
 import com.example.uplift.data.models.Testresults
 import com.example.uplift.data.models.Tests
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
 @Composable
 fun TestResultsScreen (
     testresults: Testresults,
+    testname:String,
+    navController:NavController,
     score:Int
 ) {
     Box(
@@ -83,8 +87,9 @@ fun TestResultsScreen (
                             .padding(start = 20.dp, top = 20.dp)
                             .height(43.dp)
                     )
+
                     Text(
-                        text = "Mental Health Inventory",
+                        text = testname,
                         color = Color(0xff999999),
                         fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                         fontSize = 20.sp,
@@ -93,145 +98,145 @@ fun TestResultsScreen (
                             .padding(start = 20.dp)
                     )
                 }
-
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(40.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 28.dp, top = 28.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.menu),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(28.dp)
-                    )
-                }
             }
 
-            Spacer(modifier = Modifier.height(38.dp))
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color(0xffd7f9fa))
-                    .height(85.dp)
-                    .width(260.dp)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .fillMaxHeight()
-                        .padding(top = 5.dp)
-                ) {
-                    val testID: Int = testresults.test_id
-//                    val labeltext: String = when (testID) {
-//                        1 -> if (score > 80) "You have" else "You might be experiencing"
-//                        else -> "You might be experiencing"
-//                    }
-                    Text(
-                        text = "labeltext",
-                        color = Color(0xff505050),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
-                        ),
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-                    )
-
-                    Text(
-                        text = testresults.result_description.toString(),
-                        color = Color(0xff007178),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontSize = 28.sp,
-                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(40.dp),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(end = 28.dp, top = 28.dp)
             ) {
-                val iconSymbol: String = testresults.picture_url
                 Image(
-                    painter = rememberAsyncImagePainter(iconSymbol),
+                    painter = painterResource(id = R.drawable.menu),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(start = 10.dp, top = 20.dp)
+                        .size(28.dp)
                 )
             }
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+        }
+
+        Spacer(modifier = Modifier.height(38.dp))
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .background(Color(0xffd7f9fa))
+                .height(85.dp)
+                .width(260.dp)
+                .align(Alignment.Center)
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .width(296.dp)
-                    .padding(20.dp)
+                    .align(Alignment.Center)
+                    .fillMaxHeight()
+                    .padding(top = 5.dp)
             ) {
+                val testID: Int = testresults.test_id
+                val labeltext: String = when (testID) {
+                    1 -> if (score >= 80) "You have" else "You might be experiencing"
+                    else -> "You might be experiencing"
+                }
                 Text(
-                    text = testresults.result_recommendation.toString(),
+                    text = labeltext,
+                    color = Color(0xff505050),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
+                    ),
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
+
+                Text(
+                    text = testresults.result_description,
                     color = Color(0xff007178),
                     textAlign = TextAlign.Center,
                     style = TextStyle(
-                        fontSize = 17.sp,
+                        fontSize = 28.sp,
                         fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
                     ),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+        }
 
-            Box(
-                contentAlignment = Alignment.Center,
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            val iconSymbol: String = testresults.picture_url
+            Image(
+                painter = rememberAsyncImagePainter(iconSymbol),
+                contentDescription = null,
                 modifier = Modifier
-                    .clip(RoundedCornerShape(25.dp))
-                    .background(Color(0xff101010))
-                    .height(50.dp)
-                    .width(272.dp)
-            ) {
-                Text(
-                    text = "Reach out to Specialists",
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.SemiBold,
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        fontFamily = FontFamily(Font(R.font.inter))
-                    ),
-                )
+                    .padding(start = 10.dp, top = 20.dp)
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .width(296.dp)
+                .padding(20.dp)
+        ) {
+            Text(
+                text = testresults.result_recommendation,
+                color = Color(0xff007178),
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontSize = 17.sp,
+                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
-            }
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.Bottom,
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .clip(RoundedCornerShape(25.dp))
+                .background(Color(0xff101010))
+                .height(50.dp)
+                .width(272.dp)
+                .clickable { navController.navigate(Routes.LIST_SPECIALIST) }
+        ) {
+            Text(
+                text = "Reach out to Specialists",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.SemiBold,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.inter))
+                ),
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(start = 20.dp, bottom = 28.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.back),
+                contentDescription = "back",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(start = 20.dp, bottom = 28.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.back),
-                    contentDescription = "back",
-                    modifier = Modifier
-                        .size(24.dp)
-                )
+                    .size(24.dp)
+            )
 
-                Text(
-                    text = "Back",
-                    color = Color.Black,
-                    fontFamily = FontFamily(Font(R.font.intermedium)),
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                )
-            }
+            Text(
+                text = "Back",
+                color = Color.Black,
+                fontFamily = FontFamily(Font(R.font.intermedium)),
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .padding(start = 10.dp)
+            )
         }
     }
 }

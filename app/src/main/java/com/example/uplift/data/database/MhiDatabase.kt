@@ -5,13 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.uplift.data.models.Mhiquestions
+import com.example.uplift.logic.dao.MhianswersDao
 import com.example.uplift.logic.dao.MhiquestionsDao
 
 @Database(entities = [Mhiquestions::class], version = 1, exportSchema = false)
 abstract class MhiDatabase : RoomDatabase() {
 
     abstract fun mhiQuestionsDao(): MhiquestionsDao
-
+    abstract fun mhiAnswersDao(): MhianswersDao
     companion object {
         @Volatile
         private var INSTANCE: MhiDatabase? = null

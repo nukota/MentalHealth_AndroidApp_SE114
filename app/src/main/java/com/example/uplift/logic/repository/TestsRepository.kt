@@ -2,7 +2,6 @@ package com.example.uplift.logic.repository
 
 import androidx.lifecycle.LiveData
 import com.example.uplift.data.models.Tests
-import com.example.uplift.data.models.User
 import com.example.uplift.logic.dao.TestsDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

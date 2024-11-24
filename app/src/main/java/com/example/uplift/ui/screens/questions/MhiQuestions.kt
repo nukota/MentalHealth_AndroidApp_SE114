@@ -1,6 +1,5 @@
 package com.example.uplift.ui
 
-import android.graphics.Color.rgb
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,14 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,21 +22,28 @@ import androidx.compose.ui.unit.sp
 import com.example.uplift.R
 import com.example.uplift.data.models.Mhianswers
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.uplift.data.models.Mhiquestions
 import com.example.uplift.ui.composables.AnswerOption
 import com.example.uplift.ui.composables.NextPreviousBox
+import com.example.uplift.ui.theme.Cyan
+import com.example.uplift.ui.theme.White
 import java.lang.Integer.parseInt
 
 
 @Composable
 fun MhiquestionsScreen(
+    navController: NavController,
     questions: List<Mhiquestions>,
     answers:  List<Mhianswers>,
-    onAnswerSelected: (Mhianswers) -> Unit,
     currentQuestionIndex: Int,
-
-    ) {
-    var score by remember { mutableStateOf(0) }
+    onFinish: (Int,Int) -> Unit,
+    onNext: () -> Unit,
+    onPrevious: () -> Unit,
+    score:Int,
+    onScoreUpdated: (Int) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -49,24 +51,22 @@ fun MhiquestionsScreen(
             .background(color = Color.White)
     ) {
         Row(
+
         ){
             Column(
-            ) {
+            ){
 
                 Text(
-                    text = "MHI Test",
+                    text = "GAD Test",
                     color = Color(0xff101010),
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.lemonada))
-                    ),
+                    style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
                     modifier = Modifier
                         .padding(start = 20.dp, top = 20.dp)
                         .height(43.dp)
                 )
 
                 Text(
-                    text = "Mental Health Inventory",
+                    text = "Generalized Anxiety Disorder",
                     color = Color(0xff999999),
                     fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                     fontSize = 20.sp,
@@ -74,13 +74,14 @@ fun MhiquestionsScreen(
                         .height(29.dp)
                         .padding(start = 20.dp)
                 )
+
             }
             Column(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(40.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(end=28.dp, top=28.dp)
+                    .padding(end = 28.dp, top = 28.dp)
             ){
                 Image(
                     painter = painterResource(id = R.drawable.menu),
@@ -93,18 +94,18 @@ fun MhiquestionsScreen(
 
 
         Row(
-            horizontalArrangement = Arrangement.Absolute.Right, // Căn giữa các phần tử trong Row theo chiều ngang
+            horizontalArrangement = Arrangement.Absolute.Right,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(start = 52.dp, top = 52.dp)
                 .width(286.dp)
         ) {
             if (currentQuestionIndex >= 1) {
-                NextPreviousBox(text = "Previous", onClick = { /* Handle Previous */ })
+                NextPreviousBox(text = "Previous", onClick = onPrevious)
             }
 
             Text(
-                text = "${currentQuestionIndex + 1}/${questions.size}", // Display current question number and total
+                text = "${currentQuestionIndex + 1}/${questions.size}",
                 color = Color(0xff101010),
                 textAlign = TextAlign.Center,
                 style = TextStyle(
@@ -117,7 +118,7 @@ fun MhiquestionsScreen(
                     .height(24.dp)
                     .wrapContentHeight(align = Alignment.CenterVertically)
             )
-            NextPreviousBox(text = "Next", onClick = { /* Handle Next */ })
+            NextPreviousBox(text = "Next", onClick = onNext)
         }
 
         //questions
@@ -148,28 +149,28 @@ fun MhiquestionsScreen(
                         fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
                     ),
                     modifier = Modifier
-                        .offset(x = 9.dp, y = 25.dp)
-                        .requiredWidth(width = 265.dp)
-                        .requiredHeight(height = 58.dp)
+                        .padding(horizontal = 9.dp, vertical = 25.dp)
+                        .width(265.dp)
+                        .height(58.dp)
                 )
             }
         }
-        val filteredAnswers =
-            answers.filter { it.question_id == questions[currentQuestionIndex].question_id }
         //answer
         Row(
-            horizontalArrangement = Arrangement.Center, // Căn giữa các phần tử trong Row theo chiều ngang
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(top = 30.dp)
                 .width(500.dp)
-                .height(450.dp)
+                .height(350.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxHeight()
             ) {
+                val filteredAnswers =
+                    answers.filter { it.question_id == questions[currentQuestionIndex].question_id }
                 filteredAnswers.forEach { answer ->
                     val iconResId = when (answer.answer_order) {
                         1 -> R.drawable.extremely_happy_1
@@ -178,15 +179,35 @@ fun MhiquestionsScreen(
                         4 -> R.drawable.somtimes_4
                         5->R.drawable.unhappy_5
                         6->R.drawable.dissatisfied_6
+                        7->R.drawable.sad_7
+                        8->R.drawable.very_sad_8
                         else -> R.drawable.extremely_happy_1
                     }
                     AnswerOption(
                         text = answer.answer_text,
                         iconResId = iconResId,
                         onClick = {
-                            score+=answer.answer_value
-                            onAnswerSelected(answer)
+                            onScoreUpdated(score + answer.answer_value)
                         }
+                    )
+                }
+            }
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
+            if (currentQuestionIndex == questions.lastIndex) {
+                Button(
+                    onClick = { onFinish(questions[currentQuestionIndex].test_id, score) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Cyan),
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 40.dp)
+                ) {
+                    Text(
+                        text="Finish",
+                        style = TextStyle(fontSize = 20.sp, color = White, fontFamily = FontFamily(Font(R.font.interbold)))
                     )
                 }
             }
@@ -204,6 +225,7 @@ fun MhiquestionsScreen(
                 contentDescription = "back",
                 modifier = Modifier
                     .size(24.dp)
+                    .clickable { navController.popBackStack() }
             )
 
             Text(
@@ -213,15 +235,16 @@ fun MhiquestionsScreen(
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)
+                    .clickable { navController.popBackStack() }
             )
         }
-
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewMhiquestionsScreen() {
+    val navController = rememberNavController()
     val sampleQuestions = listOf(
         Mhiquestions(1, 1, "How are you?", 1),
         Mhiquestions(2, 1, "How do you feel?", 2),
@@ -254,11 +277,4 @@ fun PreviewMhiquestionsScreen() {
         Mhianswers(20, 4, "Always", 5, 5)
     )
 
-    MhiquestionsScreen(
-        questions = sampleQuestions,
-        answers = sampleAnswers,
-        onAnswerSelected = {},
-        currentQuestionIndex = 0
-    )
 }
-

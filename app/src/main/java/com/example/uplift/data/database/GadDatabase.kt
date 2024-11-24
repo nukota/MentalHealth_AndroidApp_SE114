@@ -5,12 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.uplift.data.models.Gadquestions
+import com.example.uplift.logic.dao.GadanswersDao
 import com.example.uplift.logic.dao.GadquestionsDao
 
 @Database(entities = [Gadquestions::class], version = 1, exportSchema = false)
 abstract class GadDatabase : RoomDatabase() {
 
     abstract fun gadQuestionsDao(): GadquestionsDao
+    abstract fun gadAnswersDao(): GadanswersDao
 
     companion object {
         @Volatile
@@ -21,7 +23,7 @@ abstract class GadDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     GadDatabase::class.java,
-                    "gadquestions_database"
+                    "gad_database"
                 ).build()
                 INSTANCE = instance
                 instance
