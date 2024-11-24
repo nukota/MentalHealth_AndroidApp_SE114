@@ -23,6 +23,8 @@ import com.example.uplift.data.models.Questions
 import com.example.uplift.ui.screens.Questions.ListTests
 import com.example.uplift.ui.screens.Questions.QuestionsScreen
 import com.example.uplift.ui.screens.Questions.TestResultsScreen
+import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
+import com.example.uplift.ui.viewmodels.SpecialistsViewModel
 import com.example.uplift.ui.viewmodels.TestresultsViewModel
 
 
@@ -107,6 +109,17 @@ fun MainActivityContent(authViewModel: AuthViewModel) {
                     score = score!!,
                     testresults = testresults!!
                 )
+            }
+            composable(Routes.LIST_SPECIALIST) {backStackEntry->
+                val email = backStackEntry.arguments?.getString("email")
+                val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
+                val specialists by listSpecialistsViewModel.allSpecialists.observeAsState()
+                if (email != null) {
+                    ListSpecialistsScreen(
+                        navController = navController,
+                        email=email,
+                        listSpecialists = specialists ?: emptyList())
+                }
             }
         }
 
