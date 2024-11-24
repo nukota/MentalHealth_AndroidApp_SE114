@@ -18,12 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
 @Composable
 fun ExploreScreen (
-    modifier: Modifier = Modifier
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -92,7 +95,7 @@ fun ExploreScreen (
                             .width(164.dp)
                             .height(180.dp)
                             .padding(10.dp)
-                            .clickable { /* Add menu click action here */ }
+                            .clickable {  navController.navigate(Routes.LIST_TESTS) }
                     )
                     Image(
                         painter = painterResource(id = R.drawable.read_story),
@@ -101,7 +104,7 @@ fun ExploreScreen (
                             .width(164.dp)
                             .height(180.dp)
                             .padding(10.dp)
-                            .clickable { /* Add menu click action here */ }
+                            .clickable {  navController.navigate(Routes.STORIES) }
                     )
                 }
                 Row(horizontalArrangement = Arrangement.Center,
@@ -112,13 +115,12 @@ fun ExploreScreen (
                         contentDescription = null,
                         modifier = Modifier
                             .width(164.dp)
-                            .height(180.dp)
                             .padding(10.dp)
-                            .clickable { /* Add menu click action here */ }
+                            .height(180.dp)
+                            .clickable {  navController.navigate(Routes.LIST_SPECIALIST) }
                     )
                 }
             }
-
         }
     }
 }
@@ -131,7 +133,9 @@ fun ExploreScreen (
     heightDp = 800
 )
 @Composable
+
 fun ExploreScreenPreview() {
-    ExploreScreen()
+    val navController = rememberNavController()
+    ExploreScreen(navController=navController)
 }
 
