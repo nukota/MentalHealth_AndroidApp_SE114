@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.Questions
+package com.example.uplift.ui.screens.questions
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -157,9 +157,8 @@ fun TestResultsScreen (
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            val iconSymbol: String = testresults.picture_url
             Image(
-                painter = rememberAsyncImagePainter(iconSymbol),
+                painter = rememberAsyncImagePainter(testresults.picture_url),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 10.dp, top = 20.dp)
