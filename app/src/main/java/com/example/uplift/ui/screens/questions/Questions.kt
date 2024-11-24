@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.Questions
+package com.example.uplift.ui.screens.questions
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -27,16 +27,12 @@ import com.example.uplift.data.models.Answer
 import com.example.uplift.data.models.Questions
 import com.example.uplift.ui.composables.AnswerOption
 import com.example.uplift.ui.composables.NextPreviousBox
+import com.example.uplift.ui.composables.getInitials
 import com.example.uplift.ui.theme.Cyan
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
-fun getInitials(input: String): String {
-    return input
-        .split(" ")
-        .filter { it.isNotEmpty() }
-        .joinToString("") { it[0].uppercase() }
-}
+
 @Composable
 fun QuestionsScreen(
     navController: NavController,

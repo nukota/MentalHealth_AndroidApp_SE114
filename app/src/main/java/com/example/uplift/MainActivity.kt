@@ -20,9 +20,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.*
 import com.example.uplift.data.models.Answer
 import com.example.uplift.data.models.Questions
-import com.example.uplift.ui.screens.Questions.ListTests
-import com.example.uplift.ui.screens.Questions.QuestionsScreen
-import com.example.uplift.ui.screens.Questions.TestResultsScreen
+import com.example.uplift.ui.screens.questions.ListTests
+import com.example.uplift.ui.screens.questions.QuestionsScreen
+import com.example.uplift.ui.screens.questions.TestResultsScreen
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
 import com.example.uplift.ui.viewmodels.SpecialistsViewModel
 import com.example.uplift.ui.viewmodels.TestresultsViewModel
