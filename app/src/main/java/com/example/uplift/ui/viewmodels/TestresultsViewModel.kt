@@ -1,16 +1,11 @@
 package com.example.uplift.ui.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uplift.data.models.Testresults
-import com.example.uplift.data.models.Tests
-import com.example.uplift.logic.repository.GadRepository
 import com.example.uplift.logic.repository.TestresultsRepository
-import com.example.uplift.logic.repository.TestsRepository
 import kotlinx.coroutines.launch
 
 
