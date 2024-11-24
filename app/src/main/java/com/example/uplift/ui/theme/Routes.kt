@@ -8,11 +8,10 @@ object Routes {
     const val SENDEMAIL = "send email"
     const val RESETPASSWORD = "reset password"
     const val SIGNUP = "signup"
+    const val EXPLORE = "explore"
     const val LIST_TESTS = "list_tests"
     const val TEST_RESULTS = "test_results"
-    const val GAD_QUESTIONS = "gad_questions"
-    const val PHQ_QUESTIONS = "phq_questions"
-    const val MHI_QUESTIONS = "mhi_questions"
+    const val QUESTIONS = "questions"
     const val LIST_SPECIALIST = "list_specialists"
     const val DETAILS_SPECIALIST = "details_specialists"
 }

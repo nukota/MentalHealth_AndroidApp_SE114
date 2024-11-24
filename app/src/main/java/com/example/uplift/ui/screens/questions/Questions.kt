@@ -1,4 +1,4 @@
-package com.example.uplift.ui
+package com.example.uplift.ui.screens.Questions
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -20,26 +20,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.uplift.R
-import com.example.uplift.data.models.Phqanswers
-import com.example.uplift.data.models.Phqquestions
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.uplift.data.models.Answer
+import com.example.uplift.data.models.Questions
 import com.example.uplift.ui.composables.AnswerOption
 import com.example.uplift.ui.composables.NextPreviousBox
 import com.example.uplift.ui.theme.Cyan
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
+fun getInitials(input: String): String {
+    return input
+        .split(" ")
+        .filter { it.isNotEmpty() }
+        .joinToString("") { it[0].uppercase() }
+}
 @Composable
-fun PhqQuestionScreen(
+fun QuestionsScreen(
     navController: NavController,
-    questions: List<Phqquestions>,
-    answers:  List<Phqanswers>,
+    questions: List<Questions>,
+    answers:  List<Answer>,
     currentQuestionIndex: Int,
-    onFinish: (Int,Int) -> Unit,
+    onFinish: (testId:Int,testName:String,score:Int) -> Unit,
     onNext: () -> Unit,
     onPrevious: () -> Unit,
     score:Int,
+    testId:Int,
+    testName:String,
     onScoreUpdated: (Int) -> Unit
 ) {
     Column(
@@ -53,9 +62,8 @@ fun PhqQuestionScreen(
         ){
             Column(
             ){
-
                 Text(
-                    text = "GAD Test",
+                    text = getInitials(testName)+ " Test",
                     color = Color(0xff101010),
                     style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
                     modifier = Modifier
@@ -64,7 +72,7 @@ fun PhqQuestionScreen(
                 )
 
                 Text(
-                    text = "Generalized Anxiety Disorder",
+                    text = testName,
                     color = Color(0xff999999),
                     fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                     fontSize = 20.sp,
@@ -168,7 +176,7 @@ fun PhqQuestionScreen(
                 modifier = Modifier.fillMaxHeight()
             ) {
                 val filteredAnswers =
-                    answers.filter { it.question_id == questions[currentQuestionIndex].question_id }
+                    answers.filter { it.question_id == questions[currentQuestionIndex].question_order }
                 filteredAnswers.forEach { answer ->
                     val iconResId = when (answer.answer_order) {
                         1 -> R.drawable.extremely_happy_1
@@ -198,7 +206,7 @@ fun PhqQuestionScreen(
         ){
             if (currentQuestionIndex == questions.lastIndex) {
                 Button(
-                    onClick = { onFinish(questions[currentQuestionIndex].test_id, score) },
+                    onClick = { onFinish(testId, testName,score) },
                     colors = ButtonDefaults.buttonColors(containerColor = Cyan),
                     modifier = Modifier
                         .size(width = 120.dp, height = 40.dp)
@@ -223,7 +231,7 @@ fun PhqQuestionScreen(
                 contentDescription = "back",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { navController.navigate(Routes.LIST_TESTS)}
             )
 
             Text(
@@ -233,50 +241,33 @@ fun PhqQuestionScreen(
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { navController.navigate(Routes.LIST_TESTS) }
             )
         }
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun PhqQuestionScreenPreview() {
-    val navController = rememberNavController()
-    val questions = listOf(
-        Phqquestions(1, 2, "Little interest or pleasure in doing things?", 1),
-        Phqquestions(2, 2, "Feeling down, depressed, or hopeless?", 2),
-        Phqquestions(3, 2, "Trouble falling or staying asleep, or sleeping too much?", 3)
-    )
-
-    val answers = listOf(
-        Phqanswers(1, 1, "Not at all", 0, 1),
-        Phqanswers(2, 1, "Several days", 1, 2),
-        Phqanswers(3, 1, "More than half the days", 2, 3),
-        Phqanswers(4, 1, "Nearly every day", 3, 4),
-
-        Phqanswers(5, 2, "Not at all", 0, 1),
-        Phqanswers(6, 2, "Several days", 1, 2),
-        Phqanswers(7, 2, "More than half the days", 2, 3),
-        Phqanswers(8, 2, "Nearly every day", 3, 4),
-
-        Phqanswers(9, 3, "Not at all", 0, 1),
-        Phqanswers(10, 3, "Several days", 1, 2),
-        Phqanswers(11, 3, "More than half the days", 2, 3),
-        Phqanswers(12, 3, "Nearly every day", 3, 4),
-    )
-
-//    PhqQuestionScreen(
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewGadquestionsScreen() {
+//    val navController = rememberNavController()
+//    val sampleQuestions = listOf(
+//        Questions(1, 1, "How are you?", 1),
+//        Gadquestions(2, 1, "How do you feel?", 2)
+//    )
+//    val sampleAnswers = listOf(
+//        Gadanswers(1, 2, "Good", 1, 1),
+//        Gadanswers(2, 2, "Bad", 2, 2)
+//    )
+//
+////    GadquestionsScreen(
 //        navController = navController,
-//        questions = questions,
-//        answers = answers,
-//        currentQuestionIndex = 2,
+//        questions = sampleQuestions,
+//        answers = sampleAnswers,
+//        currentQuestionIndex = 1,
 //        score = 0,
-//        onAnswerSelected = {},
 //        onNext = {},
 //        onPrevious = {},
-//        onFinish = {},
+//        onFinish = ,
 //        onScoreUpdated = {}
 //    )
-}

@@ -5,11 +5,12 @@ import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "phqanswers")
-data class Phqanswers(
-    val answer_id: Int,
+@Entity( tableName = "answers",
+    primaryKeys = ["answer_order", "test_id","question_id"])
+data class Answer(
+    val answer_order: Int,
+    val test_id: Int,
     val question_id: Int,
     val answer_text: String,
-    val answer_value: Int,
-    val answer_order: Int
-):Parcelable
+    val answer_value: Int
+) : Parcelable

@@ -1,14 +1,14 @@
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.uplift.data.models.Gadanswers
-import com.example.uplift.data.models.Gadquestions
-import com.example.uplift.logic.repository.GadRepository
+import com.example.uplift.data.models.Answer
+import com.example.uplift.data.models.Questions
+import com.example.uplift.logic.repository.QuestionsRepository
 
-class GadViewModel( private val gadRepository: GadRepository) : ViewModel() {
-    val allQuestions: LiveData<List<Gadquestions>> = gadRepository.getAllQuestions()
+class QuestionsViewModel(private val questionsRepository: QuestionsRepository) : ViewModel() {
+    val allQuestions: LiveData<List<Questions>> = questionsRepository.getAllQuestions()
 
-    val allAnswers: LiveData<List<Gadanswers>> = gadRepository.getAllAnswers()
+    val allAnswers: LiveData<List<Answer>> = questionsRepository.getAllAnswers()
 
     private val _currentQuestionIndex = MutableLiveData(0)
     val currentQuestionIndex: LiveData<Int> get() = _currentQuestionIndex

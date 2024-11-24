@@ -1,9 +1,7 @@
 package com.example.uplift.ui.screens.Questions
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,13 +12,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -36,23 +30,20 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.uplift.R
-import com.example.uplift.data.models.Gadquestions
 import com.example.uplift.data.models.Testresults
-import com.example.uplift.data.models.Tests
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
 @Composable
 fun TestResultsScreen (
     testresults: Testresults,
-    testname:String,
+    testName:String,
     navController:NavController,
     score:Int
 ) {
@@ -89,7 +80,7 @@ fun TestResultsScreen (
                     )
 
                     Text(
-                        text = testname,
+                        text = testName,
                         color = Color(0xff999999),
                         fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
                         fontSize = 20.sp,
@@ -227,6 +218,7 @@ fun TestResultsScreen (
                 contentDescription = "back",
                 modifier = Modifier
                     .size(24.dp)
+                    .clickable { navController.navigate(Routes.LIST_TESTS) }
             )
 
             Text(
@@ -236,6 +228,7 @@ fun TestResultsScreen (
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)
+                    .clickable { navController.navigate(Routes.LIST_TESTS) }
             )
         }
     }

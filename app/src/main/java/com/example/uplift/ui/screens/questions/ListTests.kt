@@ -39,7 +39,7 @@ import com.example.uplift.ui.theme.White
 fun ListTests (
     tests: List<Tests>,
     navController: NavController,
-    onFinish: (Int) -> Unit
+    onFinish: (testId: Int, testName: String) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -141,7 +141,7 @@ fun ListTests (
                             questionCount = test.question_count,
                             testTime = "${test.duration_minutes} min",
                             iconResId = iconUrl,
-                            onClick = { onFinish(test.test_id) })
+                            onClick = { onFinish(test.test_id,test.test_name) })
                     }
                 }
             }
@@ -158,5 +158,8 @@ private fun TestPreview() {
         Tests(2, "Patient Health Questionnaire", "For screening depression", 9, 10, "", 1),
         Tests(3, "Generalized Anxiety Disorder", "For screening anxiety", 7, 10, "", 1)
     )
-    ListTests(tests = sampleTests,navController=navController, onFinish = {})
+    ListTests(tests = sampleTests,navController=navController,  onFinish = { testId, testName ->
+        println("Test ID: $testId, Test Name: $testName")
+        navController.navigate("test_results/$testId")
+    })
 }
