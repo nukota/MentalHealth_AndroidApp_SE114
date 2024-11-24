@@ -13,8 +13,11 @@ data class Specialists(
     val profession: String,
     val years_of_experience: Int,
     val location: String,
+    val email: String,
     val rating: Double,
     val review_count: Int,
-    val avartar: Int,
-    val explore_spec_id: Int
+    val avartar: String,
+    val specializations: List<String>,
+    val educations: List<String>,
+    val certifications: List<String>
 ):Parcelable

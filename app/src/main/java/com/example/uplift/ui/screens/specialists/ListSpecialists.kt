@@ -1,7 +1,8 @@
-package com.example.uplift.ui.screens.Specialists
+package com.example.uplift.ui.screens.specialists
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,9 +28,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.uplift.R
 import com.example.uplift.data.models.Specialists
 import com.example.uplift.ui.composables.SpecialistsBox
@@ -33,13 +38,17 @@ import com.example.uplift.ui.theme.White
 
 @Composable
 fun ListSpecialistsScreen (
-    listSpecialists: List<Specialists>
+    listSpecialists: List<Specialists>,
+    navController:NavController,
+    email:String
 ) {
-
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedSpecialist by remember { mutableStateOf<Specialists?>(null) }
+    val parentBackgroundColor = remember { mutableStateOf(Color.White) }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(White)
+            .background(parentBackgroundColor.value)
             .fillMaxWidth()
     ) {
         Row() {
@@ -83,17 +92,9 @@ fun ListSpecialistsScreen (
         ) {
             Column(
             ) {
-
                 listSpecialists.forEach { specialist ->
-                    val avartar = when (specialist.avartar) {
-                        1 -> R.drawable.avartar1
-                        2 -> R.drawable.avartar1
-                        3 -> R.drawable.avartar1
-                        else -> R.drawable.avartar1
-                    }
-
                     SpecialistsBox(
-                        iconAvartar = avartar,
+                        iconAvartar =  specialist.avartar,
                         textName = specialist.full_name,
                         textAge = specialist.age,
                         textProfession = specialist.profession,
@@ -102,12 +103,20 @@ fun ListSpecialistsScreen (
                         textRating = specialist.rating,
                         textReviewCount = specialist.review_count,
                         onClick = {
-                            // Hành động khi click vào từng câu hỏi
+                            selectedSpecialist = specialist
+                            showDialog = true
                         }
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                 }
-
+            }
+            if (showDialog && selectedSpecialist != null) {
+                parentBackgroundColor.value=Color(0x99000000)
+                DetailOfSpecialists(
+                    specialist = selectedSpecialist!!,
+                    useremail=email,
+                    onDismiss = { showDialog = false }
+                )
             }
         }
         Row(
@@ -120,9 +129,12 @@ fun ListSpecialistsScreen (
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.back),
-                contentDescription = "back",
+                contentDescription = "Back",
                 modifier = Modifier
                     .size(24.dp)
+                    .clickable(){
+                        navController.popBackStack()
+                    }
             )
 
             Text(
@@ -132,52 +144,55 @@ fun ListSpecialistsScreen (
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)
+                    .clickable(){
+                        navController.popBackStack()
+                    }
             )
         }
     }
 
 }
 
-@Preview(widthDp = 360, heightDp = 800)
-@Composable
-private fun ListSpecialistsScreenPreview() {
-    val sampleSpecialists = listOf(
-        Specialists(
-            specialist_id = 1,
-            full_name = "Dr. Jane Cooper",
-            age = 32,
-            profession = "Licensed Professional Counselor (Psychotherapist)",
-            years_of_experience = 6,
-            location = "New York, NY, USA",
-            rating = 3.67,
-            review_count = 100,
-            avartar = 1,
-            explore_spec_id = 2
-        ),
-        Specialists(
-            specialist_id = 2,
-            full_name = "Dr. Alexander",
-            age = 32,
-            profession = "Licensed Professional Counselor (Psychotherapist)",
-            years_of_experience = 6,
-            location = "New York, NY, USA",
-            rating = 3.67,
-            review_count = 100,
-            avartar = 2,
-            explore_spec_id = 2
-        ),
-        Specialists(
-            specialist_id = 3,
-            full_name = "Dr. Sarah Jones",
-            age = 28,
-            profession = "Clinical Psychologist",
-            years_of_experience = 5,
-            location = "Los Angeles, CA, USA",
-            rating = 4.5,
-            review_count = 200,
-            avartar = 3,
-            explore_spec_id = 2
-        )
-    )
-    ListSpecialistsScreen(listSpecialists = sampleSpecialists)
-}
+//@Preview(widthDp = 360, heightDp = 800)
+//@Composable
+//private fun ListSpecialistsScreenPreview() {
+//    val sampleSpecialists = listOf(
+//        Specialists(
+//            specialist_id = 1,
+//            full_name = "Dr. Jane Cooper",
+//            age = 32,
+//            profession = "Licensed Professional Counselor (Psychotherapist)",
+//            years_of_experience = 6,
+//            location = "New York, NY, USA",
+//            rating = 3.67,
+//            review_count = 100,
+//            avartar = 1,
+//            explore_spec_id = 2
+//        ),
+//        Specialists(
+//            specialist_id = 2,
+//            full_name = "Dr. Alexander",
+//            age = 32,
+//            profession = "Licensed Professional Counselor (Psychotherapist)",
+//            years_of_experience = 6,
+//            location = "New York, NY, USA",
+//            rating = 3.67,
+//            review_count = 100,
+//            avartar = 2,
+//            explore_spec_id = 2
+//        ),
+//        Specialists(
+//            specialist_id = 3,
+//            full_name = "Dr. Sarah Jones",
+//            age = 28,
+//            profession = "Clinical Psychologist",
+//            years_of_experience = 5,
+//            location = "Los Angeles, CA, USA",
+//            rating = 4.5,
+//            review_count = 200,
+//            avartar = 3,
+//            explore_spec_id = 2
+//        )
+//    )
+//    ListSpecialistsScreen(listSpecialists = sampleSpecialists)
+//}
