@@ -1,57 +1,38 @@
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.uplift.data.database.GadDatabase
+import androidx.lifecycle.ViewModel
+import com.example.uplift.data.models.Gadanswers
 import com.example.uplift.data.models.Gadquestions
 import com.example.uplift.logic.repository.GadRepository
-import kotlinx.coroutines.launch
 
-class GadViewModel(application: Application) : AndroidViewModel(application) {
-    private val gadRepository: GadRepository
-    private val _allQuestions  = MutableLiveData<List<Gadquestions>>()
-    val allQuestions: LiveData<List<Gadquestions>> get() = _allQuestions
+class GadViewModel( private val gadRepository: GadRepository) : ViewModel() {
+    val allQuestions: LiveData<List<Gadquestions>> = gadRepository.getAllQuestions()
 
+    val allAnswers: LiveData<List<Gadanswers>> = gadRepository.getAllAnswers()
+
+    private val _currentQuestionIndex = MutableLiveData(0)
+    val currentQuestionIndex: LiveData<Int> get() = _currentQuestionIndex
+
+    private val _score = MutableLiveData(0)
+    val score: LiveData<Int> get() = _score
+    private var currentScore = 0
     init {
-        val gadQuestionsDao = GadDatabase.getDatabase(application).gadQuestionsDao()
-        gadRepository = GadRepository(gadQuestionsDao)
-        getAllQuestions()
+        _currentQuestionIndex.value=0
+        _score.value=0
     }
-    private fun getAllQuestions() {
-        viewModelScope.launch {
-            gadRepository.getAllQuestions().observeForever { gadquestions ->
-                _allQuestions.postValue(gadquestions)
-            }
-        }
+
+    fun moveToNextQuestion() {
+        val newIndex = (_currentQuestionIndex.value ?: 0) + 1
+        _currentQuestionIndex.value = newIndex
     }
-    fun insertQuestion(gadQuestions: Gadquestions) {
-        viewModelScope.launch {
-            gadRepository.insertQuestion(gadQuestions)
-            getAllQuestions()
-        }
+    fun moveToPreviousQuestion() {
+        val newIndex = (_currentQuestionIndex.value ?: 0) - 1
+        _currentQuestionIndex.value = newIndex
     }
-    fun updateQuestions(gadQuestionsList: List<Gadquestions>) {
-        viewModelScope.launch {
-            gadRepository.updateQuestions(gadQuestionsList)
-            getAllQuestions()
-        }
+
+    fun updateScore(value: Int) {
+        currentScore += value
+        _score.value = currentScore
     }
-    fun deleteAllQuestions() {
-        viewModelScope.launch {
-            gadRepository.deleteAllQuestions()
-            _allQuestions.postValue(emptyList())
-        }
-    }
-    fun deleteQuestionById(questionId:Int) {
-        viewModelScope.launch {
-            gadRepository.deleteQuestionById(questionId)
-            getAllQuestions()
-        }
-    }
-    fun getQuestionById(questionId: Int){
-        viewModelScope.launch {
-            val test = gadRepository.getQuestionById(questionId)
-        }
-    }
+
 }

@@ -5,7 +5,7 @@ import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "phqanswer")
+@Entity(tableName = "phqanswers")
 data class Phqanswers(
     val answer_id: Int,
     val question_id: Int,

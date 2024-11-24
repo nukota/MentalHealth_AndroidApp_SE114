@@ -1,23 +1,19 @@
 package com.example.uplift.ui.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uplift.data.models.Tests
 import com.example.uplift.logic.repository.TestsRepository
 import kotlinx.coroutines.launch
 
 
-class ListTestsViewModel (application: Application) : AndroidViewModel(application) {
-    private val testsRepository: TestsRepository
+class ListTestsViewModel (private val testsRepository: TestsRepository) : ViewModel() {
     private val _allTests = MutableLiveData<List<Tests>>()
     val allTests: LiveData<List<Tests>> get() = _allTests
 
     init {
-        val testsDao = TestsDatabase.getDatabase(application).testsDao()
-        testsRepository = TestsRepository(testsDao)
         getAllTests()
     }
     private fun getAllTests() {

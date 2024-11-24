@@ -44,12 +44,12 @@ fun QuestionBox(
         modifier = Modifier
             .requiredWidth(width = 327.dp)
             .requiredHeight(height = 118.dp)
+            .background(color = Color.White)
             .border(
                 border = BorderStroke(1.dp, Color.Black),
                 shape = RoundedCornerShape(20.dp)
             )
             .clip(RoundedCornerShape(20.dp))
-            .background(color = Color.White)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
