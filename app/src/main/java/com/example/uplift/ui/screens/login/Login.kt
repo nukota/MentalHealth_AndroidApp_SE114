@@ -38,7 +38,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
 
     LaunchedEffect(authState.value) {
         when (authState.value) {
-            is AuthState.Authenticated -> navHostController.navigate(Routes.HOME)
+            is AuthState.Authenticated -> navHostController.navigate(Routes.DIARY)// dieu huong duong di
             is AuthState.Error -> Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
             else -> Unit
         }

@@ -10,8 +10,8 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "habit_table")
 data class Habit (
     @PrimaryKey(autoGenerate = true)
-    val id: String,
+    val id: Int = 0,
     val name: String,
-    val date_created: DateFormat,
+    val date_created: Long ,
     val description: String,
 ) : Parcelable

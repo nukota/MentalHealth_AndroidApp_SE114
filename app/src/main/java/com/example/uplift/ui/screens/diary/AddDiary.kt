@@ -56,7 +56,10 @@ import com.example.diary.ui.DiaryScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddDiaryScreen() {
+fun AddDiaryScreen(onSave: (String, String) -> Unit) {
+    var title by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -95,61 +98,29 @@ fun AddDiaryScreen() {
                         )
                     )
                 }
-                Image(
-                    painter = painterResource(id = R.drawable.menu),
-                    contentDescription = null,
-                    modifier = Modifier.size(28.dp)
-                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Lời nhắc nhẹ nhàng
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp)
-            ) {
-                Text(
-                    text = "Write about yours’ todays",
-                    color = Color(0xff007178),
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.sailregular)),
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Even in the darkest moments, remember that small steps forward can lead to brighter days.",
-                    color = Color(0xff505050),
-                    fontSize = 14.sp,
-                    fontFamily = FontFamily(Font(R.font.sailregular)),
-                    lineHeight = 20.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
             // Vùng nhập tiêu đề
             OutlinedTextField(
-                value = "",
-                onValueChange = { /* Handle title input */ },
+                value = title,
+                onValueChange = { title = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
                     .background(
-                        color = Color(0xFFDCFDFF), // Màu nền tùy chỉnh
-                        shape = RoundedCornerShape(16.dp) // Bo góc cho toàn bộ vùng nhập
+                        color = Color(0xFFDCFDFF),
+                        shape = RoundedCornerShape(16.dp)
                     ),
                 placeholder = { Text("Enter diary title...") },
                 maxLines = 1,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color(0xff007178), // Viền khi focus
-                    unfocusedBorderColor = Color.Gray, // Viền khi không focus
-                    cursorColor = Color.Black, // Màu con trỏ nhập liệu
-                    focusedTextColor = Color.Black, // Màu chữ
-                    focusedPlaceholderColor = Color.Gray  // Màu của placeholder
+                    focusedBorderColor = Color(0xff007178),
+                    unfocusedBorderColor = Color.Gray,
+                    cursorColor = Color.Black,
+                    focusedTextColor = Color.Black,
+                    focusedPlaceholderColor = Color.Gray
                 )
             )
 
@@ -157,23 +128,23 @@ fun AddDiaryScreen() {
 
             // Vùng nhập nội dung nhật ký
             OutlinedTextField(
-                value = "",
-                onValueChange = { /* Handle input */ },
+                value = content,
+                onValueChange = { content = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // Tăng chiều cao để chiếm toàn bộ không gian còn lại
+                    .weight(1f)
                     .background(
-                        color = Color(0xFFDCFDFF), // Nền tùy chỉnh
-                        shape = RoundedCornerShape(30.dp) // Bo góc nền
+                        color = Color(0xFFDCFDFF),
+                        shape = RoundedCornerShape(30.dp)
                     ),
                 placeholder = { Text("Start writing here...") },
-                maxLines = Int.MAX_VALUE, // Cho phép nhập nhiều dòng
+                maxLines = Int.MAX_VALUE,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Transparent, // Xóa viền khi focus
-                    unfocusedBorderColor = Color.Transparent, // Xóa viền khi không focus
-                    cursorColor = Color.Black, // Màu con trỏ nhập liệu
-                    focusedTextColor = Color.Black, // Màu chữ
-                    focusedPlaceholderColor = Color.Gray // Màu của placeholder
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = Color.Black,
+                    focusedTextColor = Color.Black,
+                    focusedPlaceholderColor = Color.Gray
                 )
             )
 
@@ -181,16 +152,16 @@ fun AddDiaryScreen() {
 
             // Nút lưu nhật ký
             Button(
-                onClick = { /* Handle save action */ },
+                onClick = { onSave(title, content) }, // Gọi callback onSave
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(8.dp)
                     .fillMaxWidth(0.8f),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xff007178), // Màu nền nút
-                    contentColor = Color.White // Màu chữ
+                    containerColor = Color(0xff007178),
+                    contentColor = Color.White
                 ),
-                shape = RoundedCornerShape(50) // Bo góc nút
+                shape = RoundedCornerShape(50)
             ) {
                 Text(
                     text = "Save Diary",
@@ -204,9 +175,3 @@ fun AddDiaryScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewAddDiaryScreen() {
-    //HabitScreen(rememberNavController(), AuthViewModel())
-    AddDiaryScreen()
-}

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics)
     id("kotlin-parcelize")
     alias(libs.plugins.compose.compiler)
+    id("kotlin-kapt")
 }
 
 android {
@@ -69,6 +70,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,6 +92,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     androidTestImplementation(libs.androidx.room.testing)
+    kapt(libs.androidx.room.compiler)
 
     //Retrofit2
     implementation (libs.retrofit)
@@ -105,4 +109,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
 }
+
+kapt {
+    correctErrorTypes = true // Thêm cấu hình kapt
+}
+
