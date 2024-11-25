@@ -39,13 +39,13 @@ fun QuestionsScreen(
     questions: List<Questions>,
     answers:  List<Answer>,
     currentQuestionIndex: Int,
-    onFinish: (testId:Int,testName:String,score:Int) -> Unit,
+    onFinish: (testId:Int,testName:String,score:Double) -> Unit,
     onNext: () -> Unit,
     onPrevious: () -> Unit,
-    score:Int,
+    score:Double,
     testId:Int,
     testName:String,
-    onScoreUpdated: (Int) -> Unit
+    onScoreUpdated: (Double) -> Unit
 ) {
     Column(
         modifier = Modifier

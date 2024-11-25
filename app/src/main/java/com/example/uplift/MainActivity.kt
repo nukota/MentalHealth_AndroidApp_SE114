@@ -65,7 +65,7 @@ fun MainActivityContent(authViewModel: AuthViewModel) {
                 val questions by questionsViewModel.allQuestions.observeAsState()
                 val answers by questionsViewModel.allAnswers.observeAsState()
                 val currentQuestionIndex by questionsViewModel.currentQuestionIndex.observeAsState(0)
-                val score by questionsViewModel.score.observeAsState(0)
+                val score by questionsViewModel.score.observeAsState(0.0)
 
                 val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull()
                 val testName = backStackEntry.arguments?.getString("testName")
