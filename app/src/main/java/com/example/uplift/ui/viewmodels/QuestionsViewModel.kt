@@ -13,12 +13,12 @@ class QuestionsViewModel(private val questionsRepository: QuestionsRepository) :
     private val _currentQuestionIndex = MutableLiveData(0)
     val currentQuestionIndex: LiveData<Int> get() = _currentQuestionIndex
 
-    private val _score = MutableLiveData(0)
-    val score: LiveData<Int> get() = _score
-    private var currentScore = 0
+    private val _score = MutableLiveData(0.0)
+    val score: LiveData<Double> get() = _score
+    private var currentScore = 0.0
     init {
         _currentQuestionIndex.value=0
-        _score.value=0
+        _score.value=0.0
     }
 
     fun moveToNextQuestion() {
@@ -30,7 +30,7 @@ class QuestionsViewModel(private val questionsRepository: QuestionsRepository) :
         _currentQuestionIndex.value = newIndex
     }
 
-    fun updateScore(value: Int) {
+    fun updateScore(value: Double) {
         currentScore += value
         _score.value = currentScore
     }

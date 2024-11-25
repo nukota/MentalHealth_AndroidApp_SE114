@@ -12,5 +12,5 @@ data class Answer(
     val test_id: Int,
     val question_id: Int,
     val answer_text: String,
-    val answer_value: Int
+    val answer_value: Double
 ) : Parcelable

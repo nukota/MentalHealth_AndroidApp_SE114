@@ -11,7 +11,5 @@ data class Tests (
     val test_name: String,
     val test_purpose: String,
     val question_count: Int,
-    val duration_minutes: Int,
     val icon_url:String,
-    val explore_test_id :Int
 ) : Parcelable
