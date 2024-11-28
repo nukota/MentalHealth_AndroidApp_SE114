@@ -99,7 +99,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 modifier = Modifier
                     .padding(start = 210.dp, top = 10.dp, bottom = 10.dp),
                 onClick = {
-                    navHostController.navigate(Routes.SENDEMAIL)
+                    navHostController.navigate(Routes.SEND_EMAIL)
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))

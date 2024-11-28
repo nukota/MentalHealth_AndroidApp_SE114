@@ -7,11 +7,11 @@ import java.text.DateFormat
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "habit_table")
+@Entity(tableName = "habit")
 data class Habit (
     @PrimaryKey(autoGenerate = true)
-    val id: String,
+    val id: Int,
     val name: String,
-    val date_created: DateFormat,
+    val date_created: String,
     val description: String,
 ) : Parcelable
