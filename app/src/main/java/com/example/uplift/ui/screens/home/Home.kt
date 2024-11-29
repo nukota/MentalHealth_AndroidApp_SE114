@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
-import com.example.uplift.ui.viewmodels.AuthViewModel
+import com.example.uplift.viewmodels.AuthViewModel
 
 
 @Composable

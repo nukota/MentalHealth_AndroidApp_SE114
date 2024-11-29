@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-//    id("org.jetbrains.kotlin.android") version "1.8.0"
 }
 
 android {
@@ -89,12 +88,6 @@ dependencies {
 
     // Date picker
     implementation(libs.materialdatetimepicker)
-
-    // Room components
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    kapt(libs.androidx.room.compiler)
-    androidTestImplementation(libs.androidx.room.testing)
 
     //Retrofit2
     implementation (libs.retrofit)

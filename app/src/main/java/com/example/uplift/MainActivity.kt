@@ -1,7 +1,6 @@
 package com.example.uplift
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -19,12 +18,11 @@ import com.example.uplift.ui.screens.signup.SignUpScreen
 import com.example.uplift.ui.screens.readStories.ReadStoriesScreen
 import com.example.uplift.ui.screens.readStories.StoryDetailScreen
 import com.example.uplift.ui.theme.Routes
-import com.example.uplift.ui.viewmodels.AuthViewModel
-import com.example.uplift.ui.viewmodels.StoryViewModel
+import com.example.uplift.viewmodels.AuthViewModel
+import com.example.uplift.viewmodels.StoryViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val storyViewModel: StoryViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +42,10 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun MainActivityContent(authViewModel: AuthViewModel, storyViewModel: StoryViewModel) {
+fun MainActivityContent(
+    authViewModel: AuthViewModel,
+    storyViewModel: StoryViewModel
+) {
     val navController = rememberNavController()
 
     Box() {
