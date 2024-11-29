@@ -3,7 +3,7 @@ package com.example.uplift.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.uplift.data.models.story
+import com.example.uplift.data.models.Story
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -13,16 +13,16 @@ import com.google.firebase.database.ValueEventListener
 class StoryRepository {
     private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("story")
 
-    private val _stories = MutableLiveData<List<story>>()
-    val stories: LiveData<List<story>> get() = _stories
+    private val _stories = MutableLiveData<List<Story>>()
+    val stories: LiveData<List<Story>> get() = _stories
 
     init {
         fetchStories()
     }
 
-    fun getStoryById(storyId: Int): LiveData<story?> {
+    fun getStoryById(storyId: Int): LiveData<Story?> {
         val story = _stories.value?.find { it.story_id == storyId }
-        val liveData = MutableLiveData<story?>()
+        val liveData = MutableLiveData<Story?>()
         liveData.value = story
         return liveData
     }
@@ -30,9 +30,9 @@ class StoryRepository {
     private fun fetchStories() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val storyList = mutableListOf<story>()
+                val storyList = mutableListOf<Story>()
                 for (storySnapshot in snapshot.children) {
-                    val story = storySnapshot.getValue(story::class.java)
+                    val story = storySnapshot.getValue(Story::class.java)
                     if (story != null) {
                         storyList.add(story)
                     }
