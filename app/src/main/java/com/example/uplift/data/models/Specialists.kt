@@ -13,6 +13,8 @@ data class Specialists(
     val location: String = "",
     val rating: Double = 0.0,
     val review_count: Int = 0,
-    val avartar: Int = 0,
-    val explore_spec_id: Int = 0
+    val avatar: String = "",
+    val specializations: List<String>,
+    val educations: List<String>,
+    val certifications: List<String>
 ):Parcelable
