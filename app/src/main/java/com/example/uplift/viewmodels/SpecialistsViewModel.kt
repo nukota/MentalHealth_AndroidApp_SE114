@@ -1,55 +1,8 @@
-package com.example.uplift.ui.viewmodels
+package com.example.uplift.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.uplift.data.models.Specialists
-import com.example.uplift.logic.dao.SpecialistsDao
-import kotlinx.coroutines.launch
+import com.example.uplift.data.repository.SpecialistsRepository
 
+class SpecialistsViewModel : ViewModel() {
 
-class SpecialistsViewModel (private val specialistsDao: SpecialistsDao) : ViewModel() {
-    private val _allSpecialists = MutableLiveData<List<Specialists>>()
-    val allSpecialists: LiveData<List<Specialists>> get() = _allSpecialists
-
-    init {
-        getAllSpecialists()
-    }
-    private fun getAllSpecialists() {
-        viewModelScope.launch {
-            specialistsDao.getAllSpecialists().observeForever { tests ->
-                _allSpecialists.postValue(tests)
-            }
-        }
-    }
-    fun insertSpecialist(specialists: Specialists) {
-        viewModelScope.launch {
-            specialistsDao.insertSpecialist(specialists)
-            getAllSpecialists()
-        }
-    }
-    fun updateSpecialists(specialistsList: List<Specialists>) {
-        viewModelScope.launch {
-            specialistsDao.updateSpecialists(specialistsList)
-            getAllSpecialists()
-        }
-    }
-    fun deleteAllSpecialists() {
-        viewModelScope.launch {
-            specialistsDao.deleteAllSpecialists()
-            _allSpecialists.postValue(emptyList())
-        }
-    }
-    fun deleteSpecialistById(testId:Int) {
-        viewModelScope.launch {
-            specialistsDao.deleteSpecialistById(testId)
-            getAllSpecialists()
-        }
-    }
-    fun getSpecialistById(testId: Int){
-        viewModelScope.launch {
-            val test = specialistsDao.getSpecialistById(testId)
-        }
-    }
 }

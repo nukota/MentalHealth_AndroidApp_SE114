@@ -22,7 +22,7 @@ import com.example.uplift.R
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.uplift.data.models.Answer
-import com.example.uplift.data.models.Questions
+import com.example.uplift.data.models.Question
 import com.example.uplift.ui.composables.AnswerOption
 import com.example.uplift.ui.composables.NextPreviousBox
 import com.example.uplift.ui.composables.getInitials
@@ -34,7 +34,7 @@ import com.example.uplift.ui.theme.White
 @Composable
 fun QuestionsScreen(
     navController: NavController,
-    questions: List<Questions>,
+    questions: List<Question>,
     answers:  List<Answer>,
     currentQuestionIndex: Int,
     onFinish: (testId:Int,testName:String,score:Double) -> Unit,

@@ -1,21 +1,48 @@
 package com.example.uplift.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.uplift.data.database.QuestionsDatabase
-import com.example.uplift.data.models.Answer
-import com.example.uplift.data.models.Questions
+import androidx.lifecycle.MutableLiveData
+import com.example.uplift.data.models.Question
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
-class QuestionsRepository(private val database: QuestionsDatabase)  {
-    private val questionsDao = database.questionsDao()
-    private val answersDao = database.answersDao()
+class QuestionsRepository() {
+    private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("questions")
 
-    // Questions
-    fun getAllQuestions(): LiveData<List<Questions>> {
-        return questionsDao.getAllQuestions()
+    private val _questions = MutableLiveData<List<Question>>()
+    val questions: LiveData<List<Question>> get() = _questions
+
+    init {
+        fetchQuestions()
     }
 
-    // Answers
-    fun getAllAnswers(): LiveData<List<Answer>> {
-        return answersDao.getAllAnswers()
+    fun getQuestionById(questionId: Int): LiveData<Question?> {
+        val question = _questions.value?.find { it.question_id == questionId }
+        val liveData = MutableLiveData<Question?>()
+        liveData.value = question
+        return liveData
+    }
+
+    private fun fetchQuestions() {
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val questionList = mutableListOf<Question>()
+                for (questionSnapshot in snapshot.children) {
+                    val question = questionSnapshot.getValue(Question::class.java)
+                    if (question != null) {
+                        questionList.add(question)
+                    }
+                }
+                _questions.value = questionList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("QuestionRepository", "Error fetching questions", error.toException())
+            }
+        })
     }
 }

@@ -14,7 +14,8 @@ data class Specialist(
     val rating: Double = 0.0,
     val review_count: Int = 0,
     val avatar: String = "",
-    val specializations: List<String>,
-    val educations: List<String>,
-    val certifications: List<String>
+    val specializations: List<String> = listOf(),
+    val educations: List<String> = listOf(),
+    val certifications: List<String> = listOf(),
+    val email: String = ""
 ) : Parcelable

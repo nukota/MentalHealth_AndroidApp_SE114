@@ -1,38 +1,48 @@
 package com.example.uplift.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.uplift.data.models.Tests
-import com.example.uplift.logic.dao.TestsDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import androidx.lifecycle.MutableLiveData
+import com.example.uplift.data.models.Test
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
-class TestsRepository(private val testsDao: TestsDao) {
-    fun getAllTests(): LiveData<List<Tests>> {
-        return testsDao.getAllTests()
+class TestsRepository() {
+    private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("tests")
+
+    private val _tests = MutableLiveData<List<Test>>()
+    val tests: LiveData<List<Test>> get() = _tests
+
+    init {
+        fetchTests()
     }
-    suspend fun getTestById(testId: Int): Tests? {
-        return withContext(Dispatchers.IO) {
-            testsDao.getTestById(testId)
-        }
+
+    fun getTestById(testId: Int): LiveData<Test?> {
+        val test = _tests.value?.find { it.test_id == testId }
+        val liveData = MutableLiveData<Test?>()
+        liveData.value = test
+        return liveData
     }
-    suspend fun insertTest(test: Tests) {
-        withContext(Dispatchers.IO) {
-            testsDao.insertTest(test)
-        }
-    }
-    suspend fun updateTests(testList: List<Tests>) {
-        withContext(Dispatchers.IO) {
-            testsDao.updateTests(testList)
-        }
-    }
-    suspend fun deleteAllTests() {
-        withContext(Dispatchers.IO) {
-            testsDao.deleteAllTests()
-        }
-    }
-    suspend fun deleteTestById(testId: Int){
-        withContext(Dispatchers.IO) {
-            testsDao.deleteTestById(testId)
-        }
+
+    private fun fetchTests() {
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val testList = mutableListOf<Test>()
+                for (testSnapshot in snapshot.children) {
+                    val test = testSnapshot.getValue(Test::class.java)
+                    if (test != null) {
+                        testList.add(test)
+                    }
+                }
+                _tests.value = testList
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("TestRepository", "Error fetching tests", error.toException())
+            }
+        })
     }
 }
