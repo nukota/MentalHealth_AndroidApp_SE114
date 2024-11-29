@@ -11,7 +11,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class StoryRepository {
-    private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("story")
+    private val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().getReference("stories")
 
     private val _stories = MutableLiveData<List<Story>>()
     val stories: LiveData<List<Story>> get() = _stories

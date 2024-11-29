@@ -30,14 +30,14 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
-import com.example.uplift.data.models.Tests
+import com.example.uplift.data.models.Test
 import com.example.uplift.ui.composables.QuestionBox
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
 @Composable
-fun ListTests (
-    tests: List<Tests>,
+fun ListTests(
+    tests: List<Test>,
     navController: NavController,
     onFinish: (testId: Int, testName: String) -> Unit
 ) {
@@ -139,9 +139,8 @@ fun ListTests (
                             testPurpose = test.test_purpose ?: "No purpose specified",
                             testName = test.test_name,
                             questionCount = test.question_count,
-                            testTime = "${test.duration_minutes} min",
                             iconResId = iconUrl,
-                            onClick = { onFinish(test.test_id,test.test_name) })
+                            onClick = { onFinish(test.test_id, test.test_name) })
                     }
                 }
             }
@@ -149,17 +148,17 @@ fun ListTests (
     }
 }
 
-@Preview(widthDp = 360, heightDp = 800)
-@Composable
-private fun TestPreview() {
-    val navController = rememberNavController()
-    val sampleTests = listOf(
-        Tests(1, "Mental Health Inventory", "For evaluating general mental health", 12, 10, "", 1),
-        Tests(2, "Patient Health Questionnaire", "For screening depression", 9, 10, "", 1),
-        Tests(3, "Generalized Anxiety Disorder", "For screening anxiety", 7, 10, "", 1)
-    )
-    ListTests(tests = sampleTests,navController=navController,  onFinish = { testId, testName ->
-        println("Test ID: $testId, Test Name: $testName")
-        navController.navigate("test_results/$testId")
-    })
-}
+//@Preview(widthDp = 360, heightDp = 800)
+//@Composable
+//private fun TestPreview() {
+//    val navController = rememberNavController()
+//    val sampleTests = listOf(
+//        Test(1, "Mental Health Inventory", "For evaluating general mental health", 12, 10, "", 1),
+//        Test(2, "Patient Health Questionnaire", "For screening depression", 9, 10, "", 1),
+//        Test(3, "Generalized Anxiety Disorder", "For screening anxiety", 7, 10, "", 1)
+//    )
+//    ListTests(tests = sampleTests, navController = navController, onFinish = { testId, testName ->
+//        println("Test ID: $testId, Test Name: $testName")
+//        navController.navigate("test_results/$testId")
+//    })
+//}

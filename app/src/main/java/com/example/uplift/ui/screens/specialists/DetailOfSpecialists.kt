@@ -43,17 +43,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import com.example.uplift.R
-import com.example.uplift.data.models.Specialists
+import com.example.uplift.data.models.Specialist
 import com.example.uplift.ui.composables.SendEmail
 import com.example.uplift.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailOfSpecialists(
-    specialist:Specialists,
-    useremail:String,
+    specialist: Specialist,
+    useremail: String,
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
@@ -99,7 +99,7 @@ fun DetailOfSpecialists(
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Image(
-                                painter = rememberAsyncImagePainter(specialist.avartar),
+                                painter = rememberAsyncImagePainter(specialist.avatar),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .fillMaxHeight()
@@ -191,7 +191,9 @@ fun DetailOfSpecialists(
                             }
                         }
                     }
-                    Column(modifier = Modifier.padding(start = 10.dp, top = 10.dp).fillMaxWidth()) {
+                    Column(modifier = Modifier
+                        .padding(start = 10.dp, top = 10.dp)
+                        .fillMaxWidth()) {
                         Row {
                             Text(
                                 text = "Specializations: ",
@@ -211,7 +213,9 @@ fun DetailOfSpecialists(
                             }
                         }
                     }
-                    Column(modifier = Modifier.padding(start = 10.dp, top = 20.dp).fillMaxWidth()) {
+                    Column(modifier = Modifier
+                        .padding(start = 10.dp, top = 20.dp)
+                        .fillMaxWidth()) {
                         Text(
                             text = "Educations: ",
                             fontWeight = FontWeight.Bold,
@@ -229,7 +233,9 @@ fun DetailOfSpecialists(
                             }
                         }
                     }
-                    Column(modifier = Modifier.padding(start = 10.dp, top = 20.dp).fillMaxWidth()) {
+                    Column(modifier = Modifier
+                        .padding(start = 10.dp, top = 20.dp)
+                        .fillMaxWidth()) {
                         Text(
                             text = "Certifications: ",
                             fontWeight = FontWeight.Bold,
@@ -284,7 +290,7 @@ fun DetailOfSpecialists(
 @Composable
 fun DetailOfSpecialistsPreview() {
     // Dữ liệu mẫu cho specialist
-    val specialist = Specialists(
+    val specialist = Specialist(
         specialist_id = 1,
         full_name = "Dr. Jane Cooper",
         age = 32,
@@ -293,7 +299,7 @@ fun DetailOfSpecialistsPreview() {
         location = "New York, NY, USA",
         rating = 3.67,
         review_count = 100,
-        avartar = "https://example.com/avatar.jpg",
+        avatar = "https://example.com/avatar.jpg",
         specializations = listOf("Psychotherapy", "Cognitive Behavioral Therapy", "Counseling"),
         educations = listOf("PhD in Psychology", "Certified Therapist"),
         certifications = listOf("Licensed Counselor", "Certified CBT Therapist"),
