@@ -1,4 +1,4 @@
-package com.example.uplift.logic.repository
+package com.example.uplift.data.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData

@@ -24,7 +24,7 @@ import coil3.compose.AsyncImage
 import com.example.uplift.R
 import com.example.uplift.ui.theme.Gray
 import com.example.uplift.ui.theme.White
-import com.example.uplift.ui.viewmodels.StoryViewModel
+import com.example.uplift.viewmodels.StoryViewModel
 
 @Composable
 fun StoryDetailScreen(storyId: Int, storyViewModel: StoryViewModel = viewModel()) {

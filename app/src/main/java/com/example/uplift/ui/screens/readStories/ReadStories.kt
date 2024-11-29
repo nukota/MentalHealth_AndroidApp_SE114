@@ -1,7 +1,6 @@
 package com.example.uplift.ui.screens.readStories
 
 import TopPaddingContent
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,14 +24,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.uplift.R
 import com.example.uplift.ui.composables.StoryItem
 import com.example.uplift.ui.theme.*
-import com.example.uplift.ui.viewmodels.StoryViewModel
+import com.example.uplift.viewmodels.StoryViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
