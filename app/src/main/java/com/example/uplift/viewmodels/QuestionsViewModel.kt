@@ -3,7 +3,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.uplift.data.models.Answer
 import com.example.uplift.data.models.Questions
-import com.example.uplift.logic.repository.QuestionsRepository
+import com.example.uplift.data.repository.QuestionsRepository
 
 class QuestionsViewModel(private val questionsRepository: QuestionsRepository) : ViewModel() {
     val allQuestions: LiveData<List<Questions>> = questionsRepository.getAllQuestions()

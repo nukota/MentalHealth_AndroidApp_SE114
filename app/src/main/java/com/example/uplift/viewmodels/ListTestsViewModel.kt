@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.uplift.data.models.Tests
-import com.example.uplift.logic.repository.TestsRepository
+import com.example.uplift.data.repository.TestsRepository
 import kotlinx.coroutines.launch
 
 

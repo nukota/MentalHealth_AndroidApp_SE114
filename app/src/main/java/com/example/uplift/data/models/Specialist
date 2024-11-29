@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Specialists(
+data class Specialist(
     val specialist_id: Int = 0,
     val full_name: String = "",
     val age: Int = 0,
@@ -17,4 +17,4 @@ data class Specialists(
     val specializations: List<String>,
     val educations: List<String>,
     val certifications: List<String>
-):Parcelable
+) : Parcelable

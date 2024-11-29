@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Habit (
+data class Habit(
     val id: Int = 0,
     val name: String = "",
     val date_created: String = "",
