@@ -9,4 +9,12 @@ object Routes {
     const val SIGNUP = "signUp"
     const val STORY = "story"
     const val STORY_DETAIL = "storyDetail/{storyId}"
+    const val HABIT = "habit"
+    const val EXPLORE = "explore"
+    const val LIST_TESTS = "list_tests"
+    const val TEST_RESULTS = "test_results"
+    const val QUESTIONS = "questions"
+    const val LIST_SPECIALIST = "list_specialists/{email}"
+    const val STORIES = "stories"
+    const val DETAILS_SPECIALIST = "details_specialists"
 }

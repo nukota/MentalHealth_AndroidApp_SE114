@@ -1,6 +1,5 @@
-package com.example.uplift.ui.screens.Questions
+package com.example.uplift.ui.screens.questions
 
-import android.graphics.Color.rgb
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,35 +11,42 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.uplift.R
-import com.example.uplift.data.models.Gadquestions
 import androidx.compose.ui.res.painterResource
-import com.example.uplift.data.models.Gadanswers
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.uplift.data.models.Answer
+import com.example.uplift.data.models.Questions
 import com.example.uplift.ui.composables.AnswerOption
 import com.example.uplift.ui.composables.NextPreviousBox
-import java.lang.Integer.parseInt
+import com.example.uplift.ui.composables.getInitials
+import com.example.uplift.ui.theme.Cyan
+import com.example.uplift.ui.theme.Routes
+import com.example.uplift.ui.theme.White
 
 
 @Composable
-fun Mhiquestions(
-    questions: List<Gadquestions>,
-    answers:  List<Gadanswers>,
-    onAnswerSelected: (Gadanswers) -> Unit,
+fun QuestionsScreen(
+    navController: NavController,
+    questions: List<Questions>,
+    answers:  List<Answer>,
     currentQuestionIndex: Int,
-
-    ) {
+    onFinish: (testId:Int,testName:String,score:Double) -> Unit,
+    onNext: () -> Unit,
+    onPrevious: () -> Unit,
+    score:Double,
+    testId:Int,
+    testName:String,
+    onScoreUpdated: (Double) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,25 +58,24 @@ fun Mhiquestions(
         ){
             Column(
             ){
+                Text(
+                    text = getInitials(testName)+ " Test",
+                    color = Color(0xff101010),
+                    style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
+                    modifier = Modifier
+                        .padding(start = 20.dp, top = 20.dp)
+                        .height(43.dp)
+                )
 
-                    Text(
-                        text = "MHI Test",
-                        color = Color(0xff101010),
-                        style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
-                        modifier = Modifier
-                            .padding(start = 20.dp, top = 20.dp)
-                            .height(43.dp)
-                    )
-
-                    Text(
-                        text = "Mental Health Inventory",
-                        color = Color(0xff999999),
-                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                        fontSize = 20.sp,
-                        modifier = Modifier
-                            .height(29.dp)
-                            .padding(start = 20.dp)
-                    )
+                Text(
+                    text = testName,
+                    color = Color(0xff999999),
+                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                    fontSize = 20.sp,
+                    modifier = Modifier
+                        .height(29.dp)
+                        .padding(start = 20.dp)
+                )
 
             }
             Column(
@@ -98,7 +103,7 @@ fun Mhiquestions(
                 .width(286.dp)
         ) {
             if (currentQuestionIndex >= 1) {
-                NextPreviousBox(text = "Previous", onClick = { /* Handle Previous */ })
+                NextPreviousBox(text = "Previous", onClick = onPrevious)
             }
 
             Text(
@@ -115,7 +120,7 @@ fun Mhiquestions(
                     .height(24.dp)
                     .wrapContentHeight(align = Alignment.CenterVertically)
             )
-            NextPreviousBox(text = "Next", onClick = { /* Handle Next */ })
+            NextPreviousBox(text = "Next", onClick = onNext)
         }
 
         //questions
@@ -152,22 +157,22 @@ fun Mhiquestions(
                 )
             }
         }
-        val filteredAnswers =
-            answers.filter { it.question_id == questions[currentQuestionIndex].question_id }
         //answer
         Row(
-            horizontalArrangement = Arrangement.Center, // Căn giữa các phần tử trong Row theo chiều ngang
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .padding(top = 30.dp)
                 .width(500.dp)
-                .height(450.dp)
+                .height(350.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxHeight()
             ) {
+                val filteredAnswers =
+                    answers.filter { it.question_id == questions[currentQuestionIndex].question_order }
                 filteredAnswers.forEach { answer ->
                     val iconResId = when (answer.answer_order) {
                         1 -> R.drawable.extremely_happy_1
@@ -184,8 +189,27 @@ fun Mhiquestions(
                         text = answer.answer_text,
                         iconResId = iconResId,
                         onClick = {
-                            onAnswerSelected(answer)
+                            onScoreUpdated(score + answer.answer_value)
                         }
+                    )
+                }
+            }
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+        ){
+            if (currentQuestionIndex == questions.lastIndex) {
+                Button(
+                    onClick = { onFinish(testId, testName,score) },
+                    colors = ButtonDefaults.buttonColors(containerColor = Cyan),
+                    modifier = Modifier
+                        .size(width = 120.dp, height = 40.dp)
+                ) {
+                    Text(
+                        text="Finish",
+                        style = TextStyle(fontSize = 20.sp, color = White, fontFamily = FontFamily(Font(R.font.interbold)))
                     )
                 }
             }
@@ -203,6 +227,7 @@ fun Mhiquestions(
                 contentDescription = "back",
                 modifier = Modifier
                     .size(24.dp)
+                    .clickable { navController.navigate(Routes.LIST_TESTS)}
             )
 
             Text(
@@ -212,40 +237,33 @@ fun Mhiquestions(
                 fontSize = 24.sp,
                 modifier = Modifier
                     .padding(start = 10.dp)
+                    .clickable { navController.navigate(Routes.LIST_TESTS) }
             )
         }
-
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewMhiquestions() {
-    val sampleQuestions = listOf(
-        Gadquestions(1, 1, "How are you?", 1),
-        Gadquestions(2, 1, "How do you feel?", 2),
-        Gadquestions(3, 1, "Not being able to stop or control worrying?", 3),
-        Gadquestions(4, 1, "Trouble relaxing?", 4)
-    )
-    val sampleAnswers = listOf(
-        Gadanswers(1, 1, "Good", 1, 1),
-        Gadanswers(2, 1, "Bad", 2, 2),
-        Gadanswers(3, 2, "Happy", 1, 1),
-        Gadanswers(4, 2, "Sad", 2, 2),
-        Gadanswers(5, 1, "Okay", 3, 3),
-        Gadanswers(6, 1, "Not great", 4, 4),
-        Gadanswers(7, 2, "Excited", 3, 3),
-        Gadanswers(8, 2, "Anxious", 4, 4),
-        Gadanswers(9, 3, "Fine", 1, 1),
-        Gadanswers(10, 3, "Terrible", 2, 2),
-        Gadanswers(11, 4, "Content", 1, 1),
-        Gadanswers(12, 4, "Stressed", 2, 2)
-    )
-
-    Mhiquestions(
-        questions = sampleQuestions,
-        answers = sampleAnswers,
-        onAnswerSelected = {},
-        currentQuestionIndex = 1
-    )
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewGadquestionsScreen() {
+//    val navController = rememberNavController()
+//    val sampleQuestions = listOf(
+//        Questions(1, 1, "How are you?", 1),
+//        Gadquestions(2, 1, "How do you feel?", 2)
+//    )
+//    val sampleAnswers = listOf(
+//        Gadanswers(1, 2, "Good", 1, 1),
+//        Gadanswers(2, 2, "Bad", 2, 2)
+//    )
+//
+////    GadquestionsScreen(
+//        navController = navController,
+//        questions = sampleQuestions,
+//        answers = sampleAnswers,
+//        currentQuestionIndex = 1,
+//        score = 0,
+//        onNext = {},
+//        onPrevious = {},
+//        onFinish = ,
+//        onScoreUpdated = {}
+//    )

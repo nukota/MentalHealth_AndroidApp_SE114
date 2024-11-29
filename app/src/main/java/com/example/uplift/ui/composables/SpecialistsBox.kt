@@ -32,13 +32,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.uplift.R
 
 @Composable
 fun SpecialistsBox(
     textName:String,
     textAge:Int,
-    iconAvartar:Int,
+    iconAvartar:String,
     textProfession:String,
     textYoE:Int,
     textLocation:String,
@@ -64,7 +65,7 @@ fun SpecialistsBox(
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
-                painter = painterResource(id = iconAvartar),
+                painter = rememberAsyncImagePainter(iconAvartar),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight()
