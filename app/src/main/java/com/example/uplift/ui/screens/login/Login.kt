@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.uplift.R
 import com.example.uplift.ui.composables.*
-import com.example.uplift.ui.viewmodels.AuthViewModel
+import com.example.uplift.viewmodels.AuthViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
-import com.example.uplift.ui.viewmodels.AuthState
+import com.example.uplift.viewmodels.AuthState
 import com.example.uplift.ui.theme.Routes
 
 @Composable
@@ -99,7 +99,7 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
                 modifier = Modifier
                     .padding(start = 210.dp, top = 10.dp, bottom = 10.dp),
                 onClick = {
-                    navHostController.navigate(Routes.SENDEMAIL)
+                    navHostController.navigate(Routes.SEND_EMAIL)
                 }
             )
             Spacer(modifier = Modifier.height(10.dp))

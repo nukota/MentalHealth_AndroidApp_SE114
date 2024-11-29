@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics)
     id("kotlin-parcelize")
     alias(libs.plugins.compose.compiler)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -52,6 +54,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 dependencies {
 
@@ -67,7 +72,6 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -85,24 +89,28 @@ dependencies {
     // Date picker
     implementation(libs.materialdatetimepicker)
 
-    // Room components
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    androidTestImplementation(libs.androidx.room.testing)
-
     //Retrofit2
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
 
-    // ViewPager2
-    implementation(libs.androidx.viewpager2)
-
-    // Navigation Components
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-
+    //Firebase
+    implementation(libs.firebase.database.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.crashlytics)
+
+
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.accompanist.flowlayout)
+
+    //coil
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+
+    implementation(libs.hilt.android.v2511)
+    kapt(libs.hilt.android.compiler)
 }

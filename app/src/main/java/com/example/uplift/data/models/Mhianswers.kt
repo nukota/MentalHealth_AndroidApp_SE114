@@ -1,14 +1,12 @@
 package com.example.uplift.data.models
 import android.os.Parcelable
-import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "mhianswers")
 data class Mhianswers(
-    val answer_id: Int,
-    val question_id: Int,
-    val answer_text: String,
-    val answer_value: Int,
-    val answer_order: Int
+    val answer_id: Int = 0,
+    val question_id: Int = 0,
+    val answer_text: String = "",
+    val answer_value: Int = 0,
+    val answer_order: Int = 0
 ):Parcelable

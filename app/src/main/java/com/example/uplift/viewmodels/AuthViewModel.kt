@@ -1,16 +1,14 @@
-package com.example.uplift.ui.viewmodels
+package com.example.uplift.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthViewModel() : ViewModel() {
-
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _authState = MutableLiveData<AuthState>()
     val authState = _authState
-
 
     init {
         checkAuthStatus()
@@ -35,7 +33,8 @@ class AuthViewModel() : ViewModel() {
                 if (task.isSuccessful) {
                     _authState.value = AuthState.Authenticated
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "An unknown error occurred")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "An unknown error occurred")
                 }
             }
     }
@@ -59,7 +58,8 @@ class AuthViewModel() : ViewModel() {
                     signOut()
                     callback(true)
                 } else {
-                    _authState.value = AuthState.Error(task.exception?.message ?: "An unknown error occurred")
+                    _authState.value =
+                        AuthState.Error(task.exception?.message ?: "An unknown error occurred")
                     callback(false)
                 }
             }
