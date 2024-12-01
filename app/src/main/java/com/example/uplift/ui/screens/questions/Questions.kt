@@ -1,244 +1,285 @@
 package com.example.uplift.ui.screens.questions
 
+import TopPaddingContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.uplift.R
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import com.example.uplift.R
 import com.example.uplift.data.models.Answer
 import com.example.uplift.data.models.Question
 import com.example.uplift.ui.composables.AnswerOption
 import com.example.uplift.ui.composables.NextPreviousBox
 import com.example.uplift.ui.composables.getInitials
 import com.example.uplift.ui.theme.Cyan
+import com.example.uplift.ui.theme.Gray
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
+import com.example.uplift.viewmodels.QuestionsViewModel
 
 
 @Composable
 fun QuestionsScreen(
+    testId: Int,
+    testName: String,
     navController: NavController,
-    questions: List<Question>,
-    answers:  List<Answer>,
-    currentQuestionIndex: Int,
-    onFinish: (testId:Int,testName:String,score:Double) -> Unit,
-    onNext: () -> Unit,
-    onPrevious: () -> Unit,
-    score:Double,
-    testId:Int,
-    testName:String,
-    onScoreUpdated: (Double) -> Unit
+    questionsViewModel: QuestionsViewModel
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth()
-            .background(color = Color.White)
-    ) {
-        Row(
+    val questions by questionsViewModel.questions.observeAsState(initial = emptyList())
+    val answers by questionsViewModel.answers.observeAsState(initial = emptyList())
+    val currentQuestionIndex by questionsViewModel.currentQuestionIndex.observeAsState(0)
+    val score by questionsViewModel.score.observeAsState(0.0)
+    val listQuestion: List<Question> = questions.filter { it.test_id == testId }
+    val listAnswer: List<Answer> = answers.filter { it.test_id == testId }
 
-        ){
-            Column(
-            ){
-                Text(
-                    text = getInitials(testName)+ " Test",
-                    color = Color(0xff101010),
-                    style = TextStyle(fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.lemonada))),
-                    modifier = Modifier
-                        .padding(start = 20.dp, top = 20.dp)
-                        .height(43.dp)
-                )
-
-                Text(
-                    text = testName,
-                    color = Color(0xff999999),
-                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                    fontSize = 20.sp,
-                    modifier = Modifier
-                        .height(29.dp)
-                        .padding(start = 20.dp)
-                )
-
-            }
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(40.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 28.dp, top = 28.dp)
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.menu),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(28.dp)
-                )
-            }
-        }
-
-
-        Row(
-            horizontalArrangement = Arrangement.Absolute.Right,
-            verticalAlignment = Alignment.CenterVertically,
+    TopPaddingContent {
+        Column(
             modifier = Modifier
-                .padding(start = 52.dp, top = 52.dp)
-                .width(286.dp)
-        ) {
-            if (currentQuestionIndex >= 1) {
-                NextPreviousBox(text = "Previous", onClick = onPrevious)
-            }
-
-            Text(
-                text = "${currentQuestionIndex + 1}/${questions.size}",
-                color = Color(0xff101010),
-                textAlign = TextAlign.Center,
-                style = TextStyle(
-                    fontSize = 24.sp,
-                    color = Color(0xff101010),
-                    fontFamily = FontFamily(Font(R.font.inter))
-                ),
-                modifier = Modifier
-                    .width(95.dp)
-                    .height(24.dp)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-            )
-            NextPreviousBox(text = "Next", onClick = onNext)
-        }
-
-        //questions
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(top = 9.dp)
-                .width(500.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredWidth(width = 284.dp)
-                    .requiredHeight(height = 132.dp)
-                    .background(color = Color.White)
-                    .border(
-                        border = BorderStroke(2.dp, Color.Black),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-            )
-            {
-                Text(
-                    text = questions[currentQuestionIndex].question_text.toString(),
-                    color = Color(0xff505050),
-                    textAlign = TextAlign.Center,
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
-                    ),
-                    modifier = Modifier
-                        .padding(horizontal = 9.dp, vertical = 25.dp)
-                        .width(265.dp)
-                        .height(58.dp)
-                )
-            }
-        }
-        //answer
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(top = 30.dp)
-                .width(500.dp)
-                .height(350.dp)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier.fillMaxHeight()
-            ) {
-                val filteredAnswers =
-                    answers.filter { it.question_id == questions[currentQuestionIndex].question_order }
-                filteredAnswers.forEach { answer ->
-                    val iconResId = when (answer.answer_order) {
-                        1 -> R.drawable.extremely_happy_1
-                        2 -> R.drawable.very_happy_2
-                        3 -> R.drawable.generally_3
-                        4 -> R.drawable.somtimes_4
-                        5->R.drawable.unhappy_5
-                        6->R.drawable.dissatisfied_6
-                        7->R.drawable.sad_7
-                        8->R.drawable.very_sad_8
-                        else -> R.drawable.extremely_happy_1
-                    }
-                    AnswerOption(
-                        text = answer.answer_text,
-                        iconResId = iconResId,
-                        onClick = {
-                            onScoreUpdated(score + answer.answer_value)
-                        }
-                    )
-                }
-            }
-        }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier
+                .fillMaxSize()
                 .fillMaxWidth()
-        ){
-            if (currentQuestionIndex == questions.lastIndex) {
-                Button(
-                    onClick = { onFinish(testId, testName,score) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Cyan),
-                    modifier = Modifier
-                        .size(width = 120.dp, height = 40.dp)
+                .background(White)
+        ) {
+            Row(
+            ) {
+                Column(
+                    modifier = Modifier.padding(start = 20.dp, top = 10.dp)
                 ) {
                     Text(
-                        text="Finish",
-                        style = TextStyle(fontSize = 20.sp, color = White, fontFamily = FontFamily(Font(R.font.interbold)))
+                        text = getInitials(testName) + " Test",
+                        color = Color(0xff101010),
+                        style = TextStyle(
+                            fontSize = 26.sp, fontFamily = FontFamily(Font(R.font.lemonada))
+                        ),
+                        modifier = Modifier
+                    )
+                    Text(
+                        text = testName,
+                        color = Color(0xff999999),
+                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(40.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 28.dp, top = 28.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.menu),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(28.dp)
                     )
                 }
             }
-        }
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(start = 20.dp, bottom = 28.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.back),
-                contentDescription = "back",
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .size(24.dp)
-                    .clickable { navController.navigate(Routes.LIST_TESTS)}
-            )
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 36.dp)
+                    .fillMaxWidth(0.8f)
+                    .height(50.dp)
+            ) {
+                if (currentQuestionIndex >= 1) {
+                    NextPreviousBox(
+                        modifier = Modifier,
+                        text = "Previous",
+                        onClick = { questionsViewModel.moveToPreviousQuestion() },
+                    )
+                } else {
+                    Spacer(
+                        modifier = Modifier
+                            .width(96.dp)
+                            .height(29.dp)
+                    )
+                }
+                Text(
+                    text = "${currentQuestionIndex + 1}/${listQuestion.size}",
+                    color = Color(0xff101010),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        color = Color(0xff101010),
+                        fontFamily = FontFamily(Font(R.font.inter))
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .wrapContentHeight()
+                )
+                if (currentQuestionIndex < listQuestion.lastIndex) {
+                    NextPreviousBox(
+                        modifier = Modifier,
+                        text = "Next",
+                        onClick = { questionsViewModel.moveToNextQuestion() })
+                } else {
+                    Spacer(
+                        modifier = Modifier
+                            .width(96.dp)
+                            .height(29.dp)
+                    )
+                }
+            }
 
-            Text(
-                text = "Back",
-                color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.intermedium)),
-                fontSize = 24.sp,
+            //questions
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .padding(start = 10.dp)
-                    .clickable { navController.navigate(Routes.LIST_TESTS) }
-            )
+                    .padding(top = 9.dp)
+                    .fillMaxWidth(1f)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .requiredHeight(height = 132.dp)
+                        .border(
+                            border = BorderStroke(2.dp, Color.Black),
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                )
+                {
+                    Text(
+                        text = if (listQuestion.isNotEmpty() && currentQuestionIndex < listQuestion.size) {
+                            listQuestion[currentQuestionIndex].question_text
+                        } else {
+                            "No More Question available"
+                        },
+                        color = Color(0xff505050),
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxSize()
+                            .padding(vertical = 12.dp, horizontal = 8.dp)
+                            .wrapContentHeight(),
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
+            //answer
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 30.dp)
+                    .fillMaxWidth(0.8f)
+                    .height(380.dp)
+            ) {
+                LazyColumn(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                    modifier = Modifier.fillMaxHeight()
+                ) {
+                    val filteredAnswers = if (listQuestion.isNotEmpty() && listAnswer.isNotEmpty() && currentQuestionIndex < listQuestion.size) {
+                        listAnswer.filter { it.question_id == listQuestion[currentQuestionIndex].question_order }
+                    } else {
+                        emptyList()
+                    }
+                    items(filteredAnswers) { answer ->
+                        val iconResId = when (answer.answer_order) {
+                            1 -> R.drawable.extremely_happy_1
+                            2 -> R.drawable.very_happy_2
+                            3 -> R.drawable.generally_3
+                            4 -> R.drawable.somtimes_4
+                            5 -> R.drawable.unhappy_5
+                            6 -> R.drawable.dissatisfied_6
+                            7 -> R.drawable.sad_7
+                            8 -> R.drawable.very_sad_8
+                            else -> R.drawable.extremely_happy_1
+                        }
+                        AnswerOption(
+                            text = answer.answer_text,
+                            iconResId = iconResId,
+                            onClick = { questionsViewModel.updateScore(answer.question_id, answer.answer_value, listQuestion.size) }
+                        )
+                    }
+                }
+            }
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(top = 20.dp)
+            ) {
+                if (currentQuestionIndex == listQuestion.lastIndex) {
+                    Button(
+                        onClick = { navController.navigate("test_results/$testId/$testName/$score") },
+                        colors = ButtonDefaults.buttonColors(containerColor = Cyan),
+                        modifier = Modifier
+                            .size(width = 200.dp, height = 40.dp)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        Text(
+                            text = "Finish",
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                color = White,
+                                fontFamily = FontFamily(Font(R.font.interregular))
+                            ),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+            }
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(start = 20.dp, top = 20.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.back),
+                    contentDescription = "back",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { navController.navigate(Routes.LIST_TESTS) }
+                )
+
+                Text(
+                    text = "Back",
+                    color = Color.Black,
+                    fontFamily = FontFamily(Font(R.font.intermedium)),
+                    fontSize = 24.sp,
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .clickable { navController.navigate(Routes.LIST_TESTS) }
+                )
+            }
         }
     }
+
 }
 //
 //@Preview(showBackground = true)

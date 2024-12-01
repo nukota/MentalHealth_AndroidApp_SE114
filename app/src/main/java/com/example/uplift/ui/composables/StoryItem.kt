@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
-import com.example.uplift.data.models.story
+import com.example.uplift.data.models.Story
 
 @Composable
-fun StoryItem(modifier: Modifier = Modifier, story: story, onClick: () -> Unit) {
+fun StoryItem(modifier: Modifier = Modifier, story: Story, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth(0.4f)

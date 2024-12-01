@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Testresult(
+data class TestResult(
     val result_id: Int = 0,
     val test_id: Int = 0,
     val score_min: Int = 0,

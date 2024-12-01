@@ -20,8 +20,8 @@ class QuestionsRepository() {
         fetchQuestions()
     }
 
-    fun getQuestionById(questionId: Int): LiveData<Question?> {
-        val question = _questions.value?.find { it.question_id == questionId }
+    fun getQuestionByTestIdAndOrder(testId: Int, questionOrder: Int): LiveData<Question?> {
+        val question = _questions.value?.find { it.test_id == testId && it.question_order == questionOrder }
         val liveData = MutableLiveData<Question?>()
         liveData.value = question
         return liveData

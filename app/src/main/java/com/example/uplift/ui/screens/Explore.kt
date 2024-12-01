@@ -1,5 +1,6 @@
 package com.example.uplift.ui.screens
 
+import TopPaddingContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,104 +26,107 @@ import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
 @Composable
-fun ExploreScreen (
+fun ExploreScreen(
     navController: NavController
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .fillMaxWidth()
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.background2),
-            contentDescription = null,
+    TopPaddingContent {
+        Box(
             modifier = Modifier
-                .size(800.dp),
-            contentScale = ContentScale.Crop
-        )
-        Column(
-            modifier = Modifier
-                .zIndex(1f)
+                .fillMaxSize()
+                .background(White)
+                .fillMaxWidth()
         ) {
-            Row() {
-                Column(
-                ) {
-                    Text(
-                        text = "Explore",
-                        color = Color(0xff101010),
-                        style = TextStyle(
-                            fontSize = 22.sp,
-                            fontFamily = FontFamily(Font(R.font.lemonada))
-                        ),
-                        modifier = Modifier
-                            .padding(start = 20.dp, top = 20.dp)
-                            .height(43.dp)
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(40.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 28.dp, top = 28.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.menu),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable { /* Add menu click action here */ }
-                    )
-                }
-            }
-
+            Image(
+                painter = painterResource(id = R.drawable.background2),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
             Column(
-                horizontalAlignment=Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .padding(top=30.dp)
-                    .fillMaxWidth()
-            ){
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.take_tests),
-                        contentDescription = null,
+                    .zIndex(1f)
+            ) {
+                Row() {
+                    Column(
+                    ) {
+                        Text(
+                            text = "Explore",
+                            color = Color(0xff101010),
+                            style = TextStyle(
+                                fontSize = 32.sp,
+                                fontFamily = FontFamily(Font(R.font.lemonada))
+                            ),
+                            modifier = Modifier
+                                .padding(start = 20.dp, top = 10.dp)
+                                .height(54.dp)
+                        )
+                    }
+
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(40.dp),
                         modifier = Modifier
-                            .width(164.dp)
-                            .height(180.dp)
-                            .padding(10.dp)
-                            .clickable {  navController.navigate(Routes.LIST_TESTS) }
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.read_story),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(164.dp)
-                            .height(180.dp)
-                            .padding(10.dp)
-                            .clickable {  navController.navigate(Routes.STORIES) }
-                    )
+                            .fillMaxWidth()
+                            .padding(end = 28.dp, top = 28.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.menu),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable { /* Add menu click action here */ }
+                        )
+                    }
                 }
-                Row(horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .padding(top = 30.dp)
+                        .fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.reach_specialists),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(164.dp)
-                            .padding(10.dp)
-                            .height(180.dp)
-                            .clickable {  navController.navigate(Routes.LIST_SPECIALIST) }
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.take_tests),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(164.dp)
+                                .height(180.dp)
+                                .padding(10.dp)
+                                .clickable { navController.navigate(Routes.LIST_TESTS) }
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.read_story),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(164.dp)
+                                .height(180.dp)
+                                .padding(10.dp)
+                                .clickable { navController.navigate(Routes.STORY) }
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.reach_specialists),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(164.dp)
+                                .padding(10.dp)
+                                .height(180.dp)
+                                .clickable { navController.navigate(Routes.LIST_SPECIALIST) }
+                        )
+                    }
                 }
             }
         }
     }
+
 }
 
 @Preview(
@@ -136,6 +140,6 @@ fun ExploreScreen (
 
 fun ExploreScreenPreview() {
     val navController = rememberNavController()
-    ExploreScreen(navController=navController)
+    ExploreScreen(navController = navController)
 }
 

@@ -1,6 +1,5 @@
 package com.example.uplift
 
-import QuestionsViewModel
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,7 +11,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.login.LoginScreen
 import com.example.uplift.ui.screens.resetPassword.ResetPasswordScreen
 import com.example.uplift.ui.screens.sendEmail.SendEmailScreen
@@ -22,28 +20,34 @@ import com.example.uplift.ui.screens.readStories.StoryDetailScreen
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.viewmodels.AuthViewModel
 import com.example.uplift.viewmodels.StoryViewModel
-import com.example.uplift.ui.viewmodels.ListTestsViewModel
+import com.example.uplift.viewmodels.ListTestsViewModel
 import com.google.firebase.auth.FirebaseAuth
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.*
-import com.example.uplift.data.models.Answer
-import com.example.uplift.data.models.Questions
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.uplift.ui.screens.ExploreScreen
+import com.example.uplift.ui.screens.NavigationBar
+import com.example.uplift.ui.screens.home.HomeScreen
+import com.example.uplift.ui.screens.loading.LoadingScreen
 import com.example.uplift.ui.screens.questions.ListTests
 import com.example.uplift.ui.screens.questions.QuestionsScreen
 import com.example.uplift.ui.screens.questions.TestResultsScreen
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
-import com.example.uplift.ui.viewmodels.SpecialistsViewModel
-import com.example.uplift.ui.viewmodels.TestresultsViewModel
+import com.example.uplift.viewmodels.SpecialistsViewModel
+import com.example.uplift.viewmodels.TestResultsViewModel
+import com.example.uplift.viewmodels.QuestionsViewModel
+import kotlinx.coroutines.delay
 
 
 class MainActivity : AppCompatActivity() {
-    private val storyViewModel: StoryViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val authViewModel : AuthViewModel by viewModels()
+        val authViewModel: AuthViewModel by viewModels()
         setContent {
-            MainActivityContent(authViewModel, storyViewModel)
+            MainActivityContent(authViewModel)
         }
     }
 
@@ -57,110 +61,88 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MainActivityContent(
     authViewModel: AuthViewModel,
-    storyViewModel: StoryViewModel
 ) {
     val navController = rememberNavController()
+    val storyViewModel: StoryViewModel = viewModel()
+    val listTestsViewModel: ListTestsViewModel = viewModel()
+    val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
+    val questionsViewModel: QuestionsViewModel = viewModel()
+    val testResultsViewModel: TestResultsViewModel = viewModel()
 
-    Box() {
-        NavHost(navController = navController, startDestination = Routes.STORY) {
-            composable(Routes.HOME) {
-                HomeScreen(navController, authViewModel)
-            }
-            composable(Routes.LOGIN) {
-                LoginScreen(navController, authViewModel)
-            }
-            composable(Routes.SEND_EMAIL) {
-                SendEmailScreen(navController, authViewModel)
-            }
-            composable(Routes.RESET_PASSWORD) {
-                ResetPasswordScreen(navController, authViewModel)
-            }
-            composable(Routes.SIGNUP){
-                SignUpScreen(navController, authViewModel)
-            }
-            composable(Routes.STORY) {
-                ReadStoriesScreen(navController, storyViewModel)
-            }
-            composable(Routes.STORY_DETAIL) { backStackEntry ->
-                val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
-                StoryDetailScreen(storyId, storyViewModel)
-            }
-            composable(Routes.LIST_TESTS) {
-                val listTestsViewModel: ListTestsViewModel = viewModel()
-                val tests by listTestsViewModel.allTests.observeAsState()
-                ListTests(
-                    navController = navController,
-                    tests = tests ?: emptyList(),
-                    onFinish = { testId, testName ->
-                        navController.navigate("${Routes.QUESTIONS}/$testId/$testName")
-                    })
-            }
+    var loadingApp by remember { mutableStateOf(true) }
 
-            composable("${Routes.QUESTIONS}/{testId}/{testName}") { backStackEntry ->
-                val questionsViewModel: QuestionsViewModel = viewModel()
-                val questions by questionsViewModel.allQuestions.observeAsState()
-                val answers by questionsViewModel.allAnswers.observeAsState()
-                val currentQuestionIndex by questionsViewModel.currentQuestionIndex.observeAsState(0)
-                val score by questionsViewModel.score.observeAsState(0.0)
+    LaunchedEffect(Unit) {
+        delay(2000) // Delay for 2 seconds
+        loadingApp = false
+    }
 
-                val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull()
-                val testName = backStackEntry.arguments?.getString("testName")
-                val listQuestion: List<Questions> = questions!!.filter { it.test_id == testId }
-                val listAnswer: List<Answer> = answers!!.filter { it.test_id == testId }
-                QuestionsScreen(
-                    navController = navController,
-                    questions = listQuestion,
-                    answers = listAnswer,
-                    currentQuestionIndex = currentQuestionIndex,
-                    testId = testId!!,
-                    onNext = {
-                        questionsViewModel.moveToNextQuestion()
-                    },
-                    onPrevious = {
-                        questionsViewModel.moveToPreviousQuestion()
-                    },
-                    score = score,
-                    testName = testName!!,
-                    onScoreUpdated = { newScore ->
-                        questionsViewModel.updateScore(newScore)
-                    },
-                    onFinish = { testId, testName, finalScore ->
-                        navController.navigate("${Routes.TEST_RESULTS}/${testId}/$finalScore")
-                    }
-                )
+    if (loadingApp) {
+        LoadingScreen(authViewModel)
+    } else {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            NavHost(navController = navController, startDestination = Routes.LOGIN) {
+                composable(Routes.LOADING) {
+                    LoadingScreen(authViewModel)
+                }
+                composable(Routes.HOME) {
+                    HomeScreen(navController, authViewModel)
+                }
+                composable(Routes.LOGIN) {
+                    LoginScreen(navController, authViewModel)
+                }
+                composable(Routes.SEND_EMAIL) {
+                    SendEmailScreen(navController, authViewModel)
+                }
+                composable(Routes.RESET_PASSWORD) {
+                    ResetPasswordScreen(navController, authViewModel)
+                }
+                composable(Routes.SIGNUP) {
+                    SignUpScreen(navController, authViewModel)
+                }
+                composable(Routes.EXPLORE) {
+                    ExploreScreen(navController)
+                }
+                composable(Routes.STORY) {
+                    ReadStoriesScreen(navController, storyViewModel)
+                }
+                composable(Routes.STORY_DETAIL) { backStackEntry ->
+                    val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
+                    StoryDetailScreen(storyId, storyViewModel)
+                }
+                composable(Routes.LIST_TESTS) {
+                    ListTests(navController, listTestsViewModel)
+                }
+                composable(Routes.QUESTIONS) { backStackEntry ->
+                    val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
+                    val testName = backStackEntry.arguments?.getString("testName") ?: ""
+                    QuestionsScreen(testId, testName, navController, questionsViewModel)
+                }
+                composable(Routes.TEST_RESULTS) { backStackEntry ->
+                    val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
+                    val score = backStackEntry.arguments?.getDouble("score") ?: 0.0
+                    val testName = backStackEntry.arguments?.getString("testName") ?: ""
+                    TestResultsScreen(testId, testName, score, navController, testResultsViewModel)
+                }
+                composable(Routes.LIST_SPECIALIST) {
+                    ListSpecialistsScreen(navController, authViewModel, listSpecialistsViewModel)
+                }
             }
-            composable("${Routes.TEST_RESULTS}/{testId}/{testName}/{score}") { backStackEntry ->
-                val listTestsViewModel: ListTestsViewModel = viewModel()
-                val tests by listTestsViewModel.allTests.observeAsState()
-                val testresultsViewModel: TestresultsViewModel = viewModel()
-                val listTestresults by testresultsViewModel.allTestresults.observeAsState()
-                val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull()
-                val score = backStackEntry.arguments?.getString("score")?.toIntOrNull()
-                val testName = backStackEntry.arguments?.getString("testName")
+            val currentBackStackEntry = navController.currentBackStackEntryAsState().value
+            val currentRoute = currentBackStackEntry?.destination?.route
 
-                val testresults = listTestresults?.find { it.test_id == testId && score!! >= it.score_min && score <= it.score_max }
-                TestResultsScreen(
-                    navController = navController,
-                    testName = testName!!,
-                    score = score!!,
-                    testresults = testresults!!
-                )
-            }
-            composable(Routes.LIST_SPECIALIST) {backStackEntry->
-                val email = backStackEntry.arguments?.getString("email")
-                val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
-                val specialists by listSpecialistsViewModel.allSpecialists.observeAsState()
-                if (email != null) {
-                    ListSpecialistsScreen(
-                        navController = navController,
-                        email=email,
-                        listSpecialists = specialists ?: emptyList())
+            if (currentRoute in listOf(Routes.HOME, Routes.HABIT, Routes.DIARY, Routes.EXPLORE, Routes.STORY, Routes.LIST_TESTS, Routes.LIST_SPECIALIST)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 30.dp),
+                ) {
+                    NavigationBar(navController = navController)
                 }
             }
         }
-//        NavigationBar(modifier = Modifier
-//            .align(Alignment.BottomCenter)
-//        )
-
     }
 }

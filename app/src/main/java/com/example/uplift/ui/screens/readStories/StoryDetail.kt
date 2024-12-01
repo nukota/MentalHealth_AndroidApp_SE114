@@ -157,5 +157,22 @@ fun StoryDetailScreen(storyId: Int, storyViewModel: StoryViewModel = viewModel()
             }
         }
     }
+    if (story == null) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(White)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Story not found",
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.intermedium))
+                ),
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    }
 }
 

@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.example.uplift.R
 
 @Composable
-fun NextPreviousBox(text: String, onClick: () -> Unit) {
+fun NextPreviousBox(modifier: Modifier ,text: String, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .width(96.dp)
+            .width(100.dp)
             .height(29.dp)
             .clip(RoundedCornerShape(10.dp))
             .border(BorderStroke(1.dp, Color.Black), shape = RoundedCornerShape(10.dp))

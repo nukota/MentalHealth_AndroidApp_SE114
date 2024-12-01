@@ -1,9 +1,9 @@
 package com.example.uplift.ui.composables
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,10 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,19 +29,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import com.example.uplift.R
 
 @Composable
 fun SpecialistsBox(
-    textName:String,
-    textAge:Int,
-    iconAvartar:String,
-    textProfession:String,
-    textYoE:Int,
-    textLocation:String,
-    textRating:Double,
-    textReviewCount:Int,
+    textName: String,
+    textAge: Int,
+    iconAvartar: String,
+    textProfession: String,
+    textYoE: Int,
+    textLocation: String,
+    textRating: Double,
+    textReviewCount: Int,
     onClick: () -> Unit
 ) {
     val commonTextStyle = TextStyle(
@@ -54,11 +51,13 @@ fun SpecialistsBox(
     )
 
     Row(
+        horizontalArrangement = Arrangement.Center,
         modifier = Modifier
-            .requiredWidth(width = 337.dp)
-            .requiredHeight(height = 174.dp)
+            .fillMaxWidth(0.88f)
+            .requiredHeight(height = 186.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(color = Color(0xffF8F8F8))
+            .clickable(onClick = onClick)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -69,13 +68,13 @@ fun SpecialistsBox(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(20.dp)
+                    .padding(12.dp)
                     .size(96.dp)
             )
         }
         Column(
             modifier = Modifier
-                .padding(top = 20.dp)
+                .padding(top = 14.dp)
         ) {
             Text(
                 text = textName,
@@ -91,33 +90,33 @@ fun SpecialistsBox(
                 Text(
                     text = "Age: ",
                     fontWeight = FontWeight.Bold,
-                    style=commonTextStyle
+                    style = commonTextStyle
                 )
                 Text(
                     text = "$textAge",
-                    style=commonTextStyle
+                    style = commonTextStyle
                 )
             }
 
             Text(
                 text = "Profession: ",
                 fontWeight = FontWeight.Bold,
-                style=commonTextStyle
+                style = commonTextStyle
             )
             Text(
                 text = textProfession,
-                style=commonTextStyle
+                style = commonTextStyle
             )
             Row(
             ) {
                 Text(
                     text = "Year of Experience: ",
                     fontWeight = FontWeight.Bold,
-                    style=commonTextStyle
+                    style = commonTextStyle
                 )
                 Text(
                     text = "$textYoE",
-                    style=commonTextStyle
+                    style = commonTextStyle
                 )
             }
             Row(
@@ -125,19 +124,21 @@ fun SpecialistsBox(
                 Text(
                     text = "Location: ",
                     fontWeight = FontWeight.Bold,
-                    style=commonTextStyle
+                    style = commonTextStyle
                 )
                 Text(
-                    text = "$textLocation",
+                    text = textLocation,
                     color = Color(0xFF505050),
-                    style=commonTextStyle
+                    style = commonTextStyle
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .height(17.dp)
-                .padding(start=50.dp)
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(17.dp)
+                    .padding(end = 20.dp)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.star),
