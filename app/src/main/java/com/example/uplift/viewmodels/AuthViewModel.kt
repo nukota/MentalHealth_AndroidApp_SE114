@@ -80,6 +80,11 @@ class AuthViewModel() : ViewModel() {
                 }
             }
     }
+
+    fun getUserEmail(): String? {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.email
+    }
 }
 
 sealed class AuthState {

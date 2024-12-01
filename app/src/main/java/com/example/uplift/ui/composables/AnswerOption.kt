@@ -41,8 +41,7 @@ fun AnswerOption(
             .background(Color(0xffd7f9fa))
             .clickable { onClick() }
             .height(40.dp)
-            .width(284.dp)
-            .padding(end = 16.dp)
+            .fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -64,10 +63,10 @@ fun AnswerOption(
                 color = Color.Black,
                 style = TextStyle(
                     fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                    fontSize = 18.sp
+                    fontSize = 12.sp
                 ),
                 modifier = Modifier
-                    .padding(start = 12.dp)
+                    .padding(start = 10.dp)
                     .fillMaxSize()
                     .wrapContentHeight(align = Alignment.CenterVertically)
             )

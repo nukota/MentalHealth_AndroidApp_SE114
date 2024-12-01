@@ -38,6 +38,7 @@ class StoryRepository {
                     }
                 }
                 _stories.value = storyList
+                Log.d("StoryRepository", "Fetched stories")
             }
 
             override fun onCancelled(error: DatabaseError) {

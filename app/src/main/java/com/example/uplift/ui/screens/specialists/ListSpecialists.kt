@@ -1,5 +1,6 @@
 package com.example.uplift.ui.screens.specialists
 
+import TopPaddingContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,10 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,124 +36,125 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.uplift.R
-import com.example.uplift.data.models.Specialists
+import com.example.uplift.data.models.Specialist
 import com.example.uplift.ui.composables.SpecialistsBox
+import com.example.uplift.ui.theme.Gray
 import com.example.uplift.ui.theme.White
+import com.example.uplift.viewmodels.AuthViewModel
+import com.example.uplift.viewmodels.SpecialistsViewModel
 
 @Composable
-fun ListSpecialistsScreen (
-    listSpecialists: List<Specialists>,
-    navController:NavController,
-    email:String
+fun ListSpecialistsScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    specialistsViewModel: SpecialistsViewModel
 ) {
+    val listSpecialists by specialistsViewModel.specialists.observeAsState()
     var showDialog by remember { mutableStateOf(false) }
-    var selectedSpecialist by remember { mutableStateOf<Specialists?>(null) }
+    var selectedSpecialist by remember { mutableStateOf<Specialist?>(null) }
     val parentBackgroundColor = remember { mutableStateOf(Color.White) }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(parentBackgroundColor.value)
-            .fillMaxWidth()
-    ) {
-        Row() {
-            Column(
-            ) {
-                Text(
-                    text = "Specialists",
-                    color = Color(0xff101010),
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        fontFamily = FontFamily(Font(R.font.lemonada))
-                    ),
-                    modifier = Modifier
-                        .padding(start = 20.dp, top = 20.dp)
-                        .height(43.dp)
-                )
-            }
 
+    listSpecialists?.let {
+        TopPaddingContent {
             Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(40.dp),
                 modifier = Modifier
+                    .fillMaxSize()
+                    .background(parentBackgroundColor.value)
                     .fillMaxWidth()
-                    .padding(end = 28.dp, top = 28.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.menu),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(28.dp)
-                )
-            }
-        }
+                Row() {
+                    Column(
+                        modifier = Modifier.padding(start = 20.dp, top = 10.dp)
+                    ) {
+                        Text(
+                            text = "Explore", color = Gray, style = TextStyle(
+                                fontSize = 16.sp, fontFamily = FontFamily(Font(R.font.lemonada))
+                            ), modifier = Modifier
+                        )
+                        Text(
+                            text = "Read Stories", color = Color(0xff101010), style = TextStyle(
+                                fontSize = 26.sp, fontFamily = FontFamily(Font(R.font.lemonada))
+                            ), modifier = Modifier
+                        )
+                    }
 
-        Spacer(modifier = Modifier.height(38.dp))
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .width(400.dp)
-        ) {
-            Column(
-            ) {
-                listSpecialists.forEach { specialist ->
-                    SpecialistsBox(
-                        iconAvartar =  specialist.avartar,
-                        textName = specialist.full_name,
-                        textAge = specialist.age,
-                        textProfession = specialist.profession,
-                        textYoE = specialist.years_of_experience,
-                        textLocation = specialist.location,
-                        textRating = specialist.rating,
-                        textReviewCount = specialist.review_count,
-                        onClick = {
-                            selectedSpecialist = specialist
-                            showDialog = true
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(40.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 28.dp, top = 28.dp)
+                    ) {
+                        Image(painter = painterResource(id = R.drawable.menu),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable { /* Add menu click action here */ })
+                    }
+
+                }
+                Spacer(modifier = Modifier.height(38.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    LazyColumn(
+                    ) {
+                        items(it) { specialist ->
+                            SpecialistsBox(iconAvartar = specialist.avatar,
+                                textName = specialist.full_name,
+                                textAge = specialist.age,
+                                textProfession = specialist.profession,
+                                textYoE = specialist.years_of_experience,
+                                textLocation = specialist.location,
+                                textRating = specialist.rating,
+                                textReviewCount = specialist.review_count,
+                                onClick = {
+                                    selectedSpecialist = specialist
+                                    showDialog = true
+                                })
+                            Spacer(modifier = Modifier.height(10.dp))
                         }
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    }
+                    if (showDialog && selectedSpecialist != null) {
+                        parentBackgroundColor.value = Color(0x99000000)
+                        DetailOfSpecialists(specialist = selectedSpecialist!!,
+                            useremail = authViewModel.getUserEmail()!!,
+                            onDismiss = { showDialog = false })
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(start = 20.dp, bottom = 28.dp)
+                ) {
+                    Icon(painter = painterResource(id = R.drawable.back),
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable() {
+                                navController.popBackStack()
+                            })
+
+                    Text(text = "Back",
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.intermedium)),
+                        fontSize = 24.sp,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .clickable() {
+                                navController.popBackStack()
+                            })
                 }
             }
-            if (showDialog && selectedSpecialist != null) {
-                parentBackgroundColor.value=Color(0x99000000)
-                DetailOfSpecialists(
-                    specialist = selectedSpecialist!!,
-                    useremail=email,
-                    onDismiss = { showDialog = false }
-                )
-            }
         }
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .padding(start = 20.dp, bottom = 28.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.back),
-                contentDescription = "Back",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable(){
-                        navController.popBackStack()
-                    }
-            )
 
-            Text(
-                text = "Back",
-                color = Color.Black,
-                fontFamily = FontFamily(Font(R.font.intermedium)),
-                fontSize = 24.sp,
-                modifier = Modifier
-                    .padding(start = 10.dp)
-                    .clickable(){
-                        navController.popBackStack()
-                    }
-            )
-        }
     }
+
 
 }
 

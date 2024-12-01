@@ -33,12 +33,12 @@ import com.example.uplift.ui.theme.*
 import com.example.uplift.viewmodels.StoryViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 
 
 @Composable
 fun ReadStoriesScreen(
-    navHostController: NavHostController,
+    navController: NavController,
     storyViewModel : StoryViewModel = viewModel()
 ) {
     val stories = storyViewModel.stories.observeAsState(initial = emptyList())
@@ -63,7 +63,6 @@ fun ReadStoriesScreen(
             Column(
                 modifier = Modifier.zIndex(1f)
             ) {
-
                 Row {
                     Column(
                         modifier = Modifier.padding(start = 20.dp, top = 10.dp)
@@ -106,7 +105,7 @@ fun ReadStoriesScreen(
                     items(stories.value) { story ->
                         StoryItem(
                             story = story,
-                            onClick = { navHostController.navigate("storyDetail/${story.story_id}") }
+                            onClick = { navController.navigate("storyDetail/${story.story_id}") }
                         )
                     }
                 }
