@@ -1,6 +1,6 @@
 package com.example.uplift.ui.screens.questions
 
-import TopPaddingContent
+import com.example.uplift.ui.composables.TopPaddingContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

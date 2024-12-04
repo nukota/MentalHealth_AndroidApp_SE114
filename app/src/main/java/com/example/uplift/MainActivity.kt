@@ -1,9 +1,11 @@
 package com.example.uplift
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -29,12 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
+import com.example.uplift.ui.screens.habit.HabitScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
 import com.example.uplift.ui.screens.questions.ListTests
 import com.example.uplift.ui.screens.questions.QuestionsScreen
 import com.example.uplift.ui.screens.questions.TestResultsScreen
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
+import com.example.uplift.viewmodels.HabitViewModel
 import com.example.uplift.viewmodels.SpecialistsViewModel
 import com.example.uplift.viewmodels.TestResultsViewModel
 import com.example.uplift.viewmodels.QuestionsViewModel
@@ -42,6 +46,7 @@ import kotlinx.coroutines.delay
 
 
 class MainActivity : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -58,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainActivityContent(
     authViewModel: AuthViewModel,
@@ -68,6 +74,7 @@ fun MainActivityContent(
     val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
     val questionsViewModel: QuestionsViewModel = viewModel()
     val testResultsViewModel: TestResultsViewModel = viewModel()
+    val habitViewModel : HabitViewModel = viewModel()
 
     var loadingApp by remember { mutableStateOf(true) }
 
@@ -101,6 +108,9 @@ fun MainActivityContent(
                 }
                 composable(Routes.SIGNUP) {
                     SignUpScreen(navController, authViewModel)
+                }
+                composable(Routes.HABIT) {
+                    HabitScreen(habitViewModel)
                 }
                 composable(Routes.EXPLORE) {
                     ExploreScreen(navController)
