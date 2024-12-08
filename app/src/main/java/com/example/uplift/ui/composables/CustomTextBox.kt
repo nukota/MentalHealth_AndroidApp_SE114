@@ -11,83 +11,78 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
 import com.example.uplift.R
 
 @Composable
-fun TextboxShape(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.White,
-    width: Dp = 350.dp,
-    height: Dp = 55.dp,
-    cornerRadius: Dp = 27.5.dp,
-    strokeColor: Color = Color(0xFF505050), // dark_gray
-    strokeWidth: Dp = 1.5.dp
-) {
+fun CustomTextBox(text: MutableState<String>, hint: String, leadingIcon: Painter) {
     Box(
-        modifier = modifier
-            .size(width, height)
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .width(350.dp)
+            .height(55.dp)
             .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(cornerRadius)
+                color = Color.White,
+                shape = RoundedCornerShape(27.5.dp)
             )
             .border(
-                width = strokeWidth,
-                color = strokeColor,
-                shape = RoundedCornerShape(cornerRadius)
+                width = 1.5.dp,
+                color = Color(0xFF505050),
+                shape = RoundedCornerShape(27.5.dp)
             )
-    )
-}
-
-@Composable
-fun CustomTextBox(text : MutableState<String>, hint: String, leadingIcon: Painter) {
-
-    Box() {
-        TextboxShape() // Use the Textbox composable as the background
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 24.dp, end = 0.dp)
-        ) {
-            Image(
-                painter = leadingIcon,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(DarkGray),
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier.size(22.dp)
-            )
-            TextField(
-                value = text.value,
-                placeholder = { Text(text = hint, color = Gray, fontSize = 17.sp,) },
-                onValueChange = { text.value = it },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
-                    errorContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent
-                ),
-                singleLine = true,
-                textStyle = TextStyle(fontSize = 17.sp, color = Black, fontFamily = FontFamily(Font(R.font.interregular))),
-                modifier = Modifier.padding(start = 4.dp)
-            )
-        }
+    ) {
+        TextField(
+            leadingIcon = {
+                Image(
+                    painter = leadingIcon,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(DarkGray),
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.size(22.dp)
+                )
+            },
+            value = text.value,
+            placeholder = {
+                Text(
+                    text = hint,
+                    color = Gray,
+                    fontSize = 15.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            },
+            onValueChange = { text.value = it },
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                errorContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent
+            ),
+            singleLine = true,
+            textStyle = TextStyle(
+                fontSize = 15.sp,
+                color = Black,
+                fontFamily = FontFamily(Font(R.font.interregular)),
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp)
+                .height(55.dp)
+        )
     }
 }

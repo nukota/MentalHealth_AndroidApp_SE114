@@ -1,5 +1,6 @@
 package com.example.uplift.ui.screens.habit
 
+import android.annotation.SuppressLint
 import com.example.uplift.ui.composables.TopPaddingContent
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -32,6 +33,7 @@ import com.example.uplift.ui.composables.HabitCard
 import com.example.uplift.viewmodels.HabitViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+@SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HabitScreen(habitViewModel: HabitViewModel) {
@@ -41,6 +43,11 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
     val habitList: List<Habit> = habits.filter { it.uid == currentUserUid }
 
     var isDialogOpen by remember { mutableStateOf(false) }
+    if (habits.isEmpty()) {
+        // Show loading or empty state
+        Spacer(modifier = Modifier.height(20.dp))
+        Text("No habits found")
+    } else
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -52,7 +59,7 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
                     .background(color = Color.White)
                     .zIndex(1f)
             ) {
-                Row() {
+                Row {
                     Column(
                     ) {
                         Text(
@@ -84,27 +91,35 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
                         )
                     }
                 }
-                    Button(
-                        onClick = { isDialogOpen = true },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00BAC5)),
-                        modifier = Modifier
-                            .padding(top = 14.dp, start = 20.dp)
-                    ) {
-                        Text(
-                            text = "Add New",
-                            color = Color.Black,
-                            fontWeight = FontWeight.Medium,
-                            style = TextStyle(fontSize = 18.sp)
-                        )
-                    }
+
                 LazyColumn(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp, vertical = 20.dp)
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 14.dp)
                         .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.Start
                 ) {
+                    item {
+                        Button(
+                            onClick = { isDialogOpen = true },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00BAC5))
+                        ) {
+                            Text(
+                                text = "Add New",
+                                color = Color.Black,
+                                fontWeight = FontWeight.Medium,
+                                style = TextStyle(fontSize = 18.sp)
+                            )
+                        }
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(14.dp))
+                    }
                     items(habitList) { habit ->
-                        HabitCard(habit = habit, habitViewModel.getStatusListForLatestWeek(habitLogs, habit.habit_id))
+                        HabitCard(
+                            habit = habit,
+                            habitViewModel.getStatusListForLatestWeek(habitLogs, habit.habit_id)
+                        )
                         Spacer(modifier = Modifier.height(10.dp))
                     }
                 }

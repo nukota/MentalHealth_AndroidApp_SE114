@@ -29,19 +29,18 @@ fun NavigationBar(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(2.dp)
-            .background(Cyan)
-            .zIndex(2f)
-    )
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .background(White)
+            .height(82.dp)
             .padding(0.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
         Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(Cyan)
+                    .zIndex(2f)
+            )
             Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier
@@ -54,7 +53,7 @@ fun NavigationBar(navController: NavController) {
                 NavigationButton(
                     "Home",
                     painterResource(id = R.drawable.home),
-                    onClick = { /*navController.navigate(Routes.HOME)*/ })
+                    onClick = { navController.navigate(Routes.HOME) })
                 NavigationButton(
                     "Habit",
                     painterResource(id = R.drawable.medal),
@@ -62,7 +61,7 @@ fun NavigationBar(navController: NavController) {
                 NavigationButton(
                     "Diary",
                     painterResource(id = R.drawable.book),
-                    onClick = { /*navController.navigate(Routes.DIARY)*/ })
+                    onClick = { navController.navigate(Routes.DIARY) })
                 NavigationButton(
                     "Explore",
                     painterResource(id = R.drawable.compass),
