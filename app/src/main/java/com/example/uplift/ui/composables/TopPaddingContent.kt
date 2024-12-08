@@ -14,13 +14,11 @@ fun TopPaddingContent(content: @Composable () -> Unit) {
     val density = LocalDensity.current
     val insets = ViewCompat.getRootWindowInsets(view)
     val statusBarHeight = insets?.getInsets(WindowInsetsCompat.Type.statusBars())?.top ?: 0
-    val navigationBarHeight = insets?.getInsets(WindowInsetsCompat.Type.navigationBars())?.bottom ?: 0
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = with(density) { statusBarHeight.toDp() })
-            .padding(bottom = with(density) { navigationBarHeight.toDp() })
     ) {
         content()
     }

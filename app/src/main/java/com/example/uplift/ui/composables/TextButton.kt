@@ -26,7 +26,7 @@ fun TextButton(text: String, color: Color = DarkGray, modifier: Modifier = Modif
     ) {
         Text(
             text = text,
-            style = TextStyle(fontSize = 19.sp, color = color, fontFamily = FontFamily(Font(R.font.interregular)))
+            style = TextStyle(fontSize = 13.sp, color = color, fontFamily = FontFamily(Font(R.font.interregular)))
         )
     }
 }

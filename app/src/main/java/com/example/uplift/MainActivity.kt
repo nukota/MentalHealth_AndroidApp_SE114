@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,10 +28,14 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.diary.ui.DiaryScreen
 import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
+import com.example.uplift.ui.screens.diary.AddDiaryScreen
+import com.example.uplift.ui.screens.diary.DetailDiaryScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
@@ -38,6 +43,7 @@ import com.example.uplift.ui.screens.questions.ListTests
 import com.example.uplift.ui.screens.questions.QuestionsScreen
 import com.example.uplift.ui.screens.questions.TestResultsScreen
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
+import com.example.uplift.viewmodels.DiaryViewModel
 import com.example.uplift.viewmodels.HabitViewModel
 import com.example.uplift.viewmodels.SpecialistsViewModel
 import com.example.uplift.viewmodels.TestResultsViewModel
@@ -74,7 +80,8 @@ fun MainActivityContent(
     val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
     val questionsViewModel: QuestionsViewModel = viewModel()
     val testResultsViewModel: TestResultsViewModel = viewModel()
-    val habitViewModel : HabitViewModel = viewModel()
+    val habitViewModel: HabitViewModel = viewModel()
+    val diaryViewModel: DiaryViewModel = viewModel()
 
     var loadingApp by remember { mutableStateOf(true) }
 
@@ -86,69 +93,105 @@ fun MainActivityContent(
     if (loadingApp) {
         LoadingScreen(authViewModel)
     } else {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            NavHost(navController = navController, startDestination = Routes.LOGIN) {
-                composable(Routes.LOADING) {
-                    LoadingScreen(authViewModel)
-                }
-                composable(Routes.HOME) {
-                    HomeScreen(navController, authViewModel)
-                }
-                composable(Routes.LOGIN) {
-                    LoginScreen(navController, authViewModel)
-                }
-                composable(Routes.SEND_EMAIL) {
-                    SendEmailScreen(navController, authViewModel)
-                }
-                composable(Routes.RESET_PASSWORD) {
-                    ResetPasswordScreen(navController, authViewModel)
-                }
-                composable(Routes.SIGNUP) {
-                    SignUpScreen(navController, authViewModel)
-                }
-                composable(Routes.HABIT) {
-                    HabitScreen(habitViewModel)
-                }
-                composable(Routes.EXPLORE) {
-                    ExploreScreen(navController)
-                }
-                composable(Routes.STORY) {
-                    ReadStoriesScreen(navController, storyViewModel)
-                }
-                composable(Routes.STORY_DETAIL) { backStackEntry ->
-                    val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
-                    StoryDetailScreen(storyId, storyViewModel)
-                }
-                composable(Routes.LIST_TESTS) {
-                    ListTests(navController, listTestsViewModel)
-                }
-                composable(Routes.QUESTIONS) { backStackEntry ->
-                    val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
-                    val testName = backStackEntry.arguments?.getString("testName") ?: ""
-                    QuestionsScreen(testId, testName, navController, questionsViewModel)
-                }
-                composable(Routes.TEST_RESULTS) { backStackEntry ->
-                    val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
-                    val score = backStackEntry.arguments?.getDouble("score") ?: 0.0
-                    val testName = backStackEntry.arguments?.getString("testName") ?: ""
-                    TestResultsScreen(testId, testName, score, navController, testResultsViewModel)
-                }
-                composable(Routes.LIST_SPECIALIST) {
-                    ListSpecialistsScreen(navController, authViewModel, listSpecialistsViewModel)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                NavHost(navController = navController, startDestination = Routes.LOGIN) {
+                    composable(Routes.LOADING) {
+                        LoadingScreen(authViewModel)
+                    }
+                    composable(Routes.HOME) {
+                        HomeScreen(navController, authViewModel)
+                    }
+                    composable(Routes.LOGIN) {
+                        LoginScreen(navController, authViewModel)
+                    }
+                    composable(Routes.SEND_EMAIL) {
+                        SendEmailScreen(navController, authViewModel)
+                    }
+                    composable(Routes.RESET_PASSWORD) {
+                        ResetPasswordScreen(navController, authViewModel)
+                    }
+                    composable(Routes.SIGNUP) {
+                        SignUpScreen(navController, authViewModel)
+                    }
+                    composable(Routes.HABIT) {
+                        HabitScreen(habitViewModel)
+                    }
+                    composable(Routes.EXPLORE) {
+                        ExploreScreen(navController)
+                    }
+                    composable(Routes.STORY) {
+                        ReadStoriesScreen(navController, storyViewModel)
+                    }
+                    composable(Routes.STORY_DETAIL) { backStackEntry ->
+                        val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
+                        StoryDetailScreen(storyId, storyViewModel)
+                    }
+                    composable(Routes.LIST_TESTS) {
+                        ListTests(navController, listTestsViewModel)
+                    }
+                    composable(Routes.QUESTIONS) { backStackEntry ->
+                        val testId =
+                            backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
+                        val testName = backStackEntry.arguments?.getString("testName") ?: ""
+                        QuestionsScreen(testId, testName, navController, questionsViewModel)
+                    }
+                    composable(Routes.TEST_RESULTS) { backStackEntry ->
+                        val testId =
+                            backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
+                        val score = backStackEntry.arguments?.getDouble("score") ?: 0.0
+                        val testName = backStackEntry.arguments?.getString("testName") ?: ""
+                        TestResultsScreen(
+                            testId,
+                            testName,
+                            score,
+                            navController,
+                            testResultsViewModel
+                        )
+                    }
+                    composable(Routes.LIST_SPECIALIST) {
+                        ListSpecialistsScreen(
+                            navController,
+                            authViewModel,
+                            listSpecialistsViewModel
+                        )
+                    }
+                    composable(Routes.DIARY) {
+                        DiaryScreen(navController, diaryViewModel)
+                    }
+                    composable(Routes.DIARY_ADD_NEW) {
+                        AddDiaryScreen(navController, diaryViewModel)
+                    }
+                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
+                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
+                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
+                    }
                 }
             }
             val currentBackStackEntry = navController.currentBackStackEntryAsState().value
             val currentRoute = currentBackStackEntry?.destination?.route
 
-            if (currentRoute in listOf(Routes.HOME, Routes.HABIT, Routes.DIARY, Routes.EXPLORE, Routes.STORY, Routes.LIST_TESTS, Routes.LIST_SPECIALIST)) {
+            if (currentRoute in listOf(
+                    Routes.HOME,
+                    Routes.HABIT,
+                    Routes.DIARY,
+                    Routes.EXPLORE,
+                    Routes.STORY,
+                    Routes.LIST_TESTS,
+                    Routes.LIST_SPECIALIST
+                )
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 30.dp),
+                        .padding(bottom = 36.dp),
                 ) {
                     NavigationBar(navController = navController)
                 }

@@ -15,15 +15,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.uplift.R
 
 @Composable
-fun CustomButton(text: String, icon: Painter?, onClick: () -> Unit,) {
+fun CustomButton(text: String, icon: Painter?, onClick: () -> Unit) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier.wrapContentSize()
+        modifier = Modifier
+            .width(350.dp)
+            .height(55.dp)
     ) {
         Button(
             onClick = onClick,
@@ -31,33 +34,31 @@ fun CustomButton(text: String, icon: Painter?, onClick: () -> Unit,) {
                 containerColor = Black,
                 contentColor = White
             ),
-            modifier = Modifier
-                .width(350.dp)
-                .height(55.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             if (icon != null) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .padding(start = 24.dp)
                 ) {
-                    if (icon != null) {
-                        Image(
-                            painter = icon,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(24.dp)
-                                .padding(start = 0.dp)
-                        )
-                    }
-
+                    Image(
+                        painter = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = text,
                         color = Color.Gray,
-                        style = TextStyle(fontSize = 17.sp, fontFamily = FontFamily(Font(R.font.interbold))),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontFamily = FontFamily(Font(R.font.interbold))
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(start = 24.dp)
                     )
                 }
@@ -65,7 +66,12 @@ fun CustomButton(text: String, icon: Painter?, onClick: () -> Unit,) {
                 Text(
                     text = text,
                     color = Color.LightGray,
-                    style = TextStyle(fontSize = 20.sp, fontFamily = FontFamily(Font(R.font.interbold))),
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.interbold))
+                    ),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(start = 0.dp)
                 )
             }
