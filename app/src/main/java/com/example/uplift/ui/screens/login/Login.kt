@@ -123,12 +123,12 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
             ) {
                 Text(
                     text = "Don't have an account?",
-                    style = TextStyle(fontSize = 17.sp, color = DarkGray, fontFamily = FontFamily(Font(R.font.interregular)))
+                    style = TextStyle(fontSize = 14.sp, color = DarkGray, fontFamily = FontFamily(Font(R.font.interregular)))
                 )
                 TextButton(
                     text = "Sign Up",
                     color = Cyan,
-                    modifier = Modifier.padding(start = 4.dp),
+                    modifier = Modifier.padding(start = 2.dp),
                     onClick = {
                         navHostController.navigate(Routes.SIGNUP)
                     }

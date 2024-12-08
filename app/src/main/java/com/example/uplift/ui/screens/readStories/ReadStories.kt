@@ -100,7 +100,8 @@ fun ReadStoriesScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 14.dp, vertical = 28.dp)
+                        .padding(horizontal = 14.dp)
+                        .padding(top = 28.dp)
                 ) {
                     items(stories.value) { story ->
                         StoryItem(

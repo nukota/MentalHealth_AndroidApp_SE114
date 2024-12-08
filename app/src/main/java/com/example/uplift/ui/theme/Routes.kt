@@ -17,4 +17,6 @@ object Routes {
     const val LOADING = "loading"
     const val HABIT = "habit"
     const val DIARY = "diary"
+    const val DIARY_ADD_NEW = "diaryAddNew"
+    const val DIARY_DETAIL = "diaryDetail/{diaryId}"
 }
