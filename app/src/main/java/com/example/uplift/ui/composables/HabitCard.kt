@@ -45,7 +45,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
             .fillMaxWidth()
             .requiredWidthIn(min = 320.dp)
             .height(160.dp)
-            .background(Color(0xFFE4FFEC), RoundedCornerShape(10.dp))
+            .background(Color(0xFFf5feff), RoundedCornerShape(10.dp))
             .padding(horizontal = 12.dp)
             .padding(top = 12.dp)
     ) {
@@ -93,7 +93,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth(1f)
-                .padding(top = 2.dp)
+                .padding(top = 8.dp)
                 .padding(horizontal = 12.dp)
         ) {
             daysOfWeek.forEachIndexed { index, date ->
@@ -101,7 +101,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),

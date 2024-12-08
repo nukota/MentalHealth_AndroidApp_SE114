@@ -5,6 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +25,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
+import com.example.uplift.ui.composables.StoryItem
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 
@@ -78,55 +82,33 @@ fun ExploreScreen(
                         )
                     }
                 }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(18.dp),
+                    horizontalArrangement = Arrangement.spacedBy(14.dp),
                     modifier = Modifier
-                        .padding(top = 30.dp)
-                        .fillMaxWidth()
+                        .fillMaxSize()
+                        .padding(horizontal = 14.dp, vertical = 28.dp)
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.take_tests),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(164.dp)
-                                .height(180.dp)
-                                .padding(10.dp)
-                                .clickable { navController.navigate(Routes.LIST_TESTS) }
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.read_story),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(164.dp)
-                                .height(180.dp)
-                                .padding(10.dp)
-                                .clickable { navController.navigate(Routes.STORY) }
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.reach_specialists),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(164.dp)
-                                .padding(10.dp)
-                                .height(180.dp)
-                                .clickable { navController.navigate(Routes.LIST_SPECIALIST) }
-                        )
-                    }
+                    item { ExploreImageButton(R.drawable.take_tests) { navController.navigate(Routes.LIST_TESTS) } }
+                    item { ExploreImageButton(R.drawable.read_story) { navController.navigate(Routes.STORY) } }
+                    item { ExploreImageButton(R.drawable.reach_specialists) { navController.navigate(Routes.LIST_SPECIALIST) } }
                 }
             }
         }
     }
+}
 
+@Composable
+fun ExploreImageButton(painter: Int, onClick: () -> Unit) {
+    Image(
+        painter = painterResource(id = painter),
+        contentDescription = null,
+        modifier = Modifier
+            .fillMaxWidth(0.4f)
+            .aspectRatio(41 / 45f)
+            .clickable { onClick() }
+    )
 }
 
 @Preview(
