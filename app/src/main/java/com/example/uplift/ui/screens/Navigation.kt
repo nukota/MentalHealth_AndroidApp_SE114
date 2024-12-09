@@ -62,7 +62,7 @@ fun NavigationBar(navController: NavController) {
                 NavigationButton(
                     "Diary",
                     painterResource(id = R.drawable.book),
-                    onClick = { /*navController.navigate(Routes.DIARY)*/ })
+                    onClick = { navController.navigate(Routes.DIARY )})
                 NavigationButton(
                     "Explore",
                     painterResource(id = R.drawable.compass),

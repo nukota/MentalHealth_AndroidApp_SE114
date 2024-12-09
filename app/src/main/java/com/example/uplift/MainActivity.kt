@@ -1,6 +1,8 @@
 package com.example.uplift
 
+import DiaryViewModel
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -25,10 +27,15 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.diary.ui.DiaryScreen
+import com.example.uplift.data.models.Diary
 import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
+import com.example.uplift.ui.screens.diary.AddDiary
+import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
 import com.example.uplift.ui.screens.questions.ListTests
@@ -53,7 +60,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // Sign out the user when the activity is stopped
         FirebaseAuth.getInstance().signOut()
     }
 }
@@ -61,6 +67,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MainActivityContent(
     authViewModel: AuthViewModel,
+
 ) {
     val navController = rememberNavController()
     val storyViewModel: StoryViewModel = viewModel()
@@ -68,8 +75,9 @@ fun MainActivityContent(
     val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
     val questionsViewModel: QuestionsViewModel = viewModel()
     val testResultsViewModel: TestResultsViewModel = viewModel()
-
     var loadingApp by remember { mutableStateOf(true) }
+
+    val diaryViewModel: DiaryViewModel = viewModel()
 
     LaunchedEffect(Unit) {
         delay(2000) // Delay for 2 seconds
@@ -129,18 +137,46 @@ fun MainActivityContent(
                 composable(Routes.LIST_SPECIALIST) {
                     ListSpecialistsScreen(navController, authViewModel, listSpecialistsViewModel)
                 }
+
+                composable(Routes.DIARY) {
+                    val diaryViewModel: DiaryViewModel = viewModel()
+                    DiaryScreen(navController = navController, diaryViewModel = diaryViewModel )  // Đây là màn hình Diary
+                }
+
+                composable(Routes.AddDIARY) { backStackEntry ->
+                    val uid = backStackEntry.arguments?.getString("uid") ?: ""
+                    val diaryViewModel: DiaryViewModel = viewModel() // Khai báo ViewModel cho diary
+
+                    AddDiary(
+                        uid = uid,
+                        diaryViewModel = diaryViewModel,
+                        navController = navController
+                    )
+                }
+                composable("update_diary/{diaryId}") { backStackEntry ->
+                    val diaryId = backStackEntry.arguments?.getString("diaryId")
+                    if (diaryId != null) {
+                        // Truyền diaryId vào UpdateDiaryScreen
+                        UpdateDiaryScreen(
+                            diaryId = diaryId,
+                            diaryViewModel = diaryViewModel,
+                            navController = navController
+                        )
+                    }
+                }
             }
+
             val currentBackStackEntry = navController.currentBackStackEntryAsState().value
             val currentRoute = currentBackStackEntry?.destination?.route
 
-            if (currentRoute in listOf(Routes.HOME, Routes.HABIT, Routes.DIARY, Routes.EXPLORE, Routes.STORY, Routes.LIST_TESTS, Routes.LIST_SPECIALIST)) {
+            if (currentRoute in listOf(Routes.HOME, Routes.HABIT,Routes.AddDIARY, Routes.DIARY, Routes.EXPLORE, Routes.STORY, Routes.LIST_TESTS, Routes.LIST_SPECIALIST)) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 30.dp),
                 ) {
-                    NavigationBar(navController = navController)
+                    NavigationBar(navController = navController )
                 }
             }
         }
