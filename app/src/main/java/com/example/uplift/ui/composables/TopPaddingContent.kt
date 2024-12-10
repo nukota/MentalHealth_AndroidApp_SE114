@@ -14,7 +14,6 @@ fun TopPaddingContent(content: @Composable () -> Unit) {
     val density = LocalDensity.current
     val insets = ViewCompat.getRootWindowInsets(view)
     val statusBarHeight = insets?.getInsets(WindowInsetsCompat.Type.statusBars())?.top ?: 0
-
     Box(
         modifier = Modifier
             .fillMaxSize()
