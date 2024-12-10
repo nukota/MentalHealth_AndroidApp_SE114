@@ -1,9 +1,7 @@
 package com.example.uplift
 
-import DiaryViewModel
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -39,8 +37,6 @@ import com.example.uplift.ui.screens.NavigationBar
 import com.example.uplift.ui.screens.diary.AddDiaryScreen
 import com.example.uplift.ui.screens.diary.DetailDiaryScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
-import com.example.uplift.ui.screens.diary.AddDiary
-import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
 import com.example.uplift.ui.screens.questions.ListTests
@@ -98,95 +94,103 @@ fun MainActivityContent(
         LoadingScreen(authViewModel)
     } else {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize()
         ) {
-            NavHost(navController = navController, startDestination = Routes.LOGIN) {
-                composable(Routes.LOADING) {
-                    LoadingScreen(authViewModel)
-                }
-                composable(Routes.HOME) {
-                    HomeScreen(navController, authViewModel)
-                }
-                composable(Routes.LOGIN) {
-                    LoginScreen(navController, authViewModel)
-                }
-                composable(Routes.SEND_EMAIL) {
-                    SendEmailScreen(navController, authViewModel)
-                }
-                composable(Routes.RESET_PASSWORD) {
-                    ResetPasswordScreen(navController, authViewModel)
-                }
-                composable(Routes.SIGNUP) {
-                    SignUpScreen(navController, authViewModel)
-                }
-                composable(Routes.EXPLORE) {
-                    ExploreScreen(navController)
-                }
-                composable(Routes.STORY) {
-                    ReadStoriesScreen(navController, storyViewModel)
-                }
-                composable(Routes.STORY_DETAIL) { backStackEntry ->
-                    val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
-                    StoryDetailScreen(storyId, storyViewModel)
-                }
-                composable(Routes.LIST_TESTS) {
-                    ListTests(navController, listTestsViewModel)
-                }
-                composable(Routes.QUESTIONS) { backStackEntry ->
-                    val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
-                    val testName = backStackEntry.arguments?.getString("testName") ?: ""
-                    QuestionsScreen(testId, testName, navController, questionsViewModel)
-                }
-                composable(Routes.TEST_RESULTS) { backStackEntry ->
-                    val testId = backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
-                    val score = backStackEntry.arguments?.getDouble("score") ?: 0.0
-                    val testName = backStackEntry.arguments?.getString("testName") ?: ""
-                    TestResultsScreen(testId, testName, score, navController, testResultsViewModel)
-                }
-                composable(Routes.LIST_SPECIALIST) {
-                    ListSpecialistsScreen(navController, authViewModel, listSpecialistsViewModel)
-                }
-
-                composable(Routes.DIARY) {
-                    val diaryViewModel: DiaryViewModel = viewModel()
-                    DiaryScreen(navController = navController, diaryViewModel = diaryViewModel )  // Đây là màn hình Diary
-                }
-
-                composable(Routes.AddDIARY) { backStackEntry ->
-                    val uid = backStackEntry.arguments?.getString("uid") ?: ""
-                    val diaryViewModel: DiaryViewModel = viewModel() // Khai báo ViewModel cho diary
-
-                    AddDiary(
-                        uid = uid,
-                        diaryViewModel = diaryViewModel,
-                        navController = navController
-                    )
-                }
-                composable("update_diary/{diaryId}") { backStackEntry ->
-                    val diaryId = backStackEntry.arguments?.getString("diaryId")
-                    if (diaryId != null) {
-                        // Truyền diaryId vào UpdateDiaryScreen
-                        UpdateDiaryScreen(
-                            diaryId = diaryId,
-                            diaryViewModel = diaryViewModel,
-                            navController = navController
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                NavHost(navController = navController, startDestination = Routes.LOGIN) {
+                    composable(Routes.LOADING) {
+                        LoadingScreen(authViewModel)
+                    }
+                    composable(Routes.HOME) {
+                        HomeScreen(navController, authViewModel)
+                    }
+                    composable(Routes.LOGIN) {
+                        LoginScreen(navController, authViewModel)
+                    }
+                    composable(Routes.SEND_EMAIL) {
+                        SendEmailScreen(navController, authViewModel)
+                    }
+                    composable(Routes.RESET_PASSWORD) {
+                        ResetPasswordScreen(navController, authViewModel)
+                    }
+                    composable(Routes.SIGNUP) {
+                        SignUpScreen(navController, authViewModel)
+                    }
+                    composable(Routes.HABIT) {
+                        HabitScreen(habitViewModel)
+                    }
+                    composable(Routes.EXPLORE) {
+                        ExploreScreen(navController)
+                    }
+                    composable(Routes.STORY) {
+                        ReadStoriesScreen(navController, storyViewModel)
+                    }
+                    composable(Routes.STORY_DETAIL) { backStackEntry ->
+                        val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
+                        StoryDetailScreen(storyId, storyViewModel)
+                    }
+                    composable(Routes.LIST_TESTS) {
+                        ListTests(navController, listTestsViewModel)
+                    }
+                    composable(Routes.QUESTIONS) { backStackEntry ->
+                        val testId =
+                            backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
+                        val testName = backStackEntry.arguments?.getString("testName") ?: ""
+                        QuestionsScreen(testId, testName, navController, questionsViewModel)
+                    }
+                    composable(Routes.TEST_RESULTS) { backStackEntry ->
+                        val testId =
+                            backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
+                        val score = backStackEntry.arguments?.getDouble("score") ?: 0.0
+                        val testName = backStackEntry.arguments?.getString("testName") ?: ""
+                        TestResultsScreen(
+                            testId,
+                            testName,
+                            score,
+                            navController,
+                            testResultsViewModel
                         )
+                    }
+                    composable(Routes.LIST_SPECIALIST) {
+                        ListSpecialistsScreen(
+                            navController,
+                            authViewModel,
+                            listSpecialistsViewModel
+                        )
+                    }
+                    composable(Routes.DIARY) {
+                        DiaryScreen(navController, diaryViewModel)
+                    }
+                    composable(Routes.DIARY_ADD_NEW) {
+                        AddDiaryScreen(navController, diaryViewModel)
+                    }
+                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
+                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
+                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
                     }
                 }
             }
             val currentBackStackEntry = navController.currentBackStackEntryAsState().value
             val currentRoute = currentBackStackEntry?.destination?.route
 
-            if (currentRoute in listOf(Routes.HOME, Routes.HABIT, Routes.DIARY, Routes.EXPLORE, Routes.STORY, Routes.LIST_TESTS, Routes.LIST_SPECIALIST)) {
+            if (currentRoute in listOf(
+                    Routes.HOME,
+                    Routes.HABIT,
+                    Routes.DIARY,
+                    Routes.EXPLORE,
+                    Routes.STORY,
+                    Routes.LIST_TESTS,
+                    Routes.LIST_SPECIALIST
+                )
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
-                        .padding(bottom = 30.dp),
-                ) {
-                    NavigationBar(navController = navController)
-                }
+                ) { NavigationBar(navController = navController) }
             }
         }
     }

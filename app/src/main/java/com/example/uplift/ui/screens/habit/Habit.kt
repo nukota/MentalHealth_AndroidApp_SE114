@@ -43,11 +43,7 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
     val habitList: List<Habit> = habits.filter { it.uid == currentUserUid }
 
     var isDialogOpen by remember { mutableStateOf(false) }
-    if (habits.isEmpty()) {
-        // Show loading or empty state
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("No habits found")
-    } else
+
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -115,6 +111,18 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
                     item {
                         Spacer(modifier = Modifier.height(14.dp))
                     }
+                    if (habitList.isEmpty()) {
+                        item {
+                            Text(
+                                text = "No habits added yet",
+                                color = Color(0xff101010),
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontFamily = FontFamily(Font(R.font.intermedium))
+                                )
+                            )
+                        }
+                    }
                     items(habitList) { habit ->
                         HabitCard(
                             habit = habit,
@@ -124,9 +132,10 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
                     }
                 }
             }
-            if (isDialogOpen) {
-                AddHabitDialog(onDismiss = { isDialogOpen = false })
-            }
+        }
+        if (isDialogOpen) {
+            AddHabitDialog(onDismiss = { isDialogOpen = false })
         }
     }
 }
+
