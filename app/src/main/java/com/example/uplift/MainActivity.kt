@@ -93,13 +93,11 @@ fun MainActivityContent(
     if (loadingApp) {
         LoadingScreen(authViewModel)
     } else {
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize()
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 NavHost(navController = navController, startDestination = Routes.LOGIN) {
@@ -191,10 +189,8 @@ fun MainActivityContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 36.dp),
-                ) {
-                    NavigationBar(navController = navController)
-                }
+                        .align(Alignment.BottomCenter)
+                ) { NavigationBar(navController = navController) }
             }
         }
     }
