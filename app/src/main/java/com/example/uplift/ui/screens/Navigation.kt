@@ -35,20 +35,12 @@ import androidx.compose.ui.zIndex
 
 @Composable
 fun NavigationBar(navController: NavController) {
-    val view = LocalView.current
-    val density = LocalDensity.current
-    val bottomInset = with(density) {
-        androidx.core.view.ViewCompat.getRootWindowInsets(view)
-            ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())?.bottom?.toDp()
-            ?: 0.dp
-    }
     var selectedButton by remember { mutableStateOf("Home") }
 
     Box(
         modifier = Modifier
             .background(White)
-            .fillMaxWidth()
-            .padding(bottom = bottomInset),
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Row(

@@ -7,7 +7,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,14 +27,15 @@ import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.diary.ui.DiaryScreen
+import com.example.uplift.ui.screens.diary.DiaryScreen
 import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
 import com.example.uplift.ui.screens.diary.AddDiaryScreen
-import com.example.uplift.ui.screens.diary.DetailDiaryScreen
+import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
@@ -74,6 +74,14 @@ class MainActivity : AppCompatActivity() {
 fun MainActivityContent(
     authViewModel: AuthViewModel,
 ) {
+    val view = LocalView.current
+    val density = LocalDensity.current
+    val bottomInset = with(density) {
+        androidx.core.view.ViewCompat.getRootWindowInsets(view)
+            ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())?.bottom?.toDp()
+            ?: 0.dp
+    }
+
     val navController = rememberNavController()
     val storyViewModel: StoryViewModel = viewModel()
     val listTestsViewModel: ListTestsViewModel = viewModel()
@@ -81,7 +89,6 @@ fun MainActivityContent(
     val questionsViewModel: QuestionsViewModel = viewModel()
     val testResultsViewModel: TestResultsViewModel = viewModel()
     val habitViewModel: HabitViewModel = viewModel()
-    val diaryViewModel: DiaryViewModel = viewModel()
 
     var loadingApp by remember { mutableStateOf(true) }
 
@@ -93,11 +100,14 @@ fun MainActivityContent(
     if (loadingApp) {
         LoadingScreen(authViewModel)
     } else {
-        Box(
-            modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = bottomInset)
         ) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 NavHost(navController = navController, startDestination = Routes.LOGIN) {
@@ -162,15 +172,26 @@ fun MainActivityContent(
                         )
                     }
                     composable(Routes.DIARY) {
+                        val diaryViewModel: DiaryViewModel = viewModel()
                         DiaryScreen(navController, diaryViewModel)
                     }
-                    composable(Routes.DIARY_ADD_NEW) {
-                        AddDiaryScreen(navController, diaryViewModel)
+                    composable(Routes.DIARY_ADD) {
+                        val diaryViewModel: DiaryViewModel = viewModel()
+                        val uid = authViewModel.currentUser?.uid ?: ""
+                        AddDiaryScreen(uid = uid, diaryViewModel = diaryViewModel, navController = navController)
                     }
-                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
-                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
-                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
+                    composable(Routes.DIARY_UPDATE) { backStackEntry ->
+                        val diaryId = backStackEntry.arguments?.getString("diaryId")?.toIntOrNull() ?: 0
+                        val diaryViewModel: DiaryViewModel = viewModel()
+                        UpdateDiaryScreen(diaryId = diaryId, diaryViewModel = diaryViewModel, navController = navController)
                     }
+//                    composable(Routes.DIARY_ADD_NEW) {
+//                        AddDiaryScreen(navController, diaryViewModel)
+//                    }
+//                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
+//                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
+//                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
+//                    }
                 }
             }
             val currentBackStackEntry = navController.currentBackStackEntryAsState().value
@@ -189,7 +210,6 @@ fun MainActivityContent(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
                 ) { NavigationBar(navController = navController) }
             }
         }

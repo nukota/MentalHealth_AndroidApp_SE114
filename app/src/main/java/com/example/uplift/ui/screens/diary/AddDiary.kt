@@ -14,31 +14,53 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.example.uplift.data.models.Diary
 import com.example.uplift.ui.composables.TopPaddingContent
-import com.example.uplift.ui.theme.Routes
+import com.example.uplift.utils.NotificationHelper
 import com.example.uplift.viewmodels.DiaryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDiaryScreen(
-    navController: NavController, diaryViewModel: DiaryViewModel
+    uid: String, navController: NavController, diaryViewModel: DiaryViewModel
 ) {
-    var title by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val diaryId =
+        navController.currentBackStackEntry?.arguments?.getString("diary_id")?.toIntOrNull()
+    val diary by diaryViewModel.currentDiary.observeAsState() // Observe currentDiary
+    // Cập nhật UI với thông tin nhật ký (title và content)
+    var title by remember { mutableStateOf(diary?.title ?: "") }
+    var content by remember { mutableStateOf(diary?.content ?: "") }
+
+    val currentDiary by diaryViewModel.currentDiary.observeAsState()
+
+    // Nếu có diaryId, lấy thông tin nhật ký
+    LaunchedEffect(diaryId) {
+        if (diaryId != null) {
+            diaryViewModel.getDiaryById(diaryId) // Lấy nhật ký theo ID
+        }
+    }
+    currentDiary?.let { diary ->
+        title = diary.title
+        content = diary.content
+    }
+
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -77,13 +99,13 @@ fun AddDiaryScreen(
                     )
                 }
             }
-            Column (
-                    modifier = Modifier
-                        .zIndex(1f)
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 70.dp)
-                        .fillMaxSize()
-                    ) {
+            Column(
+                modifier = Modifier
+                    .zIndex(1f)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 70.dp)
+                    .fillMaxSize()
+            ) {
                 Spacer(modifier = Modifier.height(16.dp))
                 // Lời nhắc nhẹ nhàng
                 Column(
@@ -109,7 +131,7 @@ fun AddDiaryScreen(
                         lineHeight = 20.sp
                     )
                 }
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 // Vùng nhập tiêu đề
                 OutlinedTextField(
                     value = title,
@@ -118,10 +140,24 @@ fun AddDiaryScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .background(
-                            color = Color(0xFFDCFDFF),
+                            color = Color.White,
                             shape = RoundedCornerShape(20.dp)
                         ),
-                    placeholder = { Text("Enter diary title...") },
+                    placeholder = {
+                        Text(
+                            text = "Enter diary title...",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Gray // Placeholder color
+                            )
+                        )
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black // Text color
+                    ),
                     maxLines = 1,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = Color(0xff007178),
@@ -141,14 +177,14 @@ fun AddDiaryScreen(
                         .fillMaxWidth()
                         .weight(1f)
                         .background(
-                            color = Color(0xFFDCFDFF),
+                            color = Color.White,
                             shape = RoundedCornerShape(20.dp)
                         ),
                     placeholder = { Text("Start writing here...") },
                     maxLines = Int.MAX_VALUE,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
+                        focusedBorderColor = Color(0xff007178),
+                        unfocusedBorderColor = Color.Gray,
                         cursorColor = Color.Black,
                         focusedTextColor = Color.Black,
                         focusedPlaceholderColor = Color.Gray
@@ -157,21 +193,24 @@ fun AddDiaryScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 // Nút lưu nhật ký
                 Button(
-                    onClick = { navController.navigate(Routes.DIARY) },
+                    onClick = {
+                        diaryViewModel.addDiary(title = title, content = content, uid = uid, context = context, onSuccess = {}, onFailure = {})
+                        navController.popBackStack()
+                    },
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .padding(8.dp)
-                        .fillMaxWidth(0.8f),
+                        .padding(vertical = 6.dp)
+                        .fillMaxWidth(1f),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xff007178),
+                        containerColor = Color.Black,
                     ),
                     shape = RoundedCornerShape(50)
                 ) {
                     Text(
-                        text = "Save Diary",
+                        text = "Add diary",
                         style = TextStyle(
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Normal
                         )
                     )
                 }

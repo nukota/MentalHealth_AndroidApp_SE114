@@ -1,41 +1,51 @@
 package com.example.diary.ui.components
+
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
+import com.example.uplift.R
 import com.example.uplift.data.models.Diary
+import com.example.uplift.ui.theme.Black
 import com.example.uplift.ui.theme.Cyan
 import com.example.uplift.ui.theme.White
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DiaryCard(title : String, dateCreated: String, content: String, onClick: () -> Unit) {
+fun DiaryCard(
+    title: String,
+    dateCreated: String,
+    content: String,
+    onClick: () -> Unit,
+    onDelete: () -> Unit
+) {
 
     Card(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = White),
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
             .clickable { onClick() }
-            .border(1.dp, Cyan, RoundedCornerShape(16.dp))
+            .border(1.dp, Black, RoundedCornerShape(16.dp))
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
@@ -44,7 +54,7 @@ fun DiaryCard(title : String, dateCreated: String, content: String, onClick: () 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = title,
@@ -60,6 +70,15 @@ fun DiaryCard(title : String, dateCreated: String, content: String, onClick: () 
                     style = MaterialTheme.typography.titleMedium.copy(fontSize = 12.sp),
                     fontWeight = FontWeight.Light,
                     color = Color.Gray
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.close_hb),
+                    contentDescription = "Delete Diary",
+                    modifier = Modifier
+                        .size(12.dp)
+                        .align(Alignment.CenterVertically)
+                        .clickable(onClick = onDelete)
+                        .zIndex(2f),
                 )
             }
 
@@ -83,7 +102,8 @@ fun DiaryList(diaries: List<Diary>, onDiaryClick: (Int) -> Unit) {
                 title = diary.title,
                 dateCreated = diary.date_created,
                 content = diary.content,
-                onClick = { onDiaryClick(diary.diary_id) }
+                onClick = { onDiaryClick(diary.diary_id) },
+                onDelete = {}
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -98,6 +118,7 @@ fun DiaryCardPreview() {
         title = "My First Diary",
         dateCreated = "2021-10-10",
         content = "Today was a good day. I went for a walk in the park and had a great time. I also met a friend for coffee. It was a great day.",
-        onClick = {}
+        onClick = {},
+        onDelete = {}
     )
 }

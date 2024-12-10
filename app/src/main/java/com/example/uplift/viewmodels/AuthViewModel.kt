@@ -10,6 +10,7 @@ class AuthViewModel() : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()
     val authState = _authState
 
+    val currentUser = auth.currentUser
     init {
         checkAuthStatus()
     }
