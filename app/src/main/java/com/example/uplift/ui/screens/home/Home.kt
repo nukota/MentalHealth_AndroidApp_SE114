@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -48,6 +50,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
             )
             Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .zIndex(1f)
             ) {
                 Row() {
@@ -82,8 +85,24 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
                         )
                     }
                 }
+//                Image(
+//                    painter = painterResource(id = R.drawable.notification),
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 20.dp)
+//                        .align(Alignment.CenterHorizontally)
+//                )
+//                Text(
+//                    text = "Today",
+//                    color = Color.Black,
+//                    style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Normal),
+//                    modifier = Modifier
+//                        .align(Alignment.Start)
+//                        .padding(top = 28.dp, start = 36.dp)
+//                )
+//                LazyRow{}
             }
         }
     }
-
 }

@@ -21,10 +21,10 @@ class DiaryRepository {
         val diaryId = database.child("diaries").push().key ?: return
 
         val diaryToSave = diary.copy(
-            diary_id = diaryId,  // Giữ lại diary_id
+            diary_id = diary.diary_id,  // Giữ lại diary_id
             uid = userId,
-            date_created = System.currentTimeMillis(),
-            date_modified = System.currentTimeMillis()
+            date_created = System.currentTimeMillis().toString(),
+            date_modified = System.currentTimeMillis().toString()
         )
 
         // Lưu dữ liệu vào Realtime Database
@@ -37,12 +37,23 @@ class DiaryRepository {
             }
     }
 
-    fun deleteDiary(diaryId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    fun deleteDiary(diaryId: Int, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         val userId = getUserId()
 
-        database.child("diaries").child(diaryId).removeValue()
-            .addOnSuccessListener {
-                onSuccess()
+        database.child("diaries").orderByChild("diary_id").equalTo(diaryId.toDouble()).get()
+            .addOnSuccessListener { snapshot ->
+                val diaryKey = snapshot.children.firstOrNull()?.key
+                if (diaryKey != null) {
+                    database.child("diaries").child(diaryKey).removeValue()
+                        .addOnSuccessListener {
+                            onSuccess() // Call onSuccess after successful deletion
+                        }
+                        .addOnFailureListener { exception ->
+                            onFailure(exception.message ?: "Unknown error") // Handle errors
+                        }
+                } else {
+                    onFailure("Diary not found") // If the diary is not found
+                }
             }
             .addOnFailureListener { exception ->
                 onFailure(exception.message ?: "Unknown error")
@@ -72,7 +83,11 @@ class DiaryRepository {
     }
 
     // Tìm nhật ký theo tiêu đề hoặc nội dung
-    fun searchDiaries(query: String, onSuccess: (List<Diary>) -> Unit, onFailure: (String) -> Unit) {
+    fun searchDiaries(
+        query: String,
+        onSuccess: (List<Diary>) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
         val userId = getUserId()
 
         database.child("diaries").orderByChild("uid").equalTo(userId)
@@ -81,7 +96,11 @@ class DiaryRepository {
                 val diaries = mutableListOf<Diary>()
                 for (data in snapshot.children) {
                     val diary = data.getValue(Diary::class.java)
-                    if (diary != null && (diary.title.contains(query, ignoreCase = true) || diary.content.contains(query, ignoreCase = true))) {
+                    if (diary != null && (diary.title.contains(
+                            query,
+                            ignoreCase = true
+                        ) || diary.content.contains(query, ignoreCase = true))
+                    ) {
                         diaries.add(diary)
                     }
                 }
@@ -92,11 +111,11 @@ class DiaryRepository {
             }
     }
 
-    fun getDiaryById(diaryId: String, onSuccess: (Diary) -> Unit, onFailure: (String) -> Unit) {
+    fun getDiaryById(diaryId: Int, onSuccess: (Diary) -> Unit, onFailure: (String) -> Unit) {
         val userId = getUserId()
 
         // Truy vấn Firebase để lấy nhật ký theo ID
-        database.child("diaries").child(diaryId).get()
+        database.child("diaries").orderByChild("diary_id").equalTo(diaryId.toDouble()).get()
             .addOnSuccessListener { snapshot ->
                 val diary = snapshot.getValue(Diary::class.java)
                 if (diary != null) {
@@ -110,19 +129,22 @@ class DiaryRepository {
             }
     }
 
-    fun updateDiary(diaryId: String, updatedDiary: Diary, onSuccess: (String) -> Unit) {
+    fun updateDiary(diaryId: Int, updatedDiary: Diary, onSuccess: (String) -> Unit) {
         val userId = getUserId()
 
         val updatedDiaryData = updatedDiary.copy(
             uid = userId,
-            date_modified = System.currentTimeMillis()
+            date_modified = System.currentTimeMillis().toString()
         )
-        database.child("diaries").child(diaryId).setValue(updatedDiaryData)
-            .addOnSuccessListener {
-                onSuccess(diaryId) // Gọi callback với diaryId sau khi cập nhật thành công
-            }
-            .addOnFailureListener {
-                // Xử lý lỗi nếu cần
+        database.child("diaries").orderByChild("diary_id").equalTo(diaryId.toDouble()).get()
+            .addOnSuccessListener { snapshot ->
+                val diaryKey = snapshot.children.firstOrNull()?.key
+                if (diaryKey != null) {
+                    database.child("diaries").child(diaryKey).setValue(updatedDiaryData)
+                        .addOnSuccessListener {
+                            onSuccess(diaryKey) // Call onSuccess with diaryKey after successful update
+                        }
+                }
             }
     }
 }
