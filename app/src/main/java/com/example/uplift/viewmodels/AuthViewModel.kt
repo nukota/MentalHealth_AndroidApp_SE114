@@ -86,6 +86,11 @@ class AuthViewModel() : ViewModel() {
         val user = FirebaseAuth.getInstance().currentUser
         return user?.email
     }
+
+    fun getUserUid(): String? {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.uid
+    }
 }
 
 sealed class AuthState {

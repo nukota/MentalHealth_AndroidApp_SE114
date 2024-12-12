@@ -67,37 +67,33 @@ fun AddDiaryScreen(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Row {
-                Column(
-                ) {
-                    Text(
-                        text = "Diary",
-                        color = Color(0xff101010),
-                        style = TextStyle(
-                            fontSize = 32.sp,
-                            fontFamily = FontFamily(Font(R.font.lemonada))
-                        ),
-                        modifier = Modifier
-                            .padding(start = 20.dp, top = 10.dp)
-                            .height(54.dp)
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(40.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Text(
+                    text = "Diary",
+                    color = Color(0xff101010),
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 32.sp,
+                        fontFamily = FontFamily(Font(R.font.lemonada))
+                    ),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 28.dp, top = 28.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.menu),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable { /* Add menu click action here */ }
-                    )
-                }
+                        .height(54.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1f)) // Cung cấp không gian trống giữa tiêu đề và menu
+
+                Image(
+                    painter = painterResource(id = R.drawable.setting),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 18.dp)
+                        .size(28.dp)
+                        .clickable { /* Add menu click action here */ }
+                )
             }
             Column(
                 modifier = Modifier
@@ -180,7 +176,16 @@ fun AddDiaryScreen(
                             color = Color.White,
                             shape = RoundedCornerShape(20.dp)
                         ),
-                    placeholder = { Text("Start writing here...") },
+                    placeholder = {
+                        Text(
+                            text = "Start writing here...",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Gray // Placeholder color
+                            )
+                        )
+                    },
                     maxLines = Int.MAX_VALUE,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = Color(0xff007178),
@@ -188,7 +193,8 @@ fun AddDiaryScreen(
                         cursorColor = Color.Black,
                         focusedTextColor = Color.Black,
                         focusedPlaceholderColor = Color.Gray
-                    )
+                    ),
+                    shape = RoundedCornerShape(20.dp)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 // Nút lưu nhật ký

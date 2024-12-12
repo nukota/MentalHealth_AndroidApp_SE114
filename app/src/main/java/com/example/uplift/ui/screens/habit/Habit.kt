@@ -14,6 +14,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +43,10 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
     val habitList: List<Habit> = habits.filter { it.uid == currentUserUid }
 
+    LaunchedEffect(Unit) {
+        habitViewModel.getHabits()
+        habitViewModel.getHabitLogs()
+    }
     var isDialogOpen by remember { mutableStateOf(false) }
 
     TopPaddingContent {

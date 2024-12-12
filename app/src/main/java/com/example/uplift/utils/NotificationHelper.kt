@@ -26,6 +26,7 @@ object NotificationHelper {
         }
 
         val builder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.logo)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

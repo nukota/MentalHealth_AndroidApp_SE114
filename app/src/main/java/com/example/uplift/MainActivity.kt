@@ -2,6 +2,7 @@ package com.example.uplift
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -177,12 +178,13 @@ fun MainActivityContent(
                     }
                     composable(Routes.DIARY_ADD) {
                         val diaryViewModel: DiaryViewModel = viewModel()
-                        val uid = authViewModel.currentUser?.uid ?: ""
+                        val uid = authViewModel.getUserUid() ?: ""
                         AddDiaryScreen(uid = uid, diaryViewModel = diaryViewModel, navController = navController)
                     }
                     composable(Routes.DIARY_UPDATE) { backStackEntry ->
-                        val diaryId = backStackEntry.arguments?.getString("diaryId")?.toIntOrNull() ?: 0
+                        val diaryId = backStackEntry.arguments?.getString("diaryId")?.toInt() ?: 0
                         val diaryViewModel: DiaryViewModel = viewModel()
+                        Log.d("MainActivity", "Diary ID: $diaryId")
                         UpdateDiaryScreen(diaryId = diaryId, diaryViewModel = diaryViewModel, navController = navController)
                     }
 //                    composable(Routes.DIARY_ADD_NEW) {

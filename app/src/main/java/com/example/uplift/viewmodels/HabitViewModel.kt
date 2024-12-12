@@ -12,9 +12,21 @@ import java.time.temporal.ChronoField
 
 class HabitViewModel : ViewModel() {
     private val repository = HabitRepository()
-    val habits: LiveData<List<Habit>> = repository.habits
-    val habitLogs: LiveData<List<HabitLog>> = repository.habitLogs
+    var habits: LiveData<List<Habit>> = repository.habits
+    var habitLogs: LiveData<List<HabitLog>> = repository.habitLogs
 
+    fun getHabits() {
+        repository.fetchHabits()
+        habits = repository.habits
+    }
+    fun getHabitLogs() {
+        repository.fetchHabitLog()
+        habitLogs = repository.habitLogs
+    }
+    init {
+        getHabits()
+        getHabitLogs()
+    }
     fun getHabitById(habitId: Int): LiveData<Habit?> {
         return repository.getHabitById(habitId)
     }
