@@ -164,9 +164,10 @@ fun DiaryScreen(
                         DiaryCard(
                             title = diary.title,
                             dateCreated = diary.date_created,
+                            dateModified = diary.date_modified,
                             content = diary.content,
                             onDelete = { diaryViewModel.deleteDiary(diary.diary_id) },
-                            onClick = { navController.navigate("diary_update/$diary.diary_id") }
+                            onClick = { navController.navigate("diary_update/${diary.diary_id}") }
                         )
                     }
                     item {

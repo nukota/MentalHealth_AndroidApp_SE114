@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -37,21 +38,23 @@ import com.example.uplift.viewmodels.DiaryViewModel
 fun UpdateDiaryScreen(
     diaryId: Int, navController: NavController, diaryViewModel: DiaryViewModel
 ) {
-    var title by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
-
-    // Lấy dữ liệu nhật ký khi màn hình được tạo
+    var title by remember { mutableStateOf("loading ...") }
+    var content by remember { mutableStateOf("loading ...") }
+    var dateCreated by remember { mutableStateOf("") }
+    var dateModified by remember { mutableStateOf("") }
+        // Lấy dữ liệu nhật ký khi màn hình được tạo
     LaunchedEffect(diaryId) {
         diaryViewModel.getDiaryById(diaryId)  // Lấy nhật ký từ Firebase
     }
     // Theo dõi dữ liệu nhật ký hiện tại từ ViewModel
-    val currentDiary = diaryViewModel.currentDiary.observeAsState().value
-
+    val currentDiary by diaryViewModel.currentDiary.observeAsState()
     // Cập nhật title và content khi có dữ liệu nhật ký
     LaunchedEffect(currentDiary) {
         currentDiary?.let {
             title = it.title
             content = it.content
+            dateCreated = it.date_created
+            dateModified = it.date_modified
         }
     }
 
@@ -61,45 +64,85 @@ fun UpdateDiaryScreen(
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Row {
-                Column(
-                ) {
-                    Text(
-                        text = "Diary",
-                        color = Color(0xff101010),
-                        style = TextStyle(
-                            fontSize = 32.sp,
-                            fontFamily = FontFamily(Font(R.font.lemonada))
-                        ),
-                        modifier = Modifier
-                            .padding(start = 20.dp, top = 10.dp)
-                            .height(54.dp)
-                    )
-                }
-
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    verticalArrangement = Arrangement.spacedBy(40.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Text(
+                    text = "Diary",
+                    color = Color(0xff101010),
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 32.sp,
+                        fontFamily = FontFamily(Font(R.font.lemonada))
+                    ),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 28.dp, top = 28.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.menu),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable { /* Add menu click action here */ }
-                    )
-                }
+                        .height(54.dp)
+                )
+
+                Spacer(modifier = Modifier.weight(1f)) // Cung cấp không gian trống giữa tiêu đề và menu
+
+                Image(
+                    painter = painterResource(id = R.drawable.setting),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 18.dp)
+                        .size(28.dp)
+                        .clickable { /* Add menu click action here */ }
+                )
             }
             Column(
                 modifier = Modifier
                     .zIndex(1f)
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 20.dp)
                     .padding(top = 70.dp)
                     .fillMaxSize()
             ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .padding(horizontal = 10.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Created: $dateCreated",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.LightGray
+                            )
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Modified: $dateModified",
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.LightGray
+                            )
+                        )
+                    }
+
+                    Image(
+                        painter = painterResource(id = R.drawable.check),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .padding(start = 8.dp)
+                            .clickable(onClick = {
+                                currentDiary?.let { diary ->
+                                    val updatedDiary = diary.copy(title = title, content = content)
+                                    diaryViewModel.updateDiary(updatedDiary) {
+                                        navController.popBackStack() // Quay lại màn hình trước
+                                    }
+                                }
+                            })
+                    )
+                }
                 Spacer(modifier = Modifier.height(32.dp))
                 // Vùng nhập tiêu đề
                 OutlinedTextField(
@@ -175,33 +218,6 @@ fun UpdateDiaryScreen(
                     shape = RoundedCornerShape(20.dp)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                // Nút lưu nhật ký
-                Button(
-                    onClick = {
-                        currentDiary?.let { diary ->
-                            val updatedDiary = diary.copy(title = title, content = content)
-                            diaryViewModel.updateDiary(updatedDiary) {
-                                navController.popBackStack() // Quay lại màn hình trước
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(bottom = 8.dp)
-                        .width(120.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xff007178),
-                    ),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text(
-                        text = "Save",
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Normal,
-                        )
-                    )
-                }
             }
         }
     }

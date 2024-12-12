@@ -12,6 +12,8 @@ import com.example.uplift.data.repository.DiaryRepository
 import com.example.uplift.utils.NotificationHelper
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class DiaryViewModel : ViewModel() {
 
@@ -27,7 +29,7 @@ class DiaryViewModel : ViewModel() {
 
     // LiveData để lưu nhật ký hiện tại
     private val _currentDiary = MutableLiveData<Diary?>()
-    val currentDiary: LiveData<Diary?> get() = _currentDiary
+    val currentDiary: LiveData<Diary?> = _currentDiary
 
     init {
         // Load diaries initially (you can replace this with actual loading logic)
@@ -59,21 +61,20 @@ class DiaryViewModel : ViewModel() {
             }
         )
     }
-
     // Lấy nhật ký theo ID
     fun getDiaryById(diaryId: Int) {
-        viewModelScope.launch {
-            val diary = diaryRepository.getDiaryById(
-                diaryId = diaryId,
-                onSuccess = { diary ->
-                    _currentDiary.value = diary  // Cập nhật LiveData với nhật ký đã lấy
-                },
-                onFailure = { errorMessage ->
-                    // Xử lý lỗi nếu cần
-                    Log.d("DiaryViewModel", "Failed to fetch diary: $errorMessage")
-                }
-            )
-        }
+        _currentDiary.value = null
+        Log.d("DiaryViewModel", "Fetching diary with ID: $diaryId")
+        diaryRepository.getDiaryById(
+            diaryId = diaryId,
+            onSuccess = { diary ->
+                _currentDiary.value = diary  // Cập nhật LiveData với nhật ký đã lấy
+            },
+            onFailure = { errorMessage ->
+                // Xử lý lỗi nếu cần
+                Log.d("DiaryViewModel", "Failed to fetch diary: $errorMessage")
+            }
+        )
     }
 
     // Lưu nhật ký mới và cập nhật trực tiếp vào _diaries
@@ -82,6 +83,7 @@ class DiaryViewModel : ViewModel() {
             // Khi lưu thành công vào Firebase, cập nhật lại _diaries trực tiếp
             val currentList = _diaries.value ?: emptyList()
             _diaries.value = currentList + diary // Thêm nhật ký mới vào danh sách
+            getDiaries()
             onSuccess(diaryId)
         }
     }
@@ -91,6 +93,7 @@ class DiaryViewModel : ViewModel() {
         diaryRepository.updateDiary(updatedDiary.diary_id, updatedDiary) {
             // Cập nhật lại LiveData sau khi thay đổi thành công
             getDiaryById(updatedDiary.diary_id) // Gọi lại hàm lấy nhật ký theo ID để làm mới _currentDiary
+            getDiaries()
             onSuccess() // Callback sau khi cập nhật thành công
         }
     }
@@ -108,32 +111,48 @@ class DiaryViewModel : ViewModel() {
         )
     }
 
-    fun addDiary(title: String, content: String, uid: String, context: Context, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    fun addDiary(
+        title: String,
+        content: String,
+        uid: String,
+        context: Context,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
         val existingIds = _diaries.value?.map { it.diary_id } ?: emptyList()
         val newDiaryId = (existingIds.maxOrNull() ?: 0) + 1
-
+        val currentDate = LocalDateTime.now()
         val newDiary = Diary(
             diary_id = newDiaryId,
             title = title,
             content = content,
             uid = uid,
-            date_created = System.currentTimeMillis().toString(),
-            date_modified = System.currentTimeMillis().toString()
+            date_created = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(currentDate),
+            date_modified = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(currentDate)
         )
 
         // Save the new diary to the database
-        FirebaseDatabase.getInstance().reference.child("diaries").push().setValue(newDiary)
+        FirebaseDatabase.getInstance().reference.child("diaries").child(newDiaryId.toString()).setValue(newDiary)
             .addOnSuccessListener {
                 // Update LiveData with the new diary
                 val currentList = _diaries.value ?: emptyList()
                 _diaries.value = currentList + newDiary
                 onSuccess()
-                NotificationHelper.showNotification(context, "Diary Added", "Your diary has been successfully added.")
+                NotificationHelper.showNotification(
+                    context,
+                    "Diary Added",
+                    "Your diary has been successfully added."
+                )
             }
             .addOnFailureListener { exception ->
                 onFailure(exception.message ?: "Unknown error")
-                NotificationHelper.showNotification(context, "Diary Add Failed", "Failed to add your diary.")
+                NotificationHelper.showNotification(
+                    context,
+                    "Diary Add Failed",
+                    "Failed to add your diary."
+                )
             }
+        getDiaries()
     }
 }
 

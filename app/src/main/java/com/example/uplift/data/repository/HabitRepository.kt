@@ -40,7 +40,7 @@ class HabitRepository {
         return liveData
     }
 
-    private fun fetchHabits() {
+    fun fetchHabits() {
         habitDatabaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val habitList = mutableListOf<Habit>()
@@ -60,7 +60,7 @@ class HabitRepository {
         })
     }
 
-    private fun fetchHabitLog() {
+    fun fetchHabitLog() {
         habitLogDatabaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val habitLogList = mutableListOf<HabitLog>()

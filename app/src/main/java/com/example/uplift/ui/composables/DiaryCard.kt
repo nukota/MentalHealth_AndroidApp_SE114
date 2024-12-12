@@ -33,6 +33,7 @@ import com.example.uplift.ui.theme.White
 fun DiaryCard(
     title: String,
     dateCreated: String,
+    dateModified: String,
     content: String,
     onClick: () -> Unit,
     onDelete: () -> Unit
@@ -43,7 +44,6 @@ fun DiaryCard(
         colors = CardDefaults.cardColors(containerColor = White),
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp)
             .clickable { onClick() }
             .border(1.dp, Black, RoundedCornerShape(16.dp))
     ) {
@@ -61,15 +61,9 @@ fun DiaryCard(
                     modifier = Modifier.width(240.dp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 14.sp),
                     fontWeight = FontWeight.Medium,
                     color = Color.Black
-                )
-                Text(
-                    text = dateCreated,
-                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 12.sp),
-                    fontWeight = FontWeight.Light,
-                    color = Color.Gray
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.close_hb),
@@ -82,13 +76,31 @@ fun DiaryCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = content,
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                 maxLines = 2,
+                minLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(modifier = Modifier.height(6.dp))
+            Row {
+                Text(
+                    text = "created: $dateCreated",
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 11.sp),
+                    fontWeight = FontWeight.Light,
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.width(18.dp))
+                Text(
+                    text = "modified: $dateModified",
+                    style = MaterialTheme.typography.titleMedium.copy(fontSize = 11.sp),
+                    fontWeight = FontWeight.Light,
+                    color = Color.Gray
+                )
+            }
+
         }
     }
 }
@@ -101,6 +113,7 @@ fun DiaryList(diaries: List<Diary>, onDiaryClick: (Int) -> Unit) {
             DiaryCard(
                 title = diary.title,
                 dateCreated = diary.date_created,
+                dateModified = diary.date_modified,
                 content = diary.content,
                 onClick = { onDiaryClick(diary.diary_id) },
                 onDelete = {}
@@ -117,6 +130,7 @@ fun DiaryCardPreview() {
     DiaryCard(
         title = "My First Diary",
         dateCreated = "2021-10-10",
+        dateModified = "2021-10-10",
         content = "Today was a good day. I went for a walk in the park and had a great time. I also met a friend for coffee. It was a great day.",
         onClick = {},
         onDelete = {}
