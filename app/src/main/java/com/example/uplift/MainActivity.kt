@@ -90,6 +90,7 @@ fun MainActivityContent(
     val questionsViewModel: QuestionsViewModel = viewModel()
     val testResultsViewModel: TestResultsViewModel = viewModel()
     val habitViewModel: HabitViewModel = viewModel()
+    val uid = authViewModel.getUserUid() ?: ""
 
     var loadingApp by remember { mutableStateOf(true) }
 
@@ -131,7 +132,7 @@ fun MainActivityContent(
                         SignUpScreen(navController, authViewModel)
                     }
                     composable(Routes.HABIT) {
-                        HabitScreen(habitViewModel)
+                        HabitScreen(uid, habitViewModel)
                     }
                     composable(Routes.EXPLORE) {
                         ExploreScreen(navController)
@@ -178,7 +179,6 @@ fun MainActivityContent(
                     }
                     composable(Routes.DIARY_ADD) {
                         val diaryViewModel: DiaryViewModel = viewModel()
-                        val uid = authViewModel.getUserUid() ?: ""
                         AddDiaryScreen(uid = uid, diaryViewModel = diaryViewModel, navController = navController)
                     }
                     composable(Routes.DIARY_UPDATE) { backStackEntry ->
@@ -187,13 +187,6 @@ fun MainActivityContent(
                         Log.d("MainActivity", "Diary ID: $diaryId")
                         UpdateDiaryScreen(diaryId = diaryId, diaryViewModel = diaryViewModel, navController = navController)
                     }
-//                    composable(Routes.DIARY_ADD_NEW) {
-//                        AddDiaryScreen(navController, diaryViewModel)
-//                    }
-//                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
-//                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
-//                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
-//                    }
                 }
             }
             val currentBackStackEntry = navController.currentBackStackEntryAsState().value

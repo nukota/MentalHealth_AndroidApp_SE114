@@ -37,7 +37,7 @@ import com.google.firebase.auth.FirebaseAuth
 @SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HabitScreen(habitViewModel: HabitViewModel) {
+fun HabitScreen(uid: String, habitViewModel: HabitViewModel) {
     val habits by habitViewModel.habits.observeAsState(initial = emptyList())
     val habitLogs by habitViewModel.habitLogs.observeAsState(initial = emptyList())
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
@@ -139,7 +139,7 @@ fun HabitScreen(habitViewModel: HabitViewModel) {
             }
         }
         if (isDialogOpen) {
-            AddHabitDialog(onDismiss = { isDialogOpen = false })
+            AddHabitDialog(uid, habitViewModel, onDismiss = { isDialogOpen = false })
         }
     }
 }

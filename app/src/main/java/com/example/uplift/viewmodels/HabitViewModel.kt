@@ -35,6 +35,37 @@ class HabitViewModel : ViewModel() {
         return repository.getHabitLogByHabitLogId(habitLogId)
     }
 
+    fun saveHabit(
+        habitName: String,
+        uid: String,
+        habitTime: String,
+        selectedCategory: String,
+        selectedFrequency: Int,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        repository.fetchHabitIds(
+            onSuccess = { habitIds ->
+                val newHabitId = (0..Int.MAX_VALUE).first { it !in habitIds }
+                val habit = Habit(
+                    habit_id = newHabitId,
+                    habit_name = habitName,
+                    uid = uid,
+                    time = habitTime,
+                    streak = 0,
+                    completion_rate = 0.0,
+                    date_from = "",
+                    date_to = "",
+                    category = selectedCategory,
+                    frequency = selectedFrequency,
+
+                )
+                repository.saveHabit(habit, onSuccess, onFailure)
+            },
+            onFailure = onFailure
+        )
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getStatusListForLatestWeek(habitLog: List<HabitLog>, habitId: Int): List<Any> {
         val currentDate = LocalDate.now()
