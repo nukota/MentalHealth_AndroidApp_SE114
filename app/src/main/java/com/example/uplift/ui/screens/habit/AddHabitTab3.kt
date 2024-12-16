@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AddHabitTab3() {
-    var selectedOption by remember { mutableStateOf(7) }
+fun AddHabitTab3(selectedFrequency : Int, onFrequencyChange: (Int) -> Unit) {
+    var selectedFrequency by remember { mutableStateOf(7) }
     var addHabitText by remember { mutableStateOf(false) }
 
     Column(
@@ -40,38 +40,38 @@ fun AddHabitTab3() {
         Column(modifier = Modifier.fillMaxWidth()) {
             RadioButtonOption(
                 text = "Every day",
-                selected = selectedOption == 7,
-                onSelect = { selectedOption = 7 }
+                selected = selectedFrequency == 7,
+                onSelect = { onFrequencyChange(7) }
             )
             RadioButtonOption(
                 text = "Once a week",
-                selected = selectedOption == 1,
-                onSelect = { selectedOption = 1 }
+                selected = selectedFrequency == 1,
+                onSelect = { onFrequencyChange(1) }
             )
             RadioButtonOption(
                 text = "Twice a week",
-                selected = selectedOption == 2,
-                onSelect = { selectedOption = 2 }
+                selected = selectedFrequency == 2,
+                onSelect = { onFrequencyChange(2) }
             )
             RadioButtonOption(
                 text = "Three times a week",
-                selected = selectedOption == 3,
-                onSelect = { selectedOption = 3 }
+                selected = selectedFrequency == 3,
+                onSelect = { onFrequencyChange(3) }
             )
             RadioButtonOption(
                 text = "Four times a week",
-                selected = selectedOption == 4,
-                onSelect = { selectedOption = 4 }
+                selected = selectedFrequency == 4,
+                onSelect = { onFrequencyChange(4) }
             )
             RadioButtonOption(
                 text = "Five times a week",
-                selected = selectedOption == 5,
-                onSelect = { selectedOption = 5 }
+                selected = selectedFrequency == 5,
+                onSelect = { onFrequencyChange(5) }
             )
             RadioButtonOption(
                 text = "Six times a week",
-                selected = selectedOption == 6,
-                onSelect = { selectedOption = 6 }
+                selected = selectedFrequency == 6,
+                onSelect = { onFrequencyChange(6) }
             )
         }
     }

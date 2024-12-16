@@ -40,6 +40,26 @@ class HabitRepository {
         return liveData
     }
 
+    fun saveHabit(habit: Habit, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+        val habitId = habitDatabaseReference.push().key ?: return onFailure("Failed to generate habit ID")
+        habitDatabaseReference.child(habitId).setValue(habit)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { exception -> onFailure(exception.message ?: "Unknown error") }
+    }
+
+    fun fetchHabitIds(onSuccess: (List<Int>) -> Unit, onFailure: (String) -> Unit) {
+        habitDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val habitIds = snapshot.children.mapNotNull { it.key?.toIntOrNull() }
+                onSuccess(habitIds)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                onFailure(error.message)
+            }
+        })
+    }
+
     fun fetchHabits() {
         habitDatabaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

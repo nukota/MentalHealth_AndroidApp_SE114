@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,8 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.getValue
@@ -42,13 +39,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Text
 import com.example.uplift.ui.theme.White
+import com.example.uplift.viewmodels.HabitViewModel
 
 @Composable
-fun AddHabitDialog(onDismiss: () -> Unit) {
+fun AddHabitDialog(uid: String, habitViewModel: HabitViewModel, onDismiss: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     var habitName by remember { mutableStateOf("") }
-    var habitDescription by remember { mutableStateOf("") }
-    val isNextEnabled = habitName.isNotEmpty() && habitDescription.isNotEmpty()
+    var habitTime by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf("") }
+    var selectedFrequency by remember { mutableStateOf(0) }
+    val isNextEnabled = habitName.isNotEmpty() && habitTime.isNotEmpty()
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(
             modifier = Modifier
@@ -96,14 +96,23 @@ fun AddHabitDialog(onDismiss: () -> Unit) {
                             .height(344.dp)
                     ) {
                         when (selectedTabIndex) {
-                            0 -> AddHabitTab1( onCategoryClick = { selectedTabIndex += 1 })
+                            0 -> AddHabitTab1(
+                                selectedCategory = selectedCategory,
+                                onCategoryClick = {
+                                    selectedCategory = it
+                                    selectedTabIndex += 1
+                                }
+                            )
                             1 -> AddHabitTab2(
                                 habitName = habitName,
-                                habitDescription = habitDescription,
+                                habitTime = habitTime,
                                 onHabitNameChange = { habitName = it },
-                                onHabitDescriptionChange = { habitDescription = it }
+                                onHabitTimeChange = { habitTime = it }
                             )
-                            2 -> AddHabitTab3()
+                            2 -> AddHabitTab3(
+                                selectedFrequency = selectedFrequency,
+                                onFrequencyChange = { selectedFrequency = it }
+                            )
                         }
                     }
                     Row(
@@ -176,7 +185,17 @@ fun AddHabitDialog(onDismiss: () -> Unit) {
                                     modifier = Modifier
                                         .width(100.dp)
                                         .height(30.dp)
-                                        .clickable(onClick = { onDismiss() })
+                                        .clickable(onClick = {
+                                            habitViewModel.saveHabit(
+                                                habitName = habitName,
+                                                habitTime = habitTime,
+                                                uid = uid,
+                                                selectedCategory = selectedCategory,
+                                                selectedFrequency = selectedFrequency,
+                                                onSuccess = onDismiss,
+                                                onFailure = {}
+                                            )
+                                        })
                                         .border(
                                             BorderStroke(1.dp, Color(0xFF00B5AD)),
                                             shape = RoundedCornerShape(20)
