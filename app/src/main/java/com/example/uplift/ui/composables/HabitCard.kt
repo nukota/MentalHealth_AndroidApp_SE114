@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.uplift.R
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.uplift.data.models.Habit
 import java.time.LocalDate
@@ -35,7 +36,7 @@ import java.time.temporal.ChronoField
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
+fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList(), onClick : () -> Unit = {}) {
     val currentDate = LocalDate.now()
     val firstDayOfWeek = currentDate.with(ChronoField.DAY_OF_WEEK, 1)
     val daysOfWeek = (0..6).map { firstDayOfWeek.plusDays(it.toLong()) }
@@ -48,6 +49,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
             .background(Color(0xFFf5feff), RoundedCornerShape(10.dp))
             .padding(horizontal = 12.dp)
             .padding(top = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
