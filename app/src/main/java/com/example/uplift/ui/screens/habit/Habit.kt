@@ -28,6 +28,7 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.unit.*
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
 import com.example.uplift.R
 import com.example.uplift.data.models.Habit
 import com.example.uplift.ui.composables.HabitCard
@@ -37,7 +38,7 @@ import com.google.firebase.auth.FirebaseAuth
 @SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HabitScreen(uid: String, habitViewModel: HabitViewModel) {
+fun HabitScreen(uid: String, navController: NavController, habitViewModel: HabitViewModel) {
     val habits by habitViewModel.habits.observeAsState(initial = emptyList())
     val habitLogs by habitViewModel.habitLogs.observeAsState(initial = emptyList())
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
@@ -131,7 +132,9 @@ fun HabitScreen(uid: String, habitViewModel: HabitViewModel) {
                     items(habitList) { habit ->
                         HabitCard(
                             habit = habit,
-                            habitViewModel.getStatusListForLatestWeek(habitLogs, habit.habit_id)
+                            habitViewModel.getStatusListForLatestWeek(habitLogs, habit.habit_id),
+                            onClick = { navController.navigate("habit_detail/${habit.habit_id}") }
+
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                     }

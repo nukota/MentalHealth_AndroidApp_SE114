@@ -1,6 +1,7 @@
 package com.example.uplift.viewmodels
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -34,6 +35,34 @@ class HabitViewModel : ViewModel() {
     fun getHabitLogByHabitLogId(habitLogId: Int): LiveData<HabitLog?> {
         return repository.getHabitLogByHabitLogId(habitLogId)
     }
+
+    fun updateHabitLogStatus(habitLogId: Int, newStatus: Int, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        repository.updateHabitLogStatus(habitLogId, newStatus, onSuccess, onFailure)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getHabitLogByDate(date: LocalDate): List<Quintuple<String, String, Int, String, Int>> {
+        val exampleDate = LocalDate.of(2024, 11, 16)
+        val habitList = habitLogs.value?.filter { LocalDate.parse(it.date) == exampleDate }
+            ?.mapNotNull { log ->
+                val habit = habits.value?.find { it.habit_id == log.habit_id }
+                habit?.let {
+                    Quintuple(it.habit_name, it.time, log.status, it.category, log.habitLog_id)
+                }
+            } ?: emptyList()
+
+        // Convert the habit list to a string and print it in the log
+        Log.d("HabitList", habitList.toString())
+        return habitList
+    }
+
+    data class Quintuple<A, B, C, D, E>(
+        val first: A,
+        val second: B,
+        val third: C,
+        val fourth: D,
+        val fifth: E
+    )
 
     fun saveHabit(
         habitName: String,

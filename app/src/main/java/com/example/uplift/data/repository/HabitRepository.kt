@@ -47,6 +47,28 @@ class HabitRepository {
             .addOnFailureListener { exception -> onFailure(exception.message ?: "Unknown error") }
     }
 
+    fun updateHabitLogStatus(habitLogId: Int, newStatus: Int, onSuccess: (String) -> Unit, onFailure: (String) -> Unit) {
+        habitLogDatabaseReference.orderByChild("habitLog_id").equalTo(habitLogId.toDouble())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (childSnapshot in snapshot.children) {
+                            val firebaseDatabaseId = childSnapshot.key
+                            if (firebaseDatabaseId != null) {
+                                habitLogDatabaseReference.child(firebaseDatabaseId).child("status").setValue(newStatus)
+                                    .addOnSuccessListener { onSuccess(firebaseDatabaseId) }
+                                    .addOnFailureListener { exception -> onFailure(exception.message ?: "Unknown error") }
+                                return
+                            }
+                        }
+                    } else { onFailure("HabitLog not found") }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    onFailure(error.message)
+                }
+            })
+    }
+
     fun fetchHabitIds(onSuccess: (List<Int>) -> Unit, onFailure: (String) -> Unit) {
         habitDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

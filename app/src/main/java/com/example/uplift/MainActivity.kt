@@ -37,6 +37,7 @@ import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
 import com.example.uplift.ui.screens.diary.AddDiaryScreen
 import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
+import com.example.uplift.ui.screens.habit.HabitDetailScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
@@ -117,7 +118,7 @@ fun MainActivityContent(
                         LoadingScreen(authViewModel)
                     }
                     composable(Routes.HOME) {
-                        HomeScreen(navController, authViewModel)
+                        HomeScreen(navController, authViewModel, habitViewModel)
                     }
                     composable(Routes.LOGIN) {
                         LoginScreen(navController, authViewModel)
@@ -132,7 +133,11 @@ fun MainActivityContent(
                         SignUpScreen(navController, authViewModel)
                     }
                     composable(Routes.HABIT) {
-                        HabitScreen(uid, habitViewModel)
+                        HabitScreen(uid, navController, habitViewModel)
+                    }
+                    composable(Routes.HABIT_DETAIL) { backStackEntry ->
+                        val habitId = backStackEntry.arguments?.getString("habitId")?.toInt() ?: 0
+                        HabitDetailScreen(habitId, habitViewModel)
                     }
                     composable(Routes.EXPLORE) {
                         ExploreScreen(navController)
