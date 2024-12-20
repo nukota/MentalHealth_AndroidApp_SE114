@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.uplift.R
 
 @Composable
-fun ButtonSettings(text: String,width: Int, onClick: () -> Unit) {
+fun ButtonSettings(text: String,width: Int,  modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(Color.Transparent, contentColor = Color.Black),

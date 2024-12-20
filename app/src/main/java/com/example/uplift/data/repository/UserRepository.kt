@@ -45,4 +45,12 @@ class UserRepository {
             }
         })
     }
+    fun getUserDetails(userId: String): LiveData<User?> {
+        val userLiveData = MutableLiveData<User?>()
+        databaseReference.child(userId).get().addOnSuccessListener { dataSnapshot ->
+            val user = dataSnapshot.getValue(User::class.java)
+            userLiveData.value = user
+        }
+        return userLiveData
+    }
 }

@@ -1,9 +1,7 @@
 package com.example.uplift.ui.screens.Questions
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,14 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,24 +31,37 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
 import com.example.uplift.R
-import com.example.uplift.data.models.User
-import com.example.uplift.ui.composables.QuestionBox
 import com.example.uplift.ui.composables.SettingsBox
+import com.example.uplift.ui.screens.settings.Logout
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
+import com.example.uplift.viewmodels.AuthViewModel
 
 @Composable
 fun MainSettings (
-    user: User,
-    navController: NavController
+    navController: NavHostController, authViewModel: AuthViewModel
 ) {
+    val currentUser = authViewModel.currentUser
+    var showLogoutDialog = remember { mutableStateOf(false) }
+    if (showLogoutDialog.value) {
+        Logout(
+            onConfirm = {
+                authViewModel.signOut()
+                navController.navigate(Routes.LOGIN) {
+                    popUpTo(Routes.SETTINGS) { inclusive = true }
+                }
+                showLogoutDialog.value = false
+            },
+            onDismiss = {
+                showLogoutDialog.value = false
+            }
+        )
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -131,23 +142,27 @@ fun MainSettings (
                         .padding(top = 10.dp, start = 30.dp)
                         .fillMaxWidth()
                 ) {
-                    Text(
-                        text = user.display_name,
-                        color = Color(0xFF000000),
-                        style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                            fontSize = 30.sp
-                        ),
-                    )
+                    currentUser?.displayName?.let {
+                        Text(
+                            text = it,
+                            color = Color(0xFF000000),
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                                fontSize = 30.sp
+                            ),
+                        )
+                    }
                     Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        text = user.email,
-                        color = Color(0xFF007178),
-                        style = TextStyle(
-                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                            fontSize = 16.sp
-                        ),
-                    )
+                    currentUser?.email?.let {
+                        Text(
+                            text = it,
+                            color = Color(0xFF007178),
+                            style = TextStyle(
+                                fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                                fontSize = 16.sp
+                            ),
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(30.dp))
@@ -176,6 +191,7 @@ fun MainSettings (
                 textString = "Help and Feedback",
                 iconSettings = R.drawable.help,
                 onClick = {
+
                 }
             )
             Spacer(modifier = Modifier.height(30.dp))
@@ -183,6 +199,7 @@ fun MainSettings (
                 textString = "About the app",
                 iconSettings = R.drawable.about,
                 onClick = {
+                    navController.navigate(Routes.ABOUT)
                 }
             )
             Spacer(modifier = Modifier.height(30.dp))
@@ -190,6 +207,7 @@ fun MainSettings (
                 textString = "Log out",
                 iconSettings = R.drawable.log_out,
                 onClick = {
+                    showLogoutDialog.value = true
                 }
             )
             Spacer(modifier = Modifier.height(65.dp))
@@ -249,16 +267,12 @@ fun MainSettings (
     }
 }
 
-@Preview(widthDp = 360, heightDp = 800)
-@Composable
-private fun SettingsPreview() {
-    val sampleUser = User(
-        display_name = "Cong Thanh",
-        email = "22521351@gm.uit.edu.vn",
-        photo_url = "",
-        role = "admin",
-        uid = "iStKOQQ0TmdNL6FDRninshnjdwl1"
-    )
-    val navController = rememberNavController()
-    MainSettings(user = sampleUser, navController = navController)
-}
+//@Preview(widthDp = 360, heightDp = 800)
+//@Composable
+//private fun SettingsPreview() {
+//    val sampleUser = FirebaseUser(
+//
+//    )
+//    val navController = rememberNavController()
+//    MainSettings(user = sampleUser, navController = navController)
+//}
