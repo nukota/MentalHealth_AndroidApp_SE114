@@ -59,6 +59,7 @@ android {
     }
 }
 dependencies {
+    implementation ("io.coil-kt:coil-compose:2.4.0")
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.runtime.ktx)
