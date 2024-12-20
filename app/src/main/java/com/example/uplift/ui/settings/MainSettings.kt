@@ -38,6 +38,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.uplift.R
 import com.example.uplift.data.models.User
 import com.example.uplift.ui.composables.QuestionBox
@@ -47,6 +49,7 @@ import com.example.uplift.ui.theme.White
 @Composable
 fun MainSettings (
     user: User,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -224,20 +227,23 @@ fun MainSettings (
                     .fillMaxHeight()
                     .padding(start = 20.dp, bottom = 28.dp)
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.back),
-                    contentDescription = "back",
+                Icon(painter = painterResource(id = R.drawable.back),
+                    contentDescription = "Back",
                     modifier = Modifier
                         .size(24.dp)
-                )
-                Text(
-                    text = "Back",
+                        .clickable() {
+                            navController.popBackStack()
+                        })
+
+                Text(text = "Back",
                     color = Color.Black,
                     fontFamily = FontFamily(Font(R.font.intermedium)),
                     fontSize = 24.sp,
                     modifier = Modifier
                         .padding(start = 10.dp)
-                )
+                        .clickable() {
+                            navController.popBackStack()
+                        })
             }
         }
     }
@@ -253,5 +259,6 @@ private fun SettingsPreview() {
         role = "admin",
         uid = "iStKOQQ0TmdNL6FDRninshnjdwl1"
     )
-    MainSettings(user = sampleUser)
+    val navController = rememberNavController()
+    MainSettings(user = sampleUser, navController = navController)
 }
