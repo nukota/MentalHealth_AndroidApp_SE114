@@ -142,7 +142,7 @@ fun AboutApp (
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                ButtonSettings(text = "Licences", width = 123,) { }
+                ButtonSettings(text = "Licences", width = 123,modifier=Modifier.background(Color.Gray)) { }
             }
 
             Row(
