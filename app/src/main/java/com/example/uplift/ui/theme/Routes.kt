@@ -8,7 +8,7 @@ object Routes {
     const val RESET_PASSWORD = "resetPassword"
     const val SIGNUP = "signUp"
     const val STORY = "story"
-    const val STORY_DETAIL = "storyDetail/{storyId}"
+    const val STORY_DETAIL = "story_detail/{storyId}"
     const val EXPLORE = "explore"
     const val LIST_TESTS = "list_tests"
     const val TEST_RESULTS = "test_results/{testId}/{testName}/{score}"
@@ -19,4 +19,5 @@ object Routes {
     const val DIARY = "diary"
     const val DIARY_ADD = "diary_add"
     const val DIARY_UPDATE = "diary_update/{diaryId}"
+    const val HABIT_DETAIL = "habit_detail/{habitId}"
 }
