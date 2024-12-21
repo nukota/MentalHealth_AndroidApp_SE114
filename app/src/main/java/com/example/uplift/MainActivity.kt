@@ -35,6 +35,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.uplift.ui.screens.diary.DiaryScreen
 import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
+import com.example.uplift.ui.screens.Questions.AboutApp
+import com.example.uplift.ui.screens.Questions.MainSettings
 import com.example.uplift.ui.screens.diary.AddDiaryScreen
 import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
 import com.example.uplift.ui.screens.habit.HabitDetailScreen
@@ -191,6 +193,19 @@ fun MainActivityContent(
                         val diaryViewModel: DiaryViewModel = viewModel()
                         Log.d("MainActivity", "Diary ID: $diaryId")
                         UpdateDiaryScreen(diaryId = diaryId, diaryViewModel = diaryViewModel, navController = navController)
+                    }
+//                    composable(Routes.DIARY_ADD_NEW) {
+//                        AddDiaryScreen(navController, diaryViewModel)
+//                    }
+//                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
+//                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
+//                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
+//                    }
+                    composable(Routes.ABOUT) {
+                        AboutApp(navController=navController)
+                    }
+                    composable(Routes.SETTINGS) {
+                        MainSettings(navController, authViewModel)
                     }
                 }
             }
