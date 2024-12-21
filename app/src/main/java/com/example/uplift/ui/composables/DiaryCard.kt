@@ -106,24 +106,6 @@ fun DiaryCard(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun DiaryList(diaries: List<Diary>, onDiaryClick: (Int) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        diaries.forEach { diary ->
-            DiaryCard(
-                title = diary.title,
-                dateCreated = diary.date_created,
-                dateModified = diary.date_modified,
-                content = diary.content,
-                onClick = { onDiaryClick(diary.diary_id) },
-                onDelete = {}
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun DiaryCardPreview() {
