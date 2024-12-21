@@ -31,6 +31,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.diary.ui.components.DiaryCard
 import com.example.uplift.data.models.Diary
 import com.example.uplift.ui.composables.TopPaddingContent
@@ -42,7 +43,7 @@ import com.example.uplift.viewmodels.DiaryViewModel
 @Composable
 fun DiaryScreen(
     navController: NavHostController,
-    diaryViewModel: DiaryViewModel
+    diaryViewModel: DiaryViewModel = viewModel()
 ) {
     // Quan sát LiveData từ ViewModel
     val diaries by diaryViewModel.diaries.observeAsState(emptyList())

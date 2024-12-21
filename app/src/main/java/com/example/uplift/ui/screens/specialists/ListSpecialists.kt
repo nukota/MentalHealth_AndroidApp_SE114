@@ -39,7 +39,6 @@ import com.example.uplift.R
 import com.example.uplift.data.models.Specialist
 import com.example.uplift.ui.composables.SpecialistsBox
 import com.example.uplift.ui.theme.Gray
-import com.example.uplift.ui.theme.White
 import com.example.uplift.viewmodels.AuthViewModel
 import com.example.uplift.viewmodels.SpecialistsViewModel
 
@@ -52,14 +51,13 @@ fun ListSpecialistsScreen(
     val listSpecialists by specialistsViewModel.specialists.observeAsState()
     var showDialog by remember { mutableStateOf(false) }
     var selectedSpecialist by remember { mutableStateOf<Specialist?>(null) }
-    val parentBackgroundColor = remember { mutableStateOf(Color.White) }
 
     listSpecialists?.let {
         TopPaddingContent {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(parentBackgroundColor.value)
+                    .background(Color.White)
                     .fillMaxWidth()
             ) {
                 Row() {
@@ -118,9 +116,8 @@ fun ListSpecialistsScreen(
                         }
                     }
                     if (showDialog && selectedSpecialist != null) {
-                        parentBackgroundColor.value = Color(0x99000000)
                         DetailOfSpecialists(specialist = selectedSpecialist!!,
-                            useremail = authViewModel.getUserEmail()!!,
+                            userEmail = authViewModel.getUserEmail()!!,
                             onDismiss = { showDialog = false })
                     }
                 }

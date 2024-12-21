@@ -1,5 +1,7 @@
 package com.example.uplift.ui.screens.habit
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,16 +40,18 @@ import com.example.uplift.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Dialog
 import androidx.compose.material3.Text
+import androidx.compose.runtime.mutableIntStateOf
 import com.example.uplift.ui.theme.White
 import com.example.uplift.viewmodels.HabitViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AddHabitDialog(uid: String, habitViewModel: HabitViewModel, onDismiss: () -> Unit) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     var habitName by remember { mutableStateOf("") }
     var habitTime by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf("") }
-    var selectedFrequency by remember { mutableStateOf(0) }
+    var selectedFrequency by remember { mutableIntStateOf(0) }
     val isNextEnabled = habitName.isNotEmpty() && habitTime.isNotEmpty()
     Dialog(onDismissRequest = { onDismiss() }) {
         Box(

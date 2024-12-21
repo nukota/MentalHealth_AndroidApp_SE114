@@ -54,7 +54,7 @@ import kotlinx.coroutines.delay
 
 
 class MainActivity : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun MainActivityContent(
     authViewModel: AuthViewModel,
@@ -96,7 +96,7 @@ fun MainActivityContent(
     var loadingApp by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        delay(2000) // Delay for 2 seconds
+        delay(1000) // Delay for 2 seconds
         loadingApp = false
     }
 
@@ -137,7 +137,7 @@ fun MainActivityContent(
                     }
                     composable(Routes.HABIT_DETAIL) { backStackEntry ->
                         val habitId = backStackEntry.arguments?.getString("habitId")?.toInt() ?: 0
-                        HabitDetailScreen(habitId, habitViewModel)
+                        HabitDetailScreen(habitId, navController, habitViewModel)
                     }
                     composable(Routes.EXPLORE) {
                         ExploreScreen(navController)
