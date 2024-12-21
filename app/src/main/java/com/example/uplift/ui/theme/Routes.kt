@@ -19,5 +19,7 @@ object Routes {
     const val DIARY = "diary"
     const val DIARY_ADD = "diary_add"
     const val DIARY_UPDATE = "diary_update/{diaryId}"
+    const val ABOUT="about"
+    const val SETTINGS="settings"
     const val HABIT_DETAIL = "habit_detail/{habitId}"
 }
