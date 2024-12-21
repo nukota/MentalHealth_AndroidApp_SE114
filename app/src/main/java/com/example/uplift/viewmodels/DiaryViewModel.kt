@@ -1,7 +1,9 @@
 package com.example.uplift.viewmodels
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.LiveData
@@ -111,6 +113,7 @@ class DiaryViewModel : ViewModel() {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addDiary(
         title: String,
         content: String,
