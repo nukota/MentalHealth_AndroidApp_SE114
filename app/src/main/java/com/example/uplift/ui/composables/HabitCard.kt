@@ -28,14 +28,16 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.uplift.R
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.uplift.data.models.Habit
+import com.example.uplift.data.models.HabitLog
 import java.time.LocalDate
 import java.time.temporal.ChronoField
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
+fun HabitCard(habit: Habit = Habit(), habitLogList: List<HabitLog> = emptyList(), onClick : () -> Unit = {}, onStatusClick: (Int, Int) -> Unit = { _, _ -> }) {
     val currentDate = LocalDate.now()
     val firstDayOfWeek = currentDate.with(ChronoField.DAY_OF_WEEK, 1)
     val daysOfWeek = (0..6).map { firstDayOfWeek.plusDays(it.toLong()) }
@@ -48,6 +50,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
             .background(Color(0xFFf5feff), RoundedCornerShape(10.dp))
             .padding(horizontal = 12.dp)
             .padding(top = 12.dp)
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -93,11 +96,30 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth(1f)
-                .padding(top = 8.dp)
+                .padding(top = 6.dp)
                 .padding(horizontal = 12.dp)
         ) {
             daysOfWeek.forEachIndexed { index, date ->
-                HabitDateUnit(index + 2, date.dayOfMonth, statusList[index].toString())
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        when (index + 2) {
+                            2 -> "Mon"
+                            3 -> "Tue"
+                            4 -> "Wed"
+                            5 -> "Thu"
+                            6 -> "Fri"
+                            7 -> "Sat"
+                            8 -> "Sun"
+                            else -> ""
+                        },
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                    HabitDateUnit(date, habitLogList[index], onStatusClick)
+                }
             }
         }
 
@@ -118,7 +140,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "18",
+                    text = habit.streak.toString(),
                     fontSize = 14.sp,
                 )
             }
@@ -134,7 +156,7 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "100%",
+                    text = "${habit.completion_rate.toInt()}%",
                     fontSize = 14.sp
                 )
             }
@@ -142,52 +164,49 @@ fun HabitCard(habit: Habit = Habit(), statusList: List<Any> = emptyList()) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HabitDateUnit(day: Int, date: Int, status: String) {
+fun HabitDateUnit(date: LocalDate, habitLog: HabitLog, onStatusClick: (Int, Int) -> Unit) {
+    val backgroundColor = when (habitLog.status) {
+        0 -> Color(0xFFE45F5F) //undone
+        1 -> Color(0xFF9AE45F) //done
+        2 -> Color(0xFFe4c55f) //unchecked
+        3 -> Color.Transparent //not there yet
+        4 -> Color.Transparent //hidden
+        else -> Color.Transparent
+    }
+    val borderColor = when (habitLog.status) {
+        0 -> Color(0xFF7C0000) //undone
+        1 -> Color(0xFF0E7C00) //done
+        2 -> Color(0xFF7c6500) //unchecked
+        3 -> Color(0xFF505050) //not there yet
+        4 -> Color.Transparent //hidden
+        else -> Color(0xFF505050)
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            when (day) {
-                2 -> "Mon"
-                3 -> "Tue"
-                4 -> "Wed"
-                5 -> "Thu"
-                6 -> "Fri"
-                7 -> "Sat"
-                8 -> "Sun"
-                else -> ""
-            },
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Light
-        )
         Box(
             modifier = Modifier
-                .size(32.dp)
+                .size(40.dp)
                 .border(
                     width = 2.dp,
-                    color = when (status) {
-                        "unknown" -> Color(0xFF7c6500)
-                        "undone" -> Color(0xFF7C0000)
-                        "done" -> Color(0xFF0E7C00)
-                        "not yet" -> Color(0xFF505050)
-                        else -> Color(0xFF505050)
-                    },
-                    shape = RoundedCornerShape(13.dp)
+                    color = borderColor,
+                    shape = RoundedCornerShape(17.dp)
                 )
-                .background(
-                    when (status) {
-                        "unknown" -> Color(0xFFe4c55f)
-                        "undone" -> Color(0xFFE45F5F)
-                        "done" -> Color(0xFF9AE45F)
-                        "not yet" -> Color.Transparent
-                        else -> Color.Transparent
-                    },
-                    shape = RoundedCornerShape(13.dp)
-                )
+                .background(backgroundColor, shape = RoundedCornerShape(17.dp))
+                .clickable {
+                val newStatus = when (habitLog.status) {
+                    1 -> 0
+                    0 -> 2
+                    else -> 1
+                }
+                onStatusClick(habitLog.habitLog_id, newStatus)
+            }
         ) {
             Text(
-                text = date.toString(),
+                text = date.dayOfMonth.toString(),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
@@ -195,25 +214,4 @@ fun HabitDateUnit(day: Int, date: Int, status: String) {
             )
         }
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview
-@Composable
-fun HabitCardPreview() {
-    val habit = Habit(
-        habit_id = 1,
-        habit_name = "Morning Run",
-        uid = "user123",
-        date_from = "2023-01-01",
-        date_to = "2023-12-31",
-        date_created = "2023-01-01",
-        completion_rate = 75.0,
-        frequency = 7,
-        time = "07:00 AM",
-        streak = 10,
-        category = "Health"
-    )
-    val statusList = listOf("done", "undone", "done", "done", "unknown", "not yet", "not yet")
-    HabitCard(habit, statusList)
 }

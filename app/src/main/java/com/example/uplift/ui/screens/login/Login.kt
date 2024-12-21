@@ -24,6 +24,8 @@ import com.example.uplift.ui.composables.*
 import com.example.uplift.viewmodels.AuthViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavHostController
 import com.example.uplift.viewmodels.AuthState
 import com.example.uplift.ui.theme.Routes
@@ -72,9 +74,9 @@ fun LoginScreen(navHostController: NavHostController, authViewModel: AuthViewMod
             )
 
             Spacer(modifier = Modifier.height(50.dp))
-            CustomTextBox(email, hint = "Email", leadingIcon = painterResource(id = R.drawable.user_icon))
+            CustomTextBox(email, hint = "Email", leadingIcon = painterResource(id = R.drawable.user_icon), isPassword = false)
             Spacer(modifier = Modifier.height(12.dp))
-            CustomTextBox(password, hint = "Password", leadingIcon = painterResource(id = R.drawable.padlock_icon))
+            CustomTextBox(password, hint = "Password", leadingIcon = painterResource(id = R.drawable.padlock_icon), isPassword = true)
             Spacer(modifier = Modifier.height(28.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),

@@ -1,5 +1,7 @@
 package com.example.uplift.ui.screens.habit
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -15,9 +17,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentActivity
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 
+@SuppressLint("DefaultLocale")
 @Composable
-fun AddHabitTab2(habitName: String, habitDescription: String, onHabitNameChange: (String) -> Unit, onHabitDescriptionChange: (String) -> Unit) {
+fun AddHabitTab2(
+    habitName: String,
+    habitTime: String,
+    onHabitNameChange: (String) -> Unit,
+    onHabitTimeChange: (String) -> Unit
+) {
+    var timeInput by remember { mutableStateOf(habitTime) }
+    var isValidTime by remember { mutableStateOf(true) }
+
 
     Column(
         modifier = Modifier
@@ -53,25 +67,39 @@ fun AddHabitTab2(habitName: String, habitDescription: String, onHabitNameChange:
             shape = RoundedCornerShape(40),
             singleLine = true
         )
-
         OutlinedTextField(
-            value = habitDescription,
-            onValueChange = onHabitDescriptionChange,
+            value = timeInput,
+            onValueChange = {
+                timeInput = it
+                isValidTime = it.matches(Regex("^([01]\\d|2[0-3]):([0-5]\\d)$"))
+                if (isValidTime) {
+                    onHabitTimeChange(it)
+                }
+            },
             label = {
                 Text(
-                    "Description (optional)",
+                    "Enter Time (HH:mm)",
                     style = TextStyle(
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
                 )
             },
+            isError = !isValidTime,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 14.dp),
             shape = RoundedCornerShape(40),
             singleLine = true,
         )
+        if (!isValidTime) {
+            Text(
+                text = "Invalid time format. Please use HH:mm.",
+                color = Color.Red,
+                style = TextStyle(fontSize = 12.sp),
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
     }
 }
 
