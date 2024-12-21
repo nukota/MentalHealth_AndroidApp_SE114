@@ -3,6 +3,7 @@ package com.example.uplift.ui.screens.habit
 import android.annotation.SuppressLint
 import com.example.uplift.ui.composables.TopPaddingContent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,16 +36,16 @@ import com.example.uplift.ui.composables.HabitCard
 import com.example.uplift.viewmodels.HabitViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @SuppressLint("SuspiciousIndentation")
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HabitScreen(uid: String, navController: NavController, habitViewModel: HabitViewModel) {
-    val habits by habitViewModel.habits.observeAsState(initial = emptyList())
-    val habitLogs by habitViewModel.habitLogs.observeAsState(initial = emptyList())
+    val habits by habitViewModel.habits.observeAsState(emptyList())
+    val habitLogs by habitViewModel.habitLogs.observeAsState(emptyList())
     val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
     val habitList: List<Habit> = habits.filter { it.uid == currentUserUid }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(habits, habitLogs) {
         habitViewModel.getHabits()
         habitViewModel.getHabitLogs()
     }
@@ -132,9 +133,15 @@ fun HabitScreen(uid: String, navController: NavController, habitViewModel: Habit
                     items(habitList) { habit ->
                         HabitCard(
                             habit = habit,
-                            habitViewModel.getStatusListForLatestWeek(habitLogs, habit.habit_id),
-                            onClick = { navController.navigate("habit_detail/${habit.habit_id}") }
-
+                            habitViewModel.getHabitLogListForLatestWeek(habitLogs, habit.habit_id),
+                            onClick = { navController.navigate("habit_detail/${habit.habit_id}") },
+                            onStatusClick = { habitLogId, newStatus ->
+                                habitViewModel.updateHabitLogStatus(habitLogId, newStatus, {
+                                    Log.d("HabitLog", "Updated habit log status")
+                                }, {
+                                    Log.d("HabitLog", "Failed to update habit log status")
+                                })
+                            }
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                     }

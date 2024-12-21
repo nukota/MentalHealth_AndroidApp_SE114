@@ -11,15 +11,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -52,23 +51,38 @@ import com.example.uplift.viewmodels.HabitViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habitViewModel: HabitViewModel) {
-    var selectedDate by remember { mutableStateOf(0) }
-    selectedDate = 15 // Set the selected date to today of the month
+    var selectedDate by remember { mutableStateOf(15) } // Set the selected date to today of the month
     val dates = remember { generateDates(selectedDate) }
     val habits by habitViewModel.habits.observeAsState(emptyList())
     val habitLogs by habitViewModel.habitLogs.observeAsState(emptyList())
     var habitItems: List<HabitViewModel.Quintuple<String, String, Int, String, Int>> by remember { mutableStateOf(emptyList()) }
     val listState = rememberLazyListState()
+    var initialScrollPerformed by remember { mutableStateOf(false) }
     val dateFormatter = DateTimeFormatter.ofPattern("dd MMM")
 
-    LaunchedEffect(habits, habitLogs) {
-        listState.scrollToItem(selectedDate)
+    LaunchedEffect(habits, habitLogs, selectedDate) {
+        if (!initialScrollPerformed) {
+            listState.scrollToItem(selectedDate)
+            initialScrollPerformed = true
+        }
+        habitViewModel.getHabits()
+        habitViewModel.getHabitLogs()
         if (habits.isNotEmpty() && habitLogs.isNotEmpty()) {
             habitItems = habitViewModel.getHabitLogByDate(dates[selectedDate])
             Log.d("HabitList", habitItems.toString())
+        }
+        habits.forEach { habit ->
+            val habitLogList = habitViewModel.getHabitLogsForHabit(habit.habit_id)
+            habitViewModel.createMissingHabitLogs(habit.habit_id, habit.date_created, habitLogList) { newHabitLog ->
+                habitViewModel.insertHabitLog(newHabitLog, {
+                    Log.d("HabitLog", "Inserted new habit log")
+                }, {
+                    Log.d("HabitLog", "Failed to insert new habit log")
+                })
+            }
         }
     }
 
@@ -153,13 +167,13 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habit
                         })
                     }
                 }
-                Column(
+                LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(18.dp),
                     modifier = Modifier
                         .padding(horizontal = 32.dp)
                         .padding(top = 40.dp)
                 ) {
-                    habitItems.forEach { habitItem ->
+                    items(habitItems) { habitItem ->
                         HabitItem(
                             habitName = habitItem.first,
                             time = habitItem.second,

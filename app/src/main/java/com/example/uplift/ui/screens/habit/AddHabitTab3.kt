@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,9 +20,6 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun AddHabitTab3(selectedFrequency : Int, onFrequencyChange: (Int) -> Unit) {
-    var selectedFrequency by remember { mutableStateOf(7) }
-    var addHabitText by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
