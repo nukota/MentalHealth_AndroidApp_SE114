@@ -40,6 +40,7 @@ import com.example.uplift.ui.screens.settings.MainSettings
 
 import com.example.uplift.ui.screens.diary.AddDiaryScreen
 import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
+import com.example.uplift.ui.screens.habit.HabitDetailScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
 import com.example.uplift.ui.screens.home.HomeScreen
 import com.example.uplift.ui.screens.loading.LoadingScreen
@@ -56,7 +57,7 @@ import kotlinx.coroutines.delay
 
 
 class MainActivity : AppCompatActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun MainActivityContent(
     authViewModel: AuthViewModel,
@@ -93,11 +94,12 @@ fun MainActivityContent(
     val questionsViewModel: QuestionsViewModel = viewModel()
     val testResultsViewModel: TestResultsViewModel = viewModel()
     val habitViewModel: HabitViewModel = viewModel()
+    val uid = authViewModel.getUserUid() ?: ""
 
     var loadingApp by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        delay(2000) // Delay for 2 seconds
+        delay(1000) // Delay for 2 seconds
         loadingApp = false
     }
 
@@ -119,7 +121,7 @@ fun MainActivityContent(
                         LoadingScreen(authViewModel)
                     }
                     composable(Routes.HOME) {
-                        HomeScreen(navController, authViewModel)
+                        HomeScreen(navController, authViewModel, habitViewModel)
                     }
                     composable(Routes.LOGIN) {
                         LoginScreen(navController, authViewModel)
@@ -134,7 +136,11 @@ fun MainActivityContent(
                         SignUpScreen(navController, authViewModel)
                     }
                     composable(Routes.HABIT) {
-                        HabitScreen(habitViewModel)
+                        HabitScreen(uid, navController, habitViewModel)
+                    }
+                    composable(Routes.HABIT_DETAIL) { backStackEntry ->
+                        val habitId = backStackEntry.arguments?.getString("habitId")?.toInt() ?: 0
+                        HabitDetailScreen(habitId, navController, habitViewModel)
                     }
                     composable(Routes.EXPLORE) {
                         ExploreScreen(navController)
@@ -181,7 +187,6 @@ fun MainActivityContent(
                     }
                     composable(Routes.DIARY_ADD) {
                         val diaryViewModel: DiaryViewModel = viewModel()
-                        val uid = authViewModel.getUserUid() ?: ""
                         AddDiaryScreen(uid = uid, diaryViewModel = diaryViewModel, navController = navController)
                     }
                     composable(Routes.DIARY_UPDATE) { backStackEntry ->

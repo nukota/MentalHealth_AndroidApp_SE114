@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.diary.ui.components.DiaryCard
 import com.example.uplift.data.models.Diary
 import com.example.uplift.ui.composables.TopPaddingContent
@@ -41,7 +43,7 @@ import com.example.uplift.viewmodels.DiaryViewModel
 @Composable
 fun DiaryScreen(
     navController: NavHostController,
-    diaryViewModel: DiaryViewModel
+    diaryViewModel: DiaryViewModel = viewModel()
 ) {
     // Quan sát LiveData từ ViewModel
     val diaries by diaryViewModel.diaries.observeAsState(emptyList())
@@ -63,7 +65,9 @@ fun DiaryScreen(
             Image(
                 painter = painterResource(id = R.drawable.background2),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(0.5f),
                 contentScale = ContentScale.Crop
             )
             Column(

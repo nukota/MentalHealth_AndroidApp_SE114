@@ -20,13 +20,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
 import com.example.uplift.R
 
 @Composable
-fun CustomTextBox(text: MutableState<String>, hint: String, leadingIcon: Painter) {
+fun CustomTextBox(text: MutableState<String>, hint: String, leadingIcon: Painter, isPassword: Boolean = false) {
+    val visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -79,6 +83,7 @@ fun CustomTextBox(text: MutableState<String>, hint: String, leadingIcon: Painter
                 color = Black,
                 fontFamily = FontFamily(Font(R.font.interregular)),
             ),
+            visualTransformation = visualTransformation,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 10.dp)

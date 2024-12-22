@@ -1,5 +1,7 @@
 package com.example.uplift.ui.screens.diary
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -35,6 +37,7 @@ import com.example.uplift.ui.composables.TopPaddingContent
 import com.example.uplift.utils.NotificationHelper
 import com.example.uplift.viewmodels.DiaryViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddDiaryScreen(
