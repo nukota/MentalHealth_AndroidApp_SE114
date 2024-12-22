@@ -106,7 +106,7 @@ fun ReadStoriesScreen(
                     items(stories.value) { story ->
                         StoryItem(
                             story = story,
-                            onClick = { navController.navigate("storyDetail/${story.story_id}") }
+                            onClick = { navController.navigate("story_detail/${story.story_id}") }
                         )
                     }
                 }
