@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.Questions
+package com.example.uplift.ui.screens.settings
 
 import ButtonSettings
 import androidx.compose.foundation.BorderStroke
