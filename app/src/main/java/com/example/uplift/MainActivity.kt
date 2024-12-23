@@ -47,6 +47,7 @@ import com.example.uplift.ui.screens.loading.LoadingScreen
 import com.example.uplift.ui.screens.questions.ListTests
 import com.example.uplift.ui.screens.questions.QuestionsScreen
 import com.example.uplift.ui.screens.questions.TestResultsScreen
+import com.example.uplift.ui.screens.settings.Help
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
 import com.example.uplift.viewmodels.DiaryViewModel
 import com.example.uplift.viewmodels.HabitViewModel
@@ -202,9 +203,12 @@ fun MainActivityContent(
 //                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
 //                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
 //                    }
-                 composable(Routes.ABOUT) {
-                      AboutApp(navController=navController)
-                   }
+                    composable(Routes.ABOUT) {
+                        AboutApp(navController=navController)
+                    }
+                    composable(Routes.HELP) {
+                        Help(navController=navController)
+                    }
                     composable(Routes.SETTINGS) {
                         MainSettings(navController, authViewModel)
                     }
