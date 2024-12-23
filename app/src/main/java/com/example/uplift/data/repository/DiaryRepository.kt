@@ -4,6 +4,9 @@ import android.util.Log
 import com.example.uplift.data.models.Diary
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class DiaryRepository {
 
@@ -40,12 +43,13 @@ class DiaryRepository {
     fun saveDiary(diary: Diary, onSuccess: (String) -> Unit) {
         val userId = getUserId()
         val diaryId = database.child("diaries").push().key ?: return
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
         val diaryToSave = diary.copy(
             diary_id = diary.diary_id,  // Giữ lại diary_id
             uid = userId,
             date_created = diary.date_created,
-            date_modified = System.currentTimeMillis().toString()
+            date_modified = currentDate
         )
 
         // Lưu dữ liệu vào Realtime Database
@@ -119,10 +123,11 @@ class DiaryRepository {
 
     fun updateDiary(diaryId: Int, updatedDiary: Diary, onSuccess: (String) -> Unit) {
         val userId = getUserId()
+        val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
         val updatedDiaryData = updatedDiary.copy(
             uid = userId,
-            date_modified = System.currentTimeMillis().toString()
+            date_modified = currentDate
         )
         database.child("diaries").child(diaryId.toString()).setValue(updatedDiaryData)
             .addOnSuccessListener {
