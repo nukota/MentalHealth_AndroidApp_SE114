@@ -23,4 +23,5 @@ object Routes {
     const val HELP="help"
     const val SETTINGS="settings"
     const val HABIT_DETAIL = "habit_detail/{habitId}"
+    const val EDITPROFILE = "edit_profile"
 }

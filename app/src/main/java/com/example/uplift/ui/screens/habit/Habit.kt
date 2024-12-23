@@ -90,7 +90,7 @@ fun HabitScreen(uid: String, navController: NavController, habitViewModel: Habit
                             contentDescription = null,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable { /* Add menu click action here */ }
+                                .clickable { navController.navigate("settings") }
                         )
                     }
                 }
