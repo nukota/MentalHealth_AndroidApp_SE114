@@ -191,7 +191,7 @@ fun MainSettings (
                 textString = "Help and Feedback",
                 iconSettings = R.drawable.help,
                 onClick = {
-
+                    navController.navigate(Routes.HELP)
                 }
             )
             Spacer(modifier = Modifier.height(30.dp))
