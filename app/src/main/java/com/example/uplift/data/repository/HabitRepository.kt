@@ -142,6 +142,33 @@ class HabitRepository {
             })
     }
 
+    fun deleteHabitLog(habitLogId: Int, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+        habitLogDatabaseReference.orderByChild("habitLog_id").equalTo(habitLogId.toDouble())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (childSnapshot in snapshot.children) {
+                            val firebaseDatabaseId = childSnapshot.key
+                            if (firebaseDatabaseId != null) {
+                                habitLogDatabaseReference.child(firebaseDatabaseId).removeValue()
+                                    .addOnSuccessListener { onSuccess() }
+                                    .addOnFailureListener { exception ->
+                                        onFailure(exception.message ?: "Unknown error")
+                                    }
+                                return
+                            }
+                        }
+                    } else {
+                        onFailure("HabitLog not found")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onFailure(error.message)
+                }
+            })
+    }
+
     fun updateHabitLogStatus(
         habitLogId: Int,
         newStatus: Int,

@@ -56,19 +56,40 @@ fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthVie
                     .size(width = 215.dp, height = 110.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Spacer(modifier = Modifier.height(100.dp))
-            Text("You will receive a password reset link in your email.\nClick the link to reset your password.", style = TextStyle(fontSize = 14.sp, color = Gray, fontFamily = FontFamily(Font(R.font.interregular))))
+            Spacer(modifier = Modifier.height(80.dp))
+            Text(
+                "You will receive a password reset link in your email.\nClick the link to reset your password.",
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    color = Gray,
+                    fontFamily = FontFamily(Font(R.font.interregular))
+                ),
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
             Spacer(modifier = Modifier.height(30.dp))
-            CustomTextBox(verifyingEmail,"Enter Your Email", painterResource(id = R.drawable.email_icon))
+            CustomTextBox(
+                verifyingEmail,
+                "Enter Your Email",
+                painterResource(id = R.drawable.email_icon)
+            )
             Spacer(modifier = Modifier.height(28.dp))
             CustomButton("Send mail", null, onClick = {
-                Toast.makeText(context, "You entered email: " + verifyingEmail.value, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "You entered email: " + verifyingEmail.value,
+                    Toast.LENGTH_SHORT
+                ).show()
                 authViewModel.sendPasswordResetEmail(verifyingEmail.value) { success ->
                     if (success) {
-                        Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT)
+                            .show()
                         navHostController.navigate(Routes.LOGIN)
                     } else {
-                        Toast.makeText(context, "Failed to send password reset email.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Failed to send password reset email.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             })

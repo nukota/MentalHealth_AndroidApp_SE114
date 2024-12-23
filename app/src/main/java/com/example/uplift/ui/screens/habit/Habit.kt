@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.example.uplift.R
 import com.example.uplift.data.models.Habit
 import com.example.uplift.ui.composables.HabitCard
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.viewmodels.HabitViewModel
 import com.google.firebase.auth.FirebaseAuth
 
@@ -63,8 +64,7 @@ fun HabitScreen(uid: String, navController: NavController, habitViewModel: Habit
                     .zIndex(1f)
             ) {
                 Row {
-                    Column(
-                    ) {
+                    Column {
                         Text(
                             text = "Habit",
                             color = Color(0xff101010),
@@ -77,7 +77,6 @@ fun HabitScreen(uid: String, navController: NavController, habitViewModel: Habit
                                 .height(54.dp)
                         )
                     }
-
                     Column(
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.spacedBy(40.dp),
@@ -90,7 +89,7 @@ fun HabitScreen(uid: String, navController: NavController, habitViewModel: Habit
                             contentDescription = null,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable { navController.navigate("settings") }
+                                .clickable { navController.navigate(Routes.SETTINGS) }
                         )
                     }
                 }

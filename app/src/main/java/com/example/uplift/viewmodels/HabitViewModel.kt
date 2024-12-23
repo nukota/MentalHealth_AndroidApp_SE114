@@ -52,7 +52,17 @@ class HabitViewModel : ViewModel() {
 
     fun deleteHabit(habitId: Int, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         repository.deleteHabit(habitId, {
+            // Delete associated habit logs
+            val logsToDelete = habitLogs.value?.filter { it.habit_id == habitId } ?: emptyList()
+            logsToDelete.forEach { log ->
+                repository.deleteHabitLog(log.habitLog_id, {
+                    Log.d("HabitLog", "Deleted habit log with ID ${log.habitLog_id}")
+                }, {
+                    Log.d("HabitLog", "Failed to delete habit log with ID ${log.habitLog_id}")
+                })
+            }
             getHabits() // Refresh the habits list
+            getHabitLogs() // Refresh the habit logs list
             onSuccess()
         }, onFailure)
     }
@@ -116,10 +126,10 @@ class HabitViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getHabitLogByDate(date: LocalDate): List<Quintuple<String, String, Int, String, Int>> {
+    fun getHabitLogByDate(date: LocalDate, currentUserUid: String?): List<Quintuple<String, String, Int, String, Int>> {
         val habitList = habitLogs.value?.filter { LocalDate.parse(it.date) == date }
             ?.mapNotNull { log ->
-                val habit = habits.value?.find { it.habit_id == log.habit_id }
+                val habit = habits.value?.find { it.habit_id == log.habit_id && it.uid == currentUserUid }
                 habit?.let {
                     Quintuple(it.habit_name, it.time, log.status, it.category, log.habitLog_id)
                 }

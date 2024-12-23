@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.diary.ui.components.DiaryCard
 import com.example.uplift.data.models.Diary
 import com.example.uplift.ui.composables.TopPaddingContent
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 import com.example.uplift.viewmodels.DiaryViewModel
 
@@ -72,35 +73,37 @@ fun DiaryScreen(
             Column(
                 modifier = Modifier
                     .zIndex(1f)
-                    .padding(horizontal = 20.dp)
+                    .background(color = Color.White)
             ) {
-                // Header Row
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp)
-                ) {
-                    Text(
-                        text = "Diary",
-                        color = Color(0xff101010),
-                        style = androidx.compose.ui.text.TextStyle(
-                            fontSize = 32.sp,
-                            fontFamily = FontFamily(Font(R.font.lemonada))
-                        ),
+                Row {
+                    Column {
+                        Text(
+                            text = "Diary",
+                            color = Color(0xff101010),
+                            style = androidx.compose.ui.text.TextStyle(
+                                fontSize = 32.sp,
+                                fontFamily = FontFamily(Font(R.font.lemonada))
+                            ),
+                            modifier = Modifier
+                                .padding(start = 20.dp, top = 10.dp)
+                                .height(54.dp)
+                        )
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(40.dp),
                         modifier = Modifier
-                            .height(54.dp)
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f)) // Cung cấp không gian trống giữa tiêu đề và menu
-
-                    Image(
-                        painter = painterResource(id = R.drawable.setting),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(top = 18.dp)
-                            .size(28.dp)
-                            .clickable {navController.navigate("settings") }
-                    )
+                            .fillMaxWidth()
+                            .padding(end = 28.dp, top = 28.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.menu),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable { navController.navigate(Routes.SETTINGS) }
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(5.dp))
@@ -108,7 +111,9 @@ fun DiaryScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     item {
                         Row(
