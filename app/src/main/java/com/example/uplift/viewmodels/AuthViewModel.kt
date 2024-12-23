@@ -1,8 +1,12 @@
 package com.example.uplift.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.uplift.data.models.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 class AuthViewModel() : ViewModel() {
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
@@ -14,6 +18,51 @@ class AuthViewModel() : ViewModel() {
     init {
         checkAuthStatus()
     }
+
+
+    ////// edit profile
+    private val database = FirebaseDatabase.getInstance().getReference("users")
+
+    val currentUserUid: String
+        get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    fun saveUserData(user: User, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        Log.d("AuthViewModel", "Attempting to save user data: $user")
+        database.child(user.uid).setValue(user)
+            .addOnSuccessListener {
+                Log.d("AuthViewModel", "User data saved successfully")
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                Log.e("AuthViewModel", "Error saving user data: ${exception.message}")
+                onFailure(exception)
+            }
+    }
+
+    private val _userData = MutableLiveData<User?>()
+    val userData: LiveData<User?> = _userData
+
+    fun loadUserData() {
+        val uid = currentUserUid
+        if (uid.isBlank()) {
+            Log.e("AuthViewModel", "User UID is missing")
+            return
+        }
+
+        database.child(uid)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val user = snapshot.getValue(User::class.java)
+                _userData.postValue(user)
+            }
+            .addOnFailureListener { exception ->
+                Log.e("AuthViewModel", "Failed to fetch user data: ${exception.message}")
+            }
+    }
+
+
+
+    ////////////////////////////
+
 
     fun checkAuthStatus() {
         if (auth.currentUser == null) {
@@ -92,6 +141,7 @@ class AuthViewModel() : ViewModel() {
         return user?.uid
     }
 }
+
 
 sealed class AuthState {
     object Unauthenticated : AuthState()

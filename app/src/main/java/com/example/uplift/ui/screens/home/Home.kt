@@ -134,7 +134,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habit
                             contentDescription = null,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable { /* Add menu click action here */ }
+                                .clickable {navController.navigate("edit_profile") }
                         )
                     }
                 }
