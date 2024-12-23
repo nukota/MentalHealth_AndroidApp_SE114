@@ -20,14 +20,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.example.uplift.R
 import com.example.uplift.ui.theme.Gray
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 import com.example.uplift.viewmodels.StoryViewModel
 
 @Composable
-fun StoryDetailScreen(storyId: Int, storyViewModel: StoryViewModel = viewModel()) {
+fun StoryDetailScreen(storyId: Int, navController: NavController, storyViewModel: StoryViewModel = viewModel()) {
     val story by storyViewModel.getStoryById(storyId).observeAsState()
 
     story?.let {
@@ -75,7 +77,8 @@ fun StoryDetailScreen(storyId: Int, storyViewModel: StoryViewModel = viewModel()
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(28.dp)
-                                        .clickable { /* Add menu click action here */ })
+                                        .clickable { navController.navigate(Routes.SETTINGS) }
+                                )
                             }
                         }
                     }

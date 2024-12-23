@@ -92,6 +92,7 @@ fun QuestionsScreen(
                         contentDescription = null,
                         modifier = Modifier
                             .size(28.dp)
+                            .clickable { navController.navigate(Routes.SETTINGS) }
                     )
                 }
             }

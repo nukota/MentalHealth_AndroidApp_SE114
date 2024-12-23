@@ -24,4 +24,5 @@ object Routes {
     const val SETTINGS="settings"
     const val HABIT_DETAIL = "habit_detail/{habitId}"
     const val EDITPROFILE = "edit_profile"
+    const val NOTIFICATION = "notification"
 }

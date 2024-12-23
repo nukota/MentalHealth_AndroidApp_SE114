@@ -48,6 +48,7 @@ import com.example.uplift.ui.screens.questions.ListTests
 import com.example.uplift.ui.screens.questions.QuestionsScreen
 import com.example.uplift.ui.screens.questions.TestResultsScreen
 import com.example.uplift.ui.screens.settings.Help
+import com.example.uplift.ui.screens.settings.Notification
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
 import com.example.uplift.viewmodels.DiaryViewModel
 import com.example.uplift.viewmodels.HabitViewModel
@@ -58,6 +59,10 @@ import kotlinx.coroutines.delay
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        var allowSMS = mutableStateOf(true)
+        var allowPopUp = mutableStateOf(true)
+    }
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,7 +156,7 @@ fun MainActivityContent(
                     }
                     composable(Routes.STORY_DETAIL) { backStackEntry ->
                         val storyId = backStackEntry.arguments?.getString("storyId")?.toInt() ?: 0
-                        StoryDetailScreen(storyId, storyViewModel)
+                        StoryDetailScreen(storyId, navController, storyViewModel)
                     }
                     composable(Routes.LIST_TESTS) {
                         ListTests(navController, listTestsViewModel)
@@ -188,26 +193,27 @@ fun MainActivityContent(
                     }
                     composable(Routes.DIARY_ADD) {
                         val diaryViewModel: DiaryViewModel = viewModel()
-                        AddDiaryScreen(uid = uid, diaryViewModel = diaryViewModel, navController = navController)
+                        AddDiaryScreen(
+                            uid = uid,
+                            diaryViewModel = diaryViewModel,
+                            navController = navController
+                        )
                     }
                     composable(Routes.DIARY_UPDATE) { backStackEntry ->
                         val diaryId = backStackEntry.arguments?.getString("diaryId")?.toInt() ?: 0
                         val diaryViewModel: DiaryViewModel = viewModel()
                         Log.d("MainActivity", "Diary ID: $diaryId")
-                        UpdateDiaryScreen(diaryId = diaryId, diaryViewModel = diaryViewModel, navController = navController)
+                        UpdateDiaryScreen(
+                            diaryId = diaryId,
+                            diaryViewModel = diaryViewModel,
+                            navController = navController
+                        )
                     }
-//                    composable(Routes.DIARY_ADD_NEW) {
-//                        AddDiaryScreen(navController, diaryViewModel)
-//                    }
-//                    composable(Routes.DIARY_DETAIL) { backStackEntry ->
-//                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
-//                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
-//                    }
                     composable(Routes.ABOUT) {
-                        AboutApp(navController=navController)
+                        AboutApp(navController = navController)
                     }
                     composable(Routes.HELP) {
-                        Help(navController=navController)
+                        Help(navController = navController)
                     }
                     composable(Routes.SETTINGS) {
                         MainSettings(navController, authViewModel)
@@ -215,6 +221,10 @@ fun MainActivityContent(
                     composable(Routes.EDITPROFILE) {
                         EditProfile(navController, authViewModel)
                     }
+                    composable(Routes.NOTIFICATION) {
+                        Notification(navController)
+                    }
+
                 }
             }
             val currentBackStackEntry = navController.currentBackStackEntryAsState().value

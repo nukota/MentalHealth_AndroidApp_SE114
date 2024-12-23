@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,15 +37,16 @@ fun SettingsBox(
 ){
     Row(modifier = Modifier
         .requiredWidth(width = 330.dp)
-        .requiredHeight(height = 40.dp)
+        .requiredHeight(height = 48.dp)
         .border( // Đặt border bên ngoài clip
             BorderStroke(1.dp, Color(0xFF000000)),
-            shape = RoundedCornerShape(18.dp)
+            shape = RoundedCornerShape(20.dp)
         )
         .clip(RoundedCornerShape(18.dp))
         .background(Color.White)
         .padding(horizontal = 20.dp, vertical = 8.dp)
-        .fillMaxWidth(),
+        .fillMaxWidth()
+        .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ){
         Image(

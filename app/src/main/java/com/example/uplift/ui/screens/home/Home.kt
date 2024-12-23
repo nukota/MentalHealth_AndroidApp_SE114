@@ -45,9 +45,11 @@ import androidx.navigation.NavController
 import com.example.uplift.R
 import com.example.uplift.ui.composables.DateItem
 import com.example.uplift.ui.composables.HabitItem
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 import com.example.uplift.viewmodels.AuthViewModel
 import com.example.uplift.viewmodels.HabitViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -62,6 +64,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habit
     val listState = rememberLazyListState()
     var initialScrollPerformed by remember { mutableStateOf(false) }
     val dateFormatter = DateTimeFormatter.ofPattern("dd MMM")
+    val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
     LaunchedEffect(habits, habitLogs, selectedDate) {
         if (!initialScrollPerformed) {
@@ -71,7 +74,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habit
         habitViewModel.getHabits()
         habitViewModel.getHabitLogs()
         if (habits.isNotEmpty() && habitLogs.isNotEmpty()) {
-            habitItems = habitViewModel.getHabitLogByDate(dates[selectedDate])
+            habitItems = habitViewModel.getHabitLogByDate(dates[selectedDate], currentUserUid)
             Log.d("HabitList", habitItems.toString())
         }
         habits.forEach { habit ->
@@ -134,7 +137,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habit
                             contentDescription = null,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable {navController.navigate("edit_profile") }
+                                .clickable {navController.navigate(Routes.SETTINGS) }
                         )
                     }
                 }
@@ -163,7 +166,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habit
                     items(dates.size) { index ->
                         DateItem(date = dates[index], isSelected = index == selectedDate, onClick = {
                             selectedDate = index
-                            habitItems = habitViewModel.getHabitLogByDate(dates[selectedDate])
+                            habitItems = habitViewModel.getHabitLogByDate(dates[selectedDate], currentUserUid)
                         })
                     }
                 }

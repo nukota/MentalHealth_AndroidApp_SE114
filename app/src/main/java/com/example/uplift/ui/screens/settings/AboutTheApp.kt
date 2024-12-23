@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -46,133 +47,137 @@ import com.example.uplift.R
 import com.example.uplift.data.models.User
 import com.example.uplift.ui.composables.QuestionBox
 import com.example.uplift.ui.composables.SettingsBox
+import com.example.uplift.ui.composables.TopPaddingContent
 import com.example.uplift.ui.theme.White
 
 @Composable
 fun AboutApp (
     navController: NavController
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(White)
-            .fillMaxWidth()
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.background2),
-            contentDescription = null,
+    TopPaddingContent {
+        Box(
             modifier = Modifier
-                .size(800.dp),
-            contentScale = ContentScale.Crop
-        )
-        Column(
-            modifier = Modifier
-                .zIndex(1f)
                 .fillMaxSize()
-
+                .background(White)
+                .fillMaxWidth()
         ) {
-            Column(
-                horizontalAlignment = Alignment.Start,
+            Image(
+                painter = painterResource(id = R.drawable.background2),
+                contentDescription = null,
                 modifier = Modifier
-                    .padding(bottom = 20.dp, start = 20.dp)
+                    .fillMaxSize()
+                    .alpha(0.5f),
+                contentScale = ContentScale.Crop
             )
-            {
-                Text(
-                    text = "About the app",
-                    color = Color(0xff5FE4D4),
-                    style = TextStyle(
-                        fontSize = 25.sp,
-                        fontFamily = FontFamily(Font(R.font.lemonada))
-                    ),
-                    modifier = Modifier
-                        .padding(start = 20.dp, top = 20.dp)
-                        .height(43.dp)
-                )
-            }
-            Spacer(modifier = Modifier.height(65.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(width = 233.dp, height = 131.dp)
-                )
-            }
+                    .zIndex(1f)
+                    .fillMaxSize()
 
-            Spacer(modifier = Modifier.height(65.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .requiredHeight(height = 30.dp)
-                    .fillMaxWidth()
             ) {
-                Text(
-                    text = "Version 1.1.0",
-                    color = Color(0xFF000000),
-                    style = TextStyle(
-                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                        fontSize = 20.sp
-                    ),
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .requiredHeight(height = 30.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "@2024-2026",
-                    color = Color(0xFF999999),
-                    style = TextStyle(
-                        fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                        fontStyle = FontStyle.Italic,
-                        fontSize = 15.sp
-                    ),
-                )
-            }
-            Spacer(modifier = Modifier.height(85.dp))
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                ButtonSettings(text = "Licences", width = 123,modifier=Modifier.background(Color.Gray)) { }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.Bottom,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .padding(start = 20.dp, bottom = 28.dp)
-            ) {
-                Icon(painter = painterResource(id = R.drawable.back),
-                    contentDescription = "Back",
+                Row(
+                    horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
-                        .size(24.dp)
-                        .clickable() {
-                            navController.popBackStack()
-                        })
-
-                Text(text = "Back",
-                    color = Color.Black,
-                    fontFamily = FontFamily(Font(R.font.intermedium)),
-                    fontSize = 24.sp,
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "About The App",
+                        color = Color(0xff101010),
+                        style = TextStyle(
+                            fontSize = 26.sp,
+                            fontFamily = FontFamily(Font(R.font.lemonada))
+                        ),
+                        modifier = Modifier
+                            .padding(start = 20.dp, top = 10.dp, bottom = 16.dp)
+                            .height(54.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(65.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .padding(start = 10.dp)
-                        .clickable() {
-                            navController.popBackStack()
-                        })
+                        .fillMaxWidth()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(width = 233.dp, height = 131.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(65.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .requiredHeight(height = 30.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "Version 1.1.0",
+                        color = Color(0xFF000000),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                            fontSize = 20.sp
+                        ),
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .requiredHeight(height = 30.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = "@2024-2026",
+                        color = Color(0xFF999999),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                            fontStyle = FontStyle.Italic,
+                            fontSize = 15.sp
+                        ),
+                    )
+                }
+                Spacer(modifier = Modifier.height(85.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    ButtonSettings(text = "Licences", width = 123,modifier=Modifier.background(Color.Gray)) { }
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(start = 20.dp, bottom = 28.dp)
+                ) {
+                    Icon(painter = painterResource(id = R.drawable.back),
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable() {
+                                navController.popBackStack()
+                            })
+
+                    Text(text = "Back",
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.intermedium)),
+                        fontSize = 24.sp,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .clickable() {
+                                navController.popBackStack()
+                            })
+                }
             }
         }
     }
+
 }
 @Preview(widthDp = 360, heightDp = 800)
 @Composable

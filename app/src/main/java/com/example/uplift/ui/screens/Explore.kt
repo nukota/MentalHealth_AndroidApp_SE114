@@ -80,7 +80,7 @@ fun ExploreScreen(
                             contentDescription = null,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable { navController.navigate("settings") }
+                                .clickable { navController.navigate(Routes.SETTINGS) }
                         )
                     }
                 }
