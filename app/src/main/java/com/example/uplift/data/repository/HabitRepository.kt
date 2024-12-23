@@ -41,7 +41,6 @@ class HabitRepository {
     }
 
     fun saveHabit(habit: Habit, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        habitDatabaseReference.keepSynced(true)
         val habitId =
             habitDatabaseReference.push().key ?: return onFailure("Failed to generate habit ID")
         habitDatabaseReference.child(habitId).setValue(habit)
@@ -75,7 +74,6 @@ class HabitRepository {
     }
 
     fun fetchHabits() {
-        habitDatabaseReference.keepSynced(true)
         habitDatabaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val habitList = mutableListOf<Habit>()
@@ -96,7 +94,6 @@ class HabitRepository {
     }
 
     fun fetchHabitLog() {
-        habitDatabaseReference.keepSynced(true)
         habitLogDatabaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val habitLogList = mutableListOf<HabitLog>()
@@ -117,7 +114,6 @@ class HabitRepository {
     }
 
     fun deleteHabit(habitId: Int, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        habitDatabaseReference.keepSynced(true)
         habitDatabaseReference.orderByChild("habit_id").equalTo(habitId.toDouble())
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -182,7 +178,6 @@ class HabitRepository {
     }
 
     fun updateHabit(habit: Habit, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        habitDatabaseReference.keepSynced(true)
         habitDatabaseReference.orderByChild("habit_id").equalTo(habit.habit_id.toDouble())
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
