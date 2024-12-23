@@ -1,4 +1,4 @@
-package com.example.uplift.ui.screens.Questions
+package com.example.uplift.ui.screens.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -35,10 +35,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.uplift.ui.screens.diary.DiaryScreen
 import com.example.uplift.ui.screens.ExploreScreen
 import com.example.uplift.ui.screens.NavigationBar
-import com.example.uplift.ui.screens.Questions.AboutApp
-import com.example.uplift.ui.screens.Questions.MainSettings
+import com.example.uplift.ui.screens.settings.AboutApp
+import com.example.uplift.ui.screens.settings.MainSettings
 import com.example.uplift.ui.screens.diary.AddDiaryScreen
 import com.example.uplift.ui.screens.diary.UpdateDiaryScreen
+import com.example.uplift.ui.screens.editProfile.EditProfile
 import com.example.uplift.ui.screens.habit.HabitDetailScreen
 import com.example.uplift.ui.screens.habit.HabitScreen
 import com.example.uplift.ui.screens.home.HomeScreen
@@ -201,11 +202,14 @@ fun MainActivityContent(
 //                        val diaryId = backStackEntry.arguments?.getString("diaryId") ?: ""
 //                        DetailDiaryScreen(navController, diaryViewModel, diaryId.toInt())
 //                    }
-                    composable(Routes.ABOUT) {
-                        AboutApp(navController=navController)
-                    }
+                 composable(Routes.ABOUT) {
+                      AboutApp(navController=navController)
+                   }
                     composable(Routes.SETTINGS) {
                         MainSettings(navController, authViewModel)
+                    }
+                    composable(Routes.EDITPROFILE) {
+                        EditProfile(navController, authViewModel)
                     }
                 }
             }

@@ -45,7 +45,6 @@ fun DiaryScreen(
     navController: NavHostController,
     diaryViewModel: DiaryViewModel = viewModel()
 ) {
-    // Quan sát LiveData từ ViewModel
     val diaries by diaryViewModel.diaries.observeAsState(emptyList())
     val searchQuery by diaryViewModel.searchQuery.observeAsState("")
 
@@ -100,7 +99,7 @@ fun DiaryScreen(
                         modifier = Modifier
                             .padding(top = 18.dp)
                             .size(28.dp)
-                            .clickable { /* Add menu click action here */ }
+                            .clickable {navController.navigate("settings") }
                     )
                 }
 
