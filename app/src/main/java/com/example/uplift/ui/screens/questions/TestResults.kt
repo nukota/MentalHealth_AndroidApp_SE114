@@ -58,94 +58,94 @@ fun TestResultsScreen(
 ) {
     val testResult = testResultsViewModel.getTestResultByIdAndScore(testId, score).value
 
-    testResult?.let {
-        TopPaddingContent {
-            Box(
+    TopPaddingContent {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(White)
+                .fillMaxWidth()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.background2),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(White)
-                    .fillMaxWidth()
+                    .zIndex(1f)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.background2),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-                Column(
+                Row {
+                    Column(
+                        modifier = Modifier.padding(start = 20.dp, top = 10.dp)
+                    ) {
+                        Text(
+                            text = "Result",
+                            color = Color(0xff101010),
+                            style = TextStyle(
+                                fontSize = 26.sp, fontFamily = FontFamily(Font(R.font.lemonada))
+                            ),
+                            modifier = Modifier
+                        )
+                        Text(
+                            text = testName,
+                            color = Color(0xff999999),
+                            fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                        )
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(40.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 28.dp, top = 28.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.menu),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable { navController.navigate(Routes.SETTINGS) }
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(44.dp))
+                Box(
                     modifier = Modifier
-                        .zIndex(1f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color(0xffd7f9fa))
+                        .height(100.dp)
+                        .width(280.dp)
+                        .align(Alignment.CenterHorizontally)
                 ) {
-                    Row {
-                        Column(
-                            modifier = Modifier.padding(start = 20.dp, top = 10.dp)
-                        ) {
-                            Text(
-                                text = "Result",
-                                color = Color(0xff101010),
-                                style = TextStyle(
-                                    fontSize = 26.sp, fontFamily = FontFamily(Font(R.font.lemonada))
-                                ),
-                                modifier = Modifier
-                            )
-                            Text(
-                                text = testName,
-                                color = Color(0xff999999),
-                                fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                                fontSize = 16.sp,
-                                modifier = Modifier
-                            )
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .fillMaxHeight()
+                            .padding(top = 5.dp)
+                    ) {
+                        val labelText: String = when (testId) {
+                            1 -> if (score >= 80) "You have" else "You might be experiencing"
+                            else -> "You might be experiencing"
                         }
-                        Column(
-                            horizontalAlignment = Alignment.End,
-                            verticalArrangement = Arrangement.spacedBy(40.dp),
+                        Text(
+                            text = labelText,
+                            color = Color(0xff505050),
+                            textAlign = TextAlign.Center,
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
+                            ),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(end = 28.dp, top = 28.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.menu),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(28.dp)
-                                    .clickable { navController.navigate(Routes.SETTINGS) }
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(44.dp))
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(Color(0xffd7f9fa))
-                            .height(100.dp)
-                            .width(280.dp)
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .fillMaxHeight()
-                                .padding(top = 5.dp)
-                        ) {
-                            val labelText: String = when (testId) {
-                                1 -> if (score >= 80) "You have" else "You might be experiencing"
-                                else -> "You might be experiencing"
-                            }
-                            Text(
-                                text = labelText,
-                                color = Color(0xff505050),
-                                textAlign = TextAlign.Center,
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    fontFamily = FontFamily(Font(R.font.sansitadwashedfont))
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 8.dp)
-                            )
+                                .padding(bottom = 8.dp)
+                        )
 
+                        if (testResult != null) {
                             Text(
-                                text = it.result_description,
+                                text = testResult.result_description,
                                 color = Color(0xff007178),
                                 textAlign = TextAlign.Center,
                                 style = TextStyle(
@@ -156,9 +156,11 @@ fun TestResultsScreen(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(30.dp))
+                }
+                Spacer(modifier = Modifier.height(30.dp))
+                if (testResult != null) {
                     Image(
-                        painter = rememberAsyncImagePainter(it.picture_url),
+                        painter = rememberAsyncImagePainter(testResult.picture_url),
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
@@ -169,16 +171,18 @@ fun TestResultsScreen(
                             .border(1.dp, Black, RoundedCornerShape(20.dp))
                             .clip(RoundedCornerShape(20.dp))
                     )
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .width(296.dp)
-                            .padding(20.dp)
-                    ) {
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .width(296.dp)
+                        .padding(20.dp)
+                ) {
+                    if (testResult != null) {
                         Text(
-                            text = it.result_recommendation,
+                            text = testResult.result_recommendation,
                             color = Color(0xff007178),
                             textAlign = TextAlign.Center,
                             style = TextStyle(
@@ -188,64 +192,66 @@ fun TestResultsScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
+                }
 
-                    Box(
-                        contentAlignment = Alignment.Center,
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .clip(RoundedCornerShape(25.dp))
+                        .background(Color(0xff101010))
+                        .height(50.dp)
+                        .width(284.dp)
+                        .clickable { navController.navigate(Routes.LIST_SPECIALIST) }
+                ) {
+                    Text(
+                        text = "Reach out to Specialists",
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = FontFamily(Font(R.font.inter)),
+                        ),
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(start = 20.dp, bottom = 80.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.back),
+                        contentDescription = "back",
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .clip(RoundedCornerShape(25.dp))
-                            .background(Color(0xff101010))
-                            .height(50.dp)
-                            .width(284.dp)
-                            .clickable { navController.navigate(Routes.LIST_SPECIALIST) }
-                    ) {
-                        Text(
-                            text = "Reach out to Specialists",
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Medium,
-                            style = TextStyle(
-                                fontSize = 16.sp,
-                                fontFamily = FontFamily(Font(R.font.inter)),
-                            ),
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .padding(start = 20.dp, bottom = 80.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.back),
-                            contentDescription = "back",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable { navController.navigate(Routes.LIST_TESTS) }
-                        )
+                            .size(24.dp)
+                            .clickable { navController.navigate(Routes.LIST_TESTS) }
+                    )
 
-                        Text(
-                            text = "Back",
-                            color = Color.Black,
-                            fontFamily = FontFamily(Font(R.font.intermedium)),
-                            fontSize = 24.sp,
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                                .clickable { navController.navigate(Routes.LIST_TESTS) }
-                        )
-                    }
+                    Text(
+                        text = "Back",
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.intermedium)),
+                        fontSize = 24.sp,
+                        modifier = Modifier
+                            .padding(start = 10.dp)
+                            .clickable { navController.navigate(Routes.LIST_TESTS) }
+                    )
                 }
             }
         }
     }
-    if (testResult == null) {
-        Text(text = "Loading...",
-            modifier = Modifier.fillMaxSize()
-        )
-    }
 }
+
+//    if (testResult == null) {
+//        Text(text = "Loading...",
+//            modifier = Modifier.fillMaxSize()
+//        )
+//    }
+
 
 //@Preview(widthDp = 360, heightDp = 800)
 //@Composable

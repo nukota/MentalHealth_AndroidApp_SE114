@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -38,12 +39,17 @@ import com.example.uplift.ui.theme.Gray
 import com.example.uplift.ui.theme.Routes
 import com.example.uplift.ui.theme.White
 import com.example.uplift.viewmodels.ListTestsViewModel
+import com.example.uplift.viewmodels.QuestionsViewModel
 
 @Composable
 fun ListTests(
     navController: NavController,
-    listTestsViewModel: ListTestsViewModel
+    listTestsViewModel: ListTestsViewModel,
+    questionsViewModel: QuestionsViewModel
 ) {
+    LaunchedEffect(Unit) {
+        questionsViewModel.resetScore()
+    }
     val tests by listTestsViewModel.tests.observeAsState(initial = emptyList())
     TopPaddingContent {
         Box(

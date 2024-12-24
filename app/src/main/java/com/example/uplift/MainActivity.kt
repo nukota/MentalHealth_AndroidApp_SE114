@@ -159,7 +159,7 @@ fun MainActivityContent(
                         StoryDetailScreen(storyId, navController, storyViewModel)
                     }
                     composable(Routes.LIST_TESTS) {
-                        ListTests(navController, listTestsViewModel)
+                        ListTests(navController, listTestsViewModel,questionsViewModel)
                     }
                     composable(Routes.QUESTIONS) { backStackEntry ->
                         val testId =
@@ -171,8 +171,6 @@ fun MainActivityContent(
                         val testId =
                             backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
                         val score = backStackEntry.arguments?.getString("score")?.toDoubleOrNull() ?: 0.0
-
-                        testResultsViewModel.updateScore(score)
                         val testName = backStackEntry.arguments?.getString("testName") ?: ""
                         TestResultsScreen(
                             testId,

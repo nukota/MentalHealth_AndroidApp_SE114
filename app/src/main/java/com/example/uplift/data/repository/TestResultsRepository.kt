@@ -16,13 +16,11 @@ class TestResultsRepository() {
     private val _testResults = MutableLiveData<List<TestResult>>()
     val testResults: LiveData<List<TestResult>> get() = _testResults
     private val _scoreLiveData = MutableLiveData<Double>()
-    val scoreLiveData: LiveData<Double> get() = _scoreLiveData
+
     init {
         fetchTestResults()
     }
-    fun updateScore(score: Double) {
-        _scoreLiveData.value = score
-    }
+
     fun getTestResultByIdAndScore(testResultId: Int, score: Double): LiveData<TestResult?> {
         val resultLiveData = MutableLiveData<TestResult?>()
 
