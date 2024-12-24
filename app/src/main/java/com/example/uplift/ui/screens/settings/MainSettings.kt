@@ -51,7 +51,7 @@ fun MainSettings(
 ) {
 
     val currentUser = authViewModel.userData.observeAsState().value
- //   val currentUser = authViewModel.currentUser
+    //   val currentUser = authViewModel.currentUser
     var showLogoutDialog = remember { mutableStateOf(false) }
     authViewModel.loadUserData()
 
