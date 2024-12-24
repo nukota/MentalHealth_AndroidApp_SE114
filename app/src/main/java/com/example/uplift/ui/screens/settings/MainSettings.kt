@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,8 +49,12 @@ import com.example.uplift.viewmodels.AuthViewModel
 fun MainSettings(
     navController: NavController, authViewModel: AuthViewModel
 ) {
-    val currentUser = authViewModel.currentUser
+
+    val currentUser = authViewModel.userData.observeAsState().value
+ //   val currentUser = authViewModel.currentUser
     var showLogoutDialog = remember { mutableStateOf(false) }
+    authViewModel.loadUserData()
+
     if (showLogoutDialog.value) {
         Logout(
             onConfirm = {
@@ -64,6 +69,7 @@ fun MainSettings(
             }
         )
     }
+
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -130,13 +136,13 @@ fun MainSettings(
                             .padding(top = 10.dp, start = 20.dp)
                             .fillMaxWidth()
                     ) {
-                        currentUser?.displayName?.let {
+                        currentUser?.display_name?.let {
                             Text(
                                 text = it,
                                 color = Color.Black,
                                 style = TextStyle(
                                     fontFamily = FontFamily(Font(R.font.sansitadwashedfont)),
-                                    fontSize = 30.sp
+                                    fontSize = 20.sp
                                 ),
                             )
                         }
