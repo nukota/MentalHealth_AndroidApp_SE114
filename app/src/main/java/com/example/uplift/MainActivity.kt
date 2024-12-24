@@ -170,7 +170,9 @@ fun MainActivityContent(
                     composable(Routes.TEST_RESULTS) { backStackEntry ->
                         val testId =
                             backStackEntry.arguments?.getString("testId")?.toIntOrNull() ?: 0
-                        val score = backStackEntry.arguments?.getDouble("score") ?: 0.0
+                        val score = backStackEntry.arguments?.getString("score")?.toDoubleOrNull() ?: 0.0
+
+                        testResultsViewModel.updateScore(score)
                         val testName = backStackEntry.arguments?.getString("testName") ?: ""
                         TestResultsScreen(
                             testId,

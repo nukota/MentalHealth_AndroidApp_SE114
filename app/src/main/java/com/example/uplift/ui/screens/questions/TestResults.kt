@@ -242,7 +242,7 @@ fun TestResultsScreen(
     }
     if (testResult == null) {
         Text(text = "Loading...",
-        modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

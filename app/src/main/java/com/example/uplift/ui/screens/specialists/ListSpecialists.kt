@@ -39,6 +39,7 @@ import com.example.uplift.R
 import com.example.uplift.data.models.Specialist
 import com.example.uplift.ui.composables.SpecialistsBox
 import com.example.uplift.ui.theme.Gray
+import com.example.uplift.ui.theme.Routes
 import com.example.uplift.viewmodels.AuthViewModel
 import com.example.uplift.viewmodels.SpecialistsViewModel
 
@@ -70,7 +71,7 @@ fun ListSpecialistsScreen(
                             ), modifier = Modifier
                         )
                         Text(
-                            text = "Read Stories", color = Color(0xff101010), style = TextStyle(
+                            text = "List Specialists", color = Color(0xff101010), style = TextStyle(
                                 fontSize = 26.sp, fontFamily = FontFamily(Font(R.font.lemonada))
                             ), modifier = Modifier
                         )
@@ -87,9 +88,8 @@ fun ListSpecialistsScreen(
                             contentDescription = null,
                             modifier = Modifier
                                 .size(28.dp)
-                                .clickable { /* Add menu click action here */ })
+                                .clickable {navController.navigate(Routes.SETTINGS) })
                     }
-
                 }
                 Spacer(modifier = Modifier.height(38.dp))
                 Row(

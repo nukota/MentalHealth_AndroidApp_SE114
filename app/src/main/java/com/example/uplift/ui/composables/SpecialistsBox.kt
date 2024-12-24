@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.rememberAsyncImagePainter
@@ -55,7 +56,7 @@ fun SpecialistsBox(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth(0.88f)
-            .requiredHeight(height = 186.dp)
+            .requiredHeight(height = 150.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color = Color(0xffF8F8F8))
             .clickable(onClick = onClick)
@@ -75,8 +76,9 @@ fun SpecialistsBox(
             )
         }
         Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .padding(top = 14.dp)
+                .padding(top = 28.dp, bottom = 14.dp)
         ) {
             Text(
                 text = textName,
@@ -164,4 +166,20 @@ fun SpecialistsBox(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SpecialistsBoxPreview() {
+    SpecialistsBox(
+        textName = "Jane Doe",
+        textAge = 32,
+        iconAvartar = "https://example.com/avatar.jpg",
+        textProfession = "Psychologist",
+        textYoE = 8,
+        textLocation = "New York",
+        textRating = 4.8,
+        textReviewCount = 128,
+        onClick = {}
+    )
 }
