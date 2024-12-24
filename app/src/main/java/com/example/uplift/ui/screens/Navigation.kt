@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,10 +33,19 @@ import androidx.navigation.NavController
 import com.example.uplift.R
 import com.example.uplift.ui.theme.*
 import androidx.compose.ui.zIndex
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun NavigationBar(navController: NavController) {
-    var selectedButton by remember { mutableStateOf("Home") }
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+    var selectedButton by remember { mutableStateOf(currentRoute ?: Routes.HOME ) }
+
+    LaunchedEffect(currentRoute) {
+        if (currentRoute != null) {
+            selectedButton = currentRoute
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -55,40 +65,45 @@ fun NavigationBar(navController: NavController) {
             NavigationButton(
                 "Home",
                 painterResource(id = R.drawable.home),
-                isSelected = selectedButton == "Home",
+                isSelected = selectedButton == Routes.HOME,
                 onClick = {
                     navController.navigate(Routes.HOME)
-                    selectedButton = "Home"
+                    selectedButton = Routes.HOME
                 },
                 modifier = Modifier.weight(1f)
             )
             NavigationButton(
                 "Habit",
                 painterResource(id = R.drawable.medal),
-                isSelected = selectedButton == "Habit",
+                isSelected = selectedButton == Routes.HABIT,
                 onClick = {
                     navController.navigate(Routes.HABIT)
-                    selectedButton = "Habit"
+                    selectedButton = Routes.HABIT
                 },
                 modifier = Modifier.weight(1f)
             )
             NavigationButton(
                 "Diary",
                 painterResource(id = R.drawable.book),
-                isSelected = selectedButton == "Diary",
+                isSelected = selectedButton == Routes.DIARY,
                 onClick = {
                     navController.navigate(Routes.DIARY)
-                    selectedButton = "Diary"
+                    selectedButton = Routes.DIARY
                 },
                 modifier = Modifier.weight(1f)
             )
             NavigationButton(
                 "Explore",
                 painterResource(id = R.drawable.compass),
-                isSelected = selectedButton == "Explore",
+                isSelected = selectedButton in listOf(
+                    Routes.EXPLORE,
+                    Routes.LIST_TESTS,
+                    Routes.STORY,
+                    Routes.LIST_SPECIALIST
+                ),
                 onClick = {
                     navController.navigate(Routes.EXPLORE)
-                    selectedButton = "Explore"
+                    selectedButton = Routes.EXPLORE
                 },
                 modifier = Modifier.weight(1f)
             )
