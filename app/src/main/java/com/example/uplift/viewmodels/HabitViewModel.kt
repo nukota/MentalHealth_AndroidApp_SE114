@@ -148,7 +148,7 @@ class HabitViewModel : ViewModel() {
         val fifth: E
     )
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    @RequiresApi(Build.VERSION_CODES.O)
     fun createMissingHabitLogs(habitId: Int, dateCreated: String, habitLogs: List<HabitLog>, createHabitLog: (HabitLog) -> Unit) {
         val parsedDateCreated = LocalDate.parse(dateCreated)
         val today = LocalDate.now()
@@ -157,20 +157,22 @@ class HabitViewModel : ViewModel() {
         Log.d("HabitViewModel", "Existing dates: $existingDates") // Log the existing dates
         var nextHabitLogId = (existingLogIds.maxOrNull() ?: 0) + 1
 
-        for (date in parsedDateCreated.datesUntil(today.plusDays(1)).toList()) {
-            if (date.toString() !in existingDates) {
+        var currentDate = parsedDateCreated
+        while (!currentDate.isAfter(today)) {
+            if (currentDate.toString() !in existingDates) {
                 while (nextHabitLogId in existingLogIds) {
                     nextHabitLogId++
                 }
                 val newHabitLog = HabitLog(
                     habitLog_id = nextHabitLogId,
                     habit_id = habitId,
-                    date = date.toString(),
+                    date = currentDate.toString(),
                     status = 2 // Initial value
                 )
                 createHabitLog(newHabitLog)
                 existingLogIds.add(nextHabitLogId)
             }
+            currentDate = currentDate.plusDays(1)
         }
     }
 
