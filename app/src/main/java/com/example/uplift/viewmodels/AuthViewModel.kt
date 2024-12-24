@@ -30,6 +30,7 @@ class AuthViewModel() : ViewModel() {
         database.child(user.uid).setValue(user)
             .addOnSuccessListener {
                 Log.d("AuthViewModel", "User data saved successfully")
+                _userData.postValue(user)  // Cập nhật lại dữ liệu người dùng
                 onSuccess()
             }
             .addOnFailureListener { exception ->
@@ -59,8 +60,10 @@ class AuthViewModel() : ViewModel() {
             }
     }
 
-
-
+    fun getUsername(): String? {
+        val user = FirebaseAuth.getInstance().currentUser
+        return user?.displayName
+    }
     ////////////////////////////
 
 

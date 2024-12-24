@@ -39,6 +39,27 @@ fun EditProfile(
     navController: NavHostController,
     authViewModel: AuthViewModel
 ) {
+    // Tải dữ liệu người dùng
+    authViewModel.loadUserData()
+
+    // Lấy dữ liệu người dùng từ LiveData
+    val userData by authViewModel.userData.observeAsState()
+
+    // Nếu dữ liệu người dùng chưa được tải hoặc đang null, hiển thị thông báo hoặc loading
+    if (userData == null) {
+        // Hiển thị thông báo hoặc loading (ví dụ sử dụng CircularProgressIndicator)
+        CircularProgressIndicator()
+        return
+    }
+
+    // Sử dụng dữ liệu người dùng để khởi tạo giá trị các trường nhập liệu
+    var displayname by remember { mutableStateOf(userData?.display_name ?: "") }
+    var pronouns by remember { mutableStateOf(userData?.pronouns ?: "") }
+    var date by remember { mutableStateOf(userData?.date ?: "") }
+    var phonenumber by remember { mutableStateOf(userData?.phone ?: "") }
+    var location by remember { mutableStateOf(userData?.location ?: "") }
+
+    // Giao diện người dùng (như đã có trước đó)
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -158,31 +179,26 @@ fun EditProfile(
                     }
 
                     // Phone Number
-                    var displayname by remember { mutableStateOf("") }
                     createInputField("Display Name", "Enter your display name", displayname) {
                         displayname = it
                     }
 
                     // Email
-                    var pronouns by remember { mutableStateOf("") }
                     createInputField("Pronouns", "He/She/Mr/Ms...", pronouns) {
                         pronouns = it
                     }
 
                     // Address
-                    var date by remember { mutableStateOf("") }
                     createInputField("Date of Birth", "DD-MM-YYYY", date) {
                         date = it
                     }
 
                     // Location
-                    var phonenumber by remember { mutableStateOf("") }
                     createInputField("Phone Number", "Enter your phone number", phonenumber) {
                         phonenumber = it
                     }
 
                     // Gender
-                    var location by remember { mutableStateOf("") }
                     createInputField("Location", "Enter your location", location) {
                         location = it
                     }
@@ -196,10 +212,18 @@ fun EditProfile(
                                 return@Button
                             }
 
+                            // Lấy email từ AuthViewModel
+                            val userEmail = authViewModel.getUserEmail()
+
+                            if (userEmail.isNullOrBlank()) {
+                                Log.e("EditProfile", "User email is missing!")
+                                return@Button
+                            }
+
                             val updatedUser = User(
                                 uid = authViewModel.currentUserUid,
                                 display_name = displayname,
-                                email = "",
+                                email = userEmail, // Email tự động thêm
                                 phone = phonenumber,
                                 location = location,
                                 pronouns = pronouns,
@@ -253,7 +277,6 @@ fun EditProfile(
             }
         }
     }
-
 }
 
 //@RequiresApi(Build.VERSION_CODES.O)
