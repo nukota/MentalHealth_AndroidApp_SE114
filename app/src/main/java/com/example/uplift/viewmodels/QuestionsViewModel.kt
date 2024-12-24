@@ -8,8 +8,9 @@ import com.example.uplift.data.models.Question
 import com.example.uplift.data.models.Answer
 import com.example.uplift.data.repository.AnswersRepository
 import com.example.uplift.data.repository.QuestionsRepository
+import com.example.uplift.data.repository.TestResultsRepository
 
-class QuestionsViewModel(private val testId: Int = 0) : ViewModel() {
+class QuestionsViewModel() : ViewModel() {
     private val questionRepository = QuestionsRepository()
     private val answersRepository = AnswersRepository()
     val questions: LiveData<List<Question>> = questionRepository.questions
@@ -31,21 +32,32 @@ class QuestionsViewModel(private val testId: Int = 0) : ViewModel() {
             answerOrder
         )
     }
+    private val testScores = mutableMapOf<Int, Double>()
+    private val testAnswers = mutableMapOf<Int, MutableMap<Int, Double>>()
 
+    private var currentTestId: Int = 0
     private val _currentQuestionIndex = MutableLiveData(0)
     val currentQuestionIndex: LiveData<Int> = _currentQuestionIndex
     private val _score = MutableLiveData(0.0)
     val score: LiveData<Double> get() = _score
     private var currentScore = 0.0
 
-    // Store selected answers and their values
     private val selectedAnswers = mutableMapOf<Int, Double>()
 
     init {
         _currentQuestionIndex.value = 0
         _score.value = 0.0
     }
+    fun startNewTest(testId: Int) {
+        currentTestId = testId
+        _currentQuestionIndex.value = 0
+        _score.value = 0.0
 
+        if (!testScores.containsKey(testId)) {
+            testScores[testId] = 0.0
+            testAnswers[testId] = mutableMapOf()
+        }
+    }
     fun moveToNextQuestion() {
         val currentIndex = _currentQuestionIndex.value ?: 0
         _currentQuestionIndex.value = currentIndex + 1
@@ -59,15 +71,12 @@ class QuestionsViewModel(private val testId: Int = 0) : ViewModel() {
     }
 
     fun updateScore(questionId: Int, newValue: Double, questionCount: Int) {
-        // Subtract the previous value if it exists
         val previousValue = selectedAnswers[questionId] ?: 0.0
         currentScore -= previousValue
-        // Add the new value
         currentScore += newValue
         _score.value = currentScore
-        // Update the selected answer
         selectedAnswers[questionId] = newValue
-        Log.d("QuestionsViewModel", "Score: $currentScore")
+
         if (currentQuestionIndex.value!! < questionCount - 1) {
             moveToNextQuestion()
         }

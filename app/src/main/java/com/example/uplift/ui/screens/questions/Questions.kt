@@ -1,5 +1,6 @@
 package com.example.uplift.ui.screens.questions
 
+import android.widget.Toast
 import com.example.uplift.ui.composables.TopPaddingContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -16,6 +17,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -45,12 +47,17 @@ fun QuestionsScreen(
     navController: NavController,
     questionsViewModel: QuestionsViewModel
 ) {
+    val context = LocalContext.current
+    LaunchedEffect(testId) {
+        questionsViewModel.startNewTest(testId)
+    }
     val questions by questionsViewModel.questions.observeAsState(initial = emptyList())
     val answers by questionsViewModel.answers.observeAsState(initial = emptyList())
     val currentQuestionIndex by questionsViewModel.currentQuestionIndex.observeAsState(0)
     val score by questionsViewModel.score.observeAsState(0.0)
     val listQuestion: List<Question> = questions.filter { it.test_id == testId }
     val listAnswer: List<Answer> = answers.filter { it.test_id == testId }
+    val selectedAnswerIds = remember { mutableStateOf<Map<Int, Int?>>(emptyMap()) }
 
     TopPaddingContent {
         Column(
@@ -205,6 +212,7 @@ fun QuestionsScreen(
                     } else {
                         emptyList()
                     }
+
                     items(filteredAnswers) { answer ->
                         val iconResId = when (answer.answer_order) {
                             1 -> R.drawable.extremely_happy_1
@@ -217,10 +225,17 @@ fun QuestionsScreen(
                             8 -> R.drawable.very_sad_8
                             else -> R.drawable.extremely_happy_1
                         }
+                        val selectedAnswerId = selectedAnswerIds.value[answer.question_id]
                         AnswerOption(
                             text = answer.answer_text,
                             iconResId = iconResId,
-                            onClick = { questionsViewModel.updateScore(answer.question_id, answer.answer_value, listQuestion.size) }
+                            isSelected = selectedAnswerId == answer.answer_order,
+                            clickable = {
+                                selectedAnswerIds.value = selectedAnswerIds.value.toMutableMap().apply {
+                                    put(answer.question_id, answer.answer_order)
+                                }
+                                questionsViewModel.updateScore(answer.question_id, answer.answer_value, listQuestion.size)
+                            }
                         )
                     }
                 }
@@ -232,9 +247,10 @@ fun QuestionsScreen(
                     .height(60.dp)
                     .padding(top = 20.dp)
             ) {
-                if (currentQuestionIndex == listQuestion.lastIndex) {
+                if (currentQuestionIndex == listQuestion.lastIndex && selectedAnswerIds.value.size == listQuestion.size) {
+                    val currentScore = questionsViewModel.score.value ?: 0.0
                     Button(
-                        onClick = { navController.navigate("test_results/$testId/$testName/$score") },
+                        onClick = { navController.navigate("test_results/$testId/$testName/$currentScore") },
                         colors = ButtonDefaults.buttonColors(containerColor = Cyan),
                         modifier = Modifier
                             .size(width = 200.dp, height = 40.dp)
@@ -242,6 +258,31 @@ fun QuestionsScreen(
                     ) {
                         Text(
                             text = "Finish",
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                color = White,
+                                fontFamily = FontFamily(Font(R.font.interregular))
+                            ),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                else {
+                    Button(
+                        onClick = {
+                            Toast.makeText(
+                                context,
+                                "Please answer all the questions before finishing.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Cyan),
+                        modifier = Modifier
+                            .size(width = 200.dp, height = 40.dp)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        Text(
+                            text = "Close",
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 color = White,

@@ -33,13 +33,16 @@ import com.example.uplift.R
 fun AnswerOption(
     text: String,
     iconResId: Int,
-    onClick: () -> Unit
+    isSelected: Boolean,
+    clickable: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xffd7f9fa))
-            .clickable { onClick() }
+            .background(
+                if (isSelected) Color.White else Color(0xffd7f9fa)
+            )
+            .clickable { clickable() }
             .height(40.dp)
             .fillMaxWidth()
     ) {

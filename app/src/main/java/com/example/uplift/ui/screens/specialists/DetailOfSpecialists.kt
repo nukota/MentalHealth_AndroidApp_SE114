@@ -63,7 +63,7 @@ fun DetailOfSpecialists(
     ) {
         Surface(
             modifier = Modifier
-                .size(width = 500.dp, height = 560.dp)
+                .size(width = 650.dp, height = 560.dp)
                 .padding(16.dp),
             color = Color.White,
             shape = RoundedCornerShape(10.dp),
@@ -118,8 +118,9 @@ fun DetailOfSpecialists(
                             )
                         }
                         Column(
+                            verticalArrangement = Arrangement.Center,
                             modifier = Modifier
-                                .padding(top = 14.dp)
+                                .padding(top = 28.dp, bottom = 14.dp)
                         ) {
                             Row {
                                 Text(
