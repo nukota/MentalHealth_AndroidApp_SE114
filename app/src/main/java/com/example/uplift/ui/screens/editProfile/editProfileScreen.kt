@@ -43,10 +43,6 @@ fun EditProfile(
 
     val userData by authViewModel.userData.observeAsState()
 
-     if (userData == null) {
-       CircularProgressIndicator()
-        return
-    }
 
     var displayname by remember { mutableStateOf(userData?.display_name ?: "") }
     var pronouns by remember { mutableStateOf(userData?.pronouns ?: "") }
