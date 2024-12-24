@@ -39,20 +39,15 @@ fun EditProfile(
     navController: NavHostController,
     authViewModel: AuthViewModel
 ) {
-    // Tải dữ liệu người dùng
-    authViewModel.loadUserData()
+   authViewModel.loadUserData()
 
-    // Lấy dữ liệu người dùng từ LiveData
     val userData by authViewModel.userData.observeAsState()
 
-    // Nếu dữ liệu người dùng chưa được tải hoặc đang null, hiển thị thông báo hoặc loading
-    if (userData == null) {
-        // Hiển thị thông báo hoặc loading (ví dụ sử dụng CircularProgressIndicator)
-        CircularProgressIndicator()
+     if (userData == null) {
+       CircularProgressIndicator()
         return
     }
 
-    // Sử dụng dữ liệu người dùng để khởi tạo giá trị các trường nhập liệu
     var displayname by remember { mutableStateOf(userData?.display_name ?: "") }
     var pronouns by remember { mutableStateOf(userData?.pronouns ?: "") }
     var date by remember { mutableStateOf(userData?.date ?: "") }
