@@ -16,7 +16,4 @@ class TestResultsViewModel : ViewModel() {
     fun getTestResultByIdAndScore(testResultId: Int, score : Double): LiveData<TestResult?> {
         return repository.getTestResultByIdAndScore(testResultId, score)
     }
-    fun updateScore(newScore: Double) {
-        _score.value = newScore
-    }
 }

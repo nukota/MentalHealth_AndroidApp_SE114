@@ -69,7 +69,11 @@ class QuestionsViewModel() : ViewModel() {
             _currentQuestionIndex.value = currentIndex - 1
         }
     }
-
+    fun resetScore() {
+        _score.value = 0.0
+        currentScore = 0.0
+        selectedAnswers.clear()
+    }
     fun updateScore(questionId: Int, newValue: Double, questionCount: Int) {
         val previousValue = selectedAnswers[questionId] ?: 0.0
         currentScore -= previousValue
