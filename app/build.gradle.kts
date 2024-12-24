@@ -114,4 +114,5 @@ dependencies {
 
     implementation(libs.hilt.android.v2511)
     kapt(libs.hilt.android.compiler)
-}
+
+    }

@@ -8,7 +8,7 @@ import com.example.uplift.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-class AuthViewModel() : ViewModel() {
+open class AuthViewModel() : ViewModel() {
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _authState = MutableLiveData<AuthState>()
@@ -25,6 +25,7 @@ class AuthViewModel() : ViewModel() {
 
     val currentUserUid: String
         get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
     fun saveUserData(user: User, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         Log.d("AuthViewModel", "Attempting to save user data: $user")
         database.child(user.uid).setValue(user)
@@ -39,8 +40,9 @@ class AuthViewModel() : ViewModel() {
             }
     }
 
+
     private val _userData = MutableLiveData<User?>()
-    val userData: LiveData<User?> = _userData
+    open val userData: LiveData<User?> = _userData
 
     fun loadUserData() {
         val uid = currentUserUid
@@ -64,6 +66,9 @@ class AuthViewModel() : ViewModel() {
         val user = FirebaseAuth.getInstance().currentUser
         return user?.displayName
     }
+
+
+
     ////////////////////////////
 
 

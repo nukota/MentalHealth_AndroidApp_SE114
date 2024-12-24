@@ -54,7 +54,6 @@ fun EditProfile(
     var phonenumber by remember { mutableStateOf(userData?.phone ?: "") }
     var location by remember { mutableStateOf(userData?.location ?: "") }
 
-    // Giao diện người dùng (như đã có trước đó)
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -82,7 +81,7 @@ fun EditProfile(
                 ) {
                     Text(
                         text = "Edit Profile",
-                        color = Color(0xff101010),
+                        color = Color(0xff38AEB4),
                         style = TextStyle(
                             fontSize = 26.sp,
                             fontFamily = FontFamily(Font(R.font.lemonada))
@@ -100,13 +99,29 @@ fun EditProfile(
                         .wrapContentHeight()
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-                    Image(
-                        painter = painterResource(id = R.drawable.prof),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clickable { }
-                    )
+                    Box(
+                        modifier = Modifier.size(80.dp)
+                    ) {
+                        // Profile Image
+                        Image(
+                            painter = painterResource(id = R.drawable.prof),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable { }
+                        )
+
+                        Image(
+                            painter = painterResource(id = R.drawable.add_img), // Add your icon resource here
+                            contentDescription = "Add Image",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .align(Alignment.BottomEnd)
+                                .clickable {
+
+                                }
+                        )
+                    }
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
@@ -116,7 +131,7 @@ fun EditProfile(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 20.dp, end = 20.dp)
+                        .padding(start = 35.dp, end = 35.dp)
                 ) {
                     @Composable
                     fun createInputField(
@@ -128,7 +143,7 @@ fun EditProfile(
                         Text(
                             text = label,
                             style = MaterialTheme.typography.bodyLarge.copy(
-                                fontFamily = FontFamily(Font(R.font.lemonada)),
+                                fontFamily = FontFamily(Font(R.font.inriaserif_bold)),
                                 fontSize = 20.sp
                             )
                         )
@@ -147,7 +162,7 @@ fun EditProfile(
                                     )
                                 },
                             textStyle = MaterialTheme.typography.bodyLarge.copy(
-                                fontFamily = FontFamily(Font(R.font.lemonada)),
+                                fontFamily = FontFamily(Font(R.font.inriaserif_regular)),
                                 fontSize = 16.sp,
                                 color = Color.Black
                             ),
@@ -160,7 +175,7 @@ fun EditProfile(
                                         Text(
                                             text = placeholderText,
                                             style = MaterialTheme.typography.bodyLarge.copy(
-                                                fontFamily = FontFamily(Font(R.font.lemonada)),
+                                                fontFamily = FontFamily(Font(R.font.inriaserif_italic)),
                                                 fontSize = 16.sp,
                                                 color = Color.Gray
                                             )
@@ -237,37 +252,16 @@ fun EditProfile(
                                     Log.e("EditProfile", "Failed to save user data: ${exception.message}")
                                 }
                             )
-                        }
+                        },
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF5FE4D4),
+                            contentColor = Color.Black
+                        )
                     ) {
                         Text("Save")
                     }
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .padding(start = 20.dp, bottom = 28.dp)
-                    ) {
-                        Icon(painter = painterResource(id = R.drawable.back),
-                            contentDescription = "Back",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clickable() {
-                                    navController.popBackStack()
-                                })
 
-                        Text(text = "Back",
-                            color = Color.Black,
-                            fontFamily = FontFamily(Font(R.font.intermedium)),
-                            fontSize = 24.sp,
-                            modifier = Modifier
-                                .padding(start = 10.dp)
-                                .clickable() {
-                                    navController.popBackStack()
-                                })
-                    }
                 }
             }
         }
