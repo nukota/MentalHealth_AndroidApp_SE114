@@ -37,9 +37,10 @@ import com.example.uplift.R
 import com.example.uplift.ui.composables.TopPaddingContent
 import com.example.uplift.ui.theme.Cyan
 import com.example.uplift.ui.theme.White
+import com.example.uplift.viewmodels.NotificationViewModel
 
 @Composable
-fun Notification(navController: NavController) {
+fun Notification(notificationViewModel: NotificationViewModel, navController: NavController) {
     TopPaddingContent {
         Box(
             modifier = Modifier
@@ -100,8 +101,8 @@ fun Notification(navController: NavController) {
                             )
                         )
                         Switch(
-                            checked = MainActivity.allowSMS.value,
-                            onCheckedChange = { MainActivity.allowSMS.value = it },
+                            checked = notificationViewModel.allowSMS.value,
+                            onCheckedChange = { notificationViewModel.allowSMS.value = it },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
                                 uncheckedThumbColor = Color.White,
@@ -128,8 +129,8 @@ fun Notification(navController: NavController) {
                             )
                         )
                         Switch(
-                            checked = MainActivity.allowPopUp.value,
-                            onCheckedChange = { MainActivity.allowPopUp.value = it },
+                            checked = notificationViewModel.allowPopUp.value,
+                            onCheckedChange = { notificationViewModel.allowPopUp.value = it },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
                                 uncheckedThumbColor = Color.White,

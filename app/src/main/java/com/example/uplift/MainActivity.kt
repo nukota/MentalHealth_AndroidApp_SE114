@@ -52,6 +52,7 @@ import com.example.uplift.ui.screens.settings.Notification
 import com.example.uplift.ui.screens.specialists.ListSpecialistsScreen
 import com.example.uplift.viewmodels.DiaryViewModel
 import com.example.uplift.viewmodels.HabitViewModel
+import com.example.uplift.viewmodels.NotificationViewModel
 import com.example.uplift.viewmodels.SpecialistsViewModel
 import com.example.uplift.viewmodels.TestResultsViewModel
 import com.example.uplift.viewmodels.QuestionsViewModel
@@ -59,10 +60,6 @@ import kotlinx.coroutines.delay
 
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        var allowSMS = mutableStateOf(true)
-        var allowPopUp = mutableStateOf(true)
-    }
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,8 +89,8 @@ fun MainActivityContent(
             ?.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())?.bottom?.toDp()
             ?: 0.dp
     }
-
     val navController = rememberNavController()
+    val notificationViewModel: NotificationViewModel = viewModel()
     val storyViewModel: StoryViewModel = viewModel()
     val listTestsViewModel: ListTestsViewModel = viewModel()
     val listSpecialistsViewModel: SpecialistsViewModel = viewModel()
@@ -222,7 +219,7 @@ fun MainActivityContent(
                         EditProfile(navController, authViewModel)
                     }
                     composable(Routes.NOTIFICATION) {
-                        Notification(navController)
+                        Notification(notificationViewModel, navController)
                     }
 
                 }
