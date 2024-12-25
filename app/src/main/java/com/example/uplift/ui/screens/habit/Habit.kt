@@ -37,7 +37,7 @@ import com.example.uplift.ui.theme.Routes
 import com.example.uplift.viewmodels.HabitViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun HabitScreen(uid: String, navController: NavController, habitViewModel: HabitViewModel) {

@@ -53,7 +53,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, habitViewModel: HabitViewModel) {
     var selectedDate by remember { mutableStateOf(15) } // Set the selected date to today of the month
