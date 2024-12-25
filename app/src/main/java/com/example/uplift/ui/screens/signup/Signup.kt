@@ -61,7 +61,7 @@ fun SignUpScreen(navHostController: NavHostController, authViewModel: AuthViewMo
             Spacer(modifier = Modifier.height(80.dp))
             Text("Sign Up", style = TextStyle(fontSize = 32.sp, color = DarkGray, fontFamily = FontFamily(Font(R.font.interregular))))
             Spacer(modifier = Modifier.height(30.dp))
-            CustomTextBox(email, "Username", painterResource(id = R.drawable.user_icon))
+            CustomTextBox(email, "Email", painterResource(id = R.drawable.user_icon))
             Spacer(modifier = Modifier.height(12.dp))
             CustomTextBox(password1, "Enter Password", painterResource(id = R.drawable.padlock_icon))
             Spacer(modifier = Modifier.height(12.dp))

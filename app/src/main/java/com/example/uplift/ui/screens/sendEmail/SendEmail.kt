@@ -29,6 +29,7 @@ fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthVie
 
     var verifyingEmail = remember { mutableStateOf("") }
     val context = LocalContext.current
+    val currentUserEmail = authViewModel.getUserEmail() // Assuming this property exists in AuthViewModel
 
     Box(
         modifier = Modifier
@@ -74,23 +75,17 @@ fun SendEmailScreen(navHostController: NavHostController, authViewModel: AuthVie
             )
             Spacer(modifier = Modifier.height(28.dp))
             CustomButton("Send mail", null, onClick = {
-                Toast.makeText(
-                    context,
-                    "You entered email: " + verifyingEmail.value,
-                    Toast.LENGTH_SHORT
-                ).show()
-                authViewModel.sendPasswordResetEmail(verifyingEmail.value) { success ->
-                    if (success) {
-                        Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT)
-                            .show()
-                        navHostController.navigate(Routes.LOGIN)
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Failed to send password reset email.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                if (currentUserEmail == null || verifyingEmail.value == currentUserEmail) {
+                    authViewModel.sendPasswordResetEmail(verifyingEmail.value) { success ->
+                        if (success) {
+                            Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT).show()
+                            navHostController.navigate(Routes.LOGIN)
+                        } else {
+                            Toast.makeText(context, "Failed to send password reset email.", Toast.LENGTH_SHORT).show()
+                        }
                     }
+                } else {
+                    Toast.makeText(context, "Entered email does not match the current user's email.", Toast.LENGTH_SHORT).show()
                 }
             })
             Spacer(modifier = Modifier.height(220.dp))
