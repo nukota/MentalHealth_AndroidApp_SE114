@@ -117,9 +117,11 @@ class HabitViewModel : ViewModel() {
         val habit = habits.value?.find { it.habit_id == habitId } ?: return 0.0
         val startDate = LocalDate.parse(habit.date_created)
         val totalDays = ChronoUnit.DAYS.between(startDate, LocalDate.now()).toInt() + 1
+        val totalWeeks = (totalDays / 7.0).coerceAtLeast(1.0)
+        val expectedCompletions = totalWeeks * habit.frequency
         val completedLogs = habitLogs.value?.count { it.habit_id == habitId && it.status == 1 } ?: 0
-        return if (totalDays > 0) {
-            (completedLogs.toDouble() / totalDays) * 100
+        return if (expectedCompletions > 0) {
+            (completedLogs.toDouble() / expectedCompletions) * 100
         } else {
             0.0
         }

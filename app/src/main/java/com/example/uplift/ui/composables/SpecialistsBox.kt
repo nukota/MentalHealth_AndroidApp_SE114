@@ -2,17 +2,21 @@ package com.example.uplift.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -21,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -56,7 +61,7 @@ fun SpecialistsBox(
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxWidth(0.88f)
-            .requiredHeight(height = 150.dp)
+            .requiredHeight(height = 200.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color = Color(0xffF8F8F8))
             .clickable(onClick = onClick)
@@ -64,16 +69,29 @@ fun SpecialistsBox(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = 18.dp, vertical = 10.dp)
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(iconAvartar),
-                contentDescription = null,
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxHeight()
-                    .clip(CircleShape)
-                    .padding(14.dp)
-                    .size(80.dp)
-            )
+                    .height(120.dp)
+                    .width(80.dp)
+                    .clip(RoundedCornerShape(32.dp))
+                    .border(width = 1.dp, color = Color.Black, shape = RoundedCornerShape(32.dp))
+                    .background(color = Color(0xffF8F8F8))
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(iconAvartar),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+
         }
         Column(
             verticalArrangement = Arrangement.Center,
